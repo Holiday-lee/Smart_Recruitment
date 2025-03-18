@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option java_multiple_files = true;  // will generate separate files for each message and service.
+option java_package = "generated.grpc.interviewschedulingservice";
+option java_outer_classname = "InterviewSchedulingServiceImpl";
+
+package InterviewSchedulingService;
+
+// InterviewSchedulingService manages and arranges candidates interview slots
+
+service InterviewSchedulingService {
+  
+  // BIDIRECTIONAL-STREAMING METHOD TYPE
+  // INPUT: Stream of candidate name
+  // OUTPUT: Stream of interview slot
+  // Auto-scheduling interview slots. The client sends a stream of candidate name and the server returns(arranges) a stream of interview slot with 1 candidate have few slots to choose from
+  rpc ArrangeInterviewSlot(stream CandidateName) returns (stream InterviewSlot) {}
+
+}
+
+   //  Message defining the candidate's name and ID
+   message CandidateName {
+     string candidate_id = 1;   
+     string candidate_name = 2; 
+   }
+
+   // The response message containing the arranged interview slots
+   message InterviewSlot {
+     string time = 1;
+     string location = 2; // (could be a physical location or virtual meeting link)
+   }
+

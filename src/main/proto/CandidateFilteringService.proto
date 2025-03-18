@@ -1,0 +1,51 @@
+
+syntax = "proto3";
+
+option java_multiple_files = true;  // will generate separate files for each message and service.
+option java_package = "generated.grpc.candidatefilteringservice";
+option java_outer_classname = "CandidateFilteringServiceImpl";
+
+package CandidateFilteringService;
+
+// CandidateFilteringService filters the candidates' resumes to give score for each resume and ranks the candidates based on their scores.
+
+service CandidateFilteringService {
+
+   // UNARY METHOD TYPE
+   // INPUT: A candicate's resume
+   // OUTPUT: A score for the resume
+   rpc ScoringCandidateResume(CandidateResume) returns (ResumeScore) {}
+  
+  // SERVER-STREAMING METHOD TYPE
+  // INPUT: Criteria to filter qualified candidates/threshold: resume scores over/equal 80 marks
+  // OUTPUT: A stream of qualified candidates
+  rpc QualifiedCandidateList(QualificationCriteria) returns (stream QualifiedCandidate) {}
+
+}
+
+   //  Message defining the candidate's resume input
+   message CandidateResume {
+     string candidate_id = 1;   // lowerCase for message field type as per proto3 syntax
+     string candidate_name = 2; 
+     string resume_text = 3;
+     repeated string skills = 4; // List of skills (e.g., ["Java", "Python"])
+     int32 years_experience = 5;
+   }
+
+   // Message for setting qualification criteria
+   message QualificationCriteria {
+     double min_score = 1;
+   }
+
+   // The response message containing the resume score
+   message ResumeScore {
+     string candidate_id = 1;
+     double score = 2;
+   }
+ 
+    // Message containing details of a qualified candidate
+   message QualifiedCandidate {
+     string candidate_id = 1;
+     string candidate_name = 2;
+     double score = 3;
+   }

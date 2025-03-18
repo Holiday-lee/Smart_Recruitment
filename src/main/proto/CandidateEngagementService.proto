@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "generated.grpc.candidateengagementservice";
+option java_outer_classname = "CandidateEngagementServiceImpl";
+
+package CandidateEngagementService;
+
+// CandidateEngagementService sends interview slots to each of the candidate and get the confirmation slot from them.
+
+service CandidateEngagementService {
+  
+  // CLIENT-STREAMING METHOD TYPE
+  // INPUT: A stream of interview slots
+  // OUTPUT: A confirmation from the candidate
+    rpc ConfirmInterviewSlot(stream SlotSelection) returns (SchedulingConfirmation) {}
+
+  // UNARY METHOD TYPE
+  // INPUT: Candidate ID and application status
+  // OUTPUT: Notification status
+   rpc SendStatusUpdate(ApplicationStatus) returns (NotificationStatus) {}
+}
+
+// Message defining a interview slot to pick.
+message SlotSelection {
+  string candidate_id = 1;   
+  string selected_time = 2;           
+  string selcted_location = 3;       
+}
+
+// Message for application status updates
+message ApplicationStatus {
+   string candidate_id = 1;
+   string status = 2; // e.g., "In Review", "Selected for Interview", "Rejected", "Offer Extended"
+   string message = 3; // Additional details
+}
+
+// Confirmation message from the candidate of the selected slot.
+message SchedulingConfirmation {
+  bool confirmed = 1;  
+}
+
+// Response for notification delivery
+message NotificationStatus {
+   bool delivered = 1;
+   string sendtime = 2;
+}
