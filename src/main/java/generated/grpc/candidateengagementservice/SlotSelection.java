@@ -22,7 +22,7 @@ private static final long serialVersionUID = 0L;
   private SlotSelection() {
     candidateId_ = "";
     selectedTime_ = "";
-    selctedLocation_ = "";
+    selectedLocation_ = "";
   }
 
   @java.lang.Override
@@ -64,7 +64,7 @@ private static final long serialVersionUID = 0L;
           case 26: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            selctedLocation_ = s;
+            selectedLocation_ = s;
             break;
           }
           default: {
@@ -167,34 +167,34 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int SELCTED_LOCATION_FIELD_NUMBER = 3;
-  private volatile java.lang.Object selctedLocation_;
+  public static final int SELECTED_LOCATION_FIELD_NUMBER = 3;
+  private volatile java.lang.Object selectedLocation_;
   /**
-   * <code>string selcted_location = 3;</code>
+   * <code>string selected_location = 3;</code>
    */
-  public java.lang.String getSelctedLocation() {
-    java.lang.Object ref = selctedLocation_;
+  public java.lang.String getSelectedLocation() {
+    java.lang.Object ref = selectedLocation_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      selctedLocation_ = s;
+      selectedLocation_ = s;
       return s;
     }
   }
   /**
-   * <code>string selcted_location = 3;</code>
+   * <code>string selected_location = 3;</code>
    */
   public com.google.protobuf.ByteString
-      getSelctedLocationBytes() {
-    java.lang.Object ref = selctedLocation_;
+      getSelectedLocationBytes() {
+    java.lang.Object ref = selectedLocation_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      selctedLocation_ = b;
+      selectedLocation_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -221,8 +221,8 @@ private static final long serialVersionUID = 0L;
     if (!getSelectedTimeBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, selectedTime_);
     }
-    if (!getSelctedLocationBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, selctedLocation_);
+    if (!getSelectedLocationBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, selectedLocation_);
     }
     unknownFields.writeTo(output);
   }
@@ -239,8 +239,8 @@ private static final long serialVersionUID = 0L;
     if (!getSelectedTimeBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, selectedTime_);
     }
-    if (!getSelctedLocationBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, selctedLocation_);
+    if (!getSelectedLocationBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, selectedLocation_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -262,8 +262,8 @@ private static final long serialVersionUID = 0L;
         .equals(other.getCandidateId());
     result = result && getSelectedTime()
         .equals(other.getSelectedTime());
-    result = result && getSelctedLocation()
-        .equals(other.getSelctedLocation());
+    result = result && getSelectedLocation()
+        .equals(other.getSelectedLocation());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -279,8 +279,8 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getCandidateId().hashCode();
     hash = (37 * hash) + SELECTED_TIME_FIELD_NUMBER;
     hash = (53 * hash) + getSelectedTime().hashCode();
-    hash = (37 * hash) + SELCTED_LOCATION_FIELD_NUMBER;
-    hash = (53 * hash) + getSelctedLocation().hashCode();
+    hash = (37 * hash) + SELECTED_LOCATION_FIELD_NUMBER;
+    hash = (53 * hash) + getSelectedLocation().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -422,7 +422,7 @@ private static final long serialVersionUID = 0L;
 
       selectedTime_ = "";
 
-      selctedLocation_ = "";
+      selectedLocation_ = "";
 
       return this;
     }
@@ -452,7 +452,7 @@ private static final long serialVersionUID = 0L;
       generated.grpc.candidateengagementservice.SlotSelection result = new generated.grpc.candidateengagementservice.SlotSelection(this);
       result.candidateId_ = candidateId_;
       result.selectedTime_ = selectedTime_;
-      result.selctedLocation_ = selctedLocation_;
+      result.selectedLocation_ = selectedLocation_;
       onBuilt();
       return result;
     }
@@ -509,8 +509,8 @@ private static final long serialVersionUID = 0L;
         selectedTime_ = other.selectedTime_;
         onChanged();
       }
-      if (!other.getSelctedLocation().isEmpty()) {
-        selctedLocation_ = other.selctedLocation_;
+      if (!other.getSelectedLocation().isEmpty()) {
+        selectedLocation_ = other.selectedLocation_;
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -680,71 +680,71 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object selctedLocation_ = "";
+    private java.lang.Object selectedLocation_ = "";
     /**
-     * <code>string selcted_location = 3;</code>
+     * <code>string selected_location = 3;</code>
      */
-    public java.lang.String getSelctedLocation() {
-      java.lang.Object ref = selctedLocation_;
+    public java.lang.String getSelectedLocation() {
+      java.lang.Object ref = selectedLocation_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        selctedLocation_ = s;
+        selectedLocation_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string selcted_location = 3;</code>
+     * <code>string selected_location = 3;</code>
      */
     public com.google.protobuf.ByteString
-        getSelctedLocationBytes() {
-      java.lang.Object ref = selctedLocation_;
+        getSelectedLocationBytes() {
+      java.lang.Object ref = selectedLocation_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        selctedLocation_ = b;
+        selectedLocation_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string selcted_location = 3;</code>
+     * <code>string selected_location = 3;</code>
      */
-    public Builder setSelctedLocation(
+    public Builder setSelectedLocation(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      selctedLocation_ = value;
+      selectedLocation_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string selcted_location = 3;</code>
+     * <code>string selected_location = 3;</code>
      */
-    public Builder clearSelctedLocation() {
+    public Builder clearSelectedLocation() {
       
-      selctedLocation_ = getDefaultInstance().getSelctedLocation();
+      selectedLocation_ = getDefaultInstance().getSelectedLocation();
       onChanged();
       return this;
     }
     /**
-     * <code>string selcted_location = 3;</code>
+     * <code>string selected_location = 3;</code>
      */
-    public Builder setSelctedLocationBytes(
+    public Builder setSelectedLocationBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      selctedLocation_ = value;
+      selectedLocation_ = value;
       onChanged();
       return this;
     }

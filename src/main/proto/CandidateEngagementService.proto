@@ -25,7 +25,7 @@ service CandidateEngagementService {
 message SlotSelection {
   string candidate_id = 1;   
   string selected_time = 2;           
-  string selcted_location = 3;       
+  string selected_location = 3;       
 }
 
 // Message for application status updates

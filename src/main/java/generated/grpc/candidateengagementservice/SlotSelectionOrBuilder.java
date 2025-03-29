@@ -28,12 +28,12 @@ public interface SlotSelectionOrBuilder extends
       getSelectedTimeBytes();
 
   /**
-   * <code>string selcted_location = 3;</code>
+   * <code>string selected_location = 3;</code>
    */
-  java.lang.String getSelctedLocation();
+  java.lang.String getSelectedLocation();
   /**
-   * <code>string selcted_location = 3;</code>
+   * <code>string selected_location = 3;</code>
    */
   com.google.protobuf.ByteString
-      getSelctedLocationBytes();
+      getSelectedLocationBytes();
 }
