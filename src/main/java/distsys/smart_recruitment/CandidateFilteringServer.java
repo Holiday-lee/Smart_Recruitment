@@ -8,95 +8,88 @@ package distsys.smart_recruitment;
  *
  * @author jiaki
  */
-
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.stub.StreamObserver;
+import generated.grpc.candidatefilteringservice.CandidateFilteringServiceGrpc;
+import generated.grpc.candidatefilteringservice.CandidateResume;
+import generated.grpc.candidatefilteringservice.ResumeScore;
+import generated.grpc.candidatefilteringservice.QualificationCriteria;
+import generated.grpc.candidatefilteringservice.QualifiedCandidate;
+
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
-/**
- * Server that hosts the CandidateFilteringService
- */
-public class CandidateFilteringServer{
-    private static final Logger logger = Logger.getLogger(CandidateFilteringServer.class.getName());
-    
-    private Server server;
-    private final int port;
-    
-    
-    // Constructor with configurable port
-    public CandidateFilteringServer(int port){
-        this.port = port;
-    }
-    
-     // Start the server
-    public void start()throws IOException{
+public class CandidateFilteringServer {
+
+    public static void main(String[] args) throws IOException, InterruptedException {
         // Create and start the gRPC server
-        server = ServerBuilder.forPort(port)
-                .addService(new CandidateFilteringServiceImplementation())
-                .build()
-                .start();
-        
-        logger.info("Server started, listening on port " + port);
-        
-        // Add shutdown hook to ensure clean shutdown
-        Runtime.getRuntime().addShutdownHook(new Thread(){
-            @Override
-            public void run(){
-                logger.info("Shutting down gRPC server due to JVM shutdown");
-                try{
-                    CandidateFilteringServer.this.stop();
-                } catch (InterruptedException e){
-                    logger.severe("Error shutting down server: " + e.getMessage());
+        Server server = ServerBuilder.forPort(8080)
+                .addService(new CandidateFilteringServiceImpl())
+                .build();
+
+        server.start();
+        System.out.println("Server started on port 8080");
+
+        // Keep the server alive to listen for requests
+        server.awaitTermination();
+    }
+
+    static class CandidateFilteringServiceImpl extends CandidateFilteringServiceGrpc.CandidateFilteringServiceImplBase {
+
+        // Unary RPC to score the candidate's resume
+        @Override
+        public void scoringCandidateResume(CandidateResume request, StreamObserver<ResumeScore> responseObserver) {
+            // Simulate scoring the resume (you can implement real scoring logic here)
+            double score = calculateScore(request);
+
+            // Create a ResumeScore response
+            ResumeScore response = ResumeScore.newBuilder()
+                    .setCandidateId(request.getCandidateId())
+                    .setScore(score)
+                    .build();
+
+            // Send the response back to the client
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+
+        // Server-streaming RPC to return qualified candidates based on score criteria
+        @Override
+        public void qualifiedCandidateList(QualificationCriteria request, StreamObserver<QualifiedCandidate> responseObserver) {
+            // Simulate fetching qualified candidates (you would use real data here)
+            // For demo purposes, let's assume the candidates have scores pre-calculated
+
+            String[] candidateNames = {"Alice", "Bob", "Charlie"};
+            double[] candidateScores = {85.0, 90.0, 70.0};
+
+            // Stream qualified candidates (those with score >= min_score)
+            for (int i = 0; i < candidateNames.length; i++) {
+                if (candidateScores[i] >= request.getMinScore()) {
+                    QualifiedCandidate candidate = QualifiedCandidate.newBuilder()
+                            .setCandidateId(String.valueOf(i))
+                            .setCandidateName(candidateNames[i])
+                            .setScore(candidateScores[i])
+                            .build();
+
+                    responseObserver.onNext(candidate);
                 }
-                logger.info("Server shut down");
             }
-        });
-    }
-    
-    
-    //Stop the server
-    public void stop()throws InterruptedException{
-        if(server!=null){
-            server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
-        }
-    }
-    
 
-     // Block until server is terminated
-    public void blockUntilShutdown()throws InterruptedException{
-        if(server != null){
-            server.awaitTermination();
+            // End the stream
+            responseObserver.onCompleted();
         }
-    }
-    
 
-    // Main entry point
-    public static void main(String[] args){
-        // Use default port 50051 unless specified
-        int port = 50051;
-        
-        // Parse command line arguments for custom port
-        if(args.length > 0){
-            try{
-                port = Integer.parseInt(args[0]);
-            } catch (NumberFormatException e){
-                logger.warning("Invalid port number. Using default port " + port);
-            }
-        }
-        
-        // Start the server
-        final CandidateFilteringServer server = new CandidateFilteringServer(port);
-        try {
-            server.start();
-            server.blockUntilShutdown();
-        } catch (IOException e){
-            logger.severe("Failed to start server: " + e.getMessage());
-            e.printStackTrace();
-        } catch (InterruptedException e){
-            logger.severe("Server interrupted: " + e.getMessage());
-            e.printStackTrace();
+        // Dummy scoring logic based on resume content (this can be more sophisticated)
+        private double calculateScore(CandidateResume resume) {
+            double score = 0.0;
+
+            // Score based on skills and experience (for demo purposes)
+            if (resume.getSkillsList().contains("Java")) score += 30;
+            if (resume.getSkillsList().contains("Python")) score += 25;
+            score += resume.getYearsExperience() * 5; // Adding points for experience
+
+            return score;
         }
     }
 }
+
