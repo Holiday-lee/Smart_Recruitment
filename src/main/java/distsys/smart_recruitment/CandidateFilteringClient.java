@@ -8,72 +8,181 @@ package distsys.smart_recruitment;
  *
  * @author jiaki
  */
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.stub.StreamObserver;
+
 import generated.grpc.candidatefilteringservice.CandidateFilteringServiceGrpc;
 import generated.grpc.candidatefilteringservice.CandidateResume;
-import generated.grpc.candidatefilteringservice.ResumeScore;
 import generated.grpc.candidatefilteringservice.QualificationCriteria;
 import generated.grpc.candidatefilteringservice.QualifiedCandidate;
+import generated.grpc.candidatefilteringservice.ResumeScore;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+/**
+ * Client for accessing the CandidateFilteringService
+ */
 public class CandidateFilteringClient {
+    private static final Logger logger = Logger.getLogger(CandidateFilteringClient.class.getName());
 
-    public static void main(String[] args) {
-        // Create a channel to the server
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8080)
-                .usePlaintext()
+    // Blocking stub (synchronous calls)
+    private final CandidateFilteringServiceGrpc.CandidateFilteringServiceBlockingStub blockingStub;
+
+    private final ManagedChannel channel;
+
+    /**
+     * Constructor to setup channel and stub
+     */
+    public CandidateFilteringClient(String host, int port) {
+        // Create a communication channel to the server
+        channel = ManagedChannelBuilder.forAddress(host, port)
+                .usePlaintext() // Disable TLS (not secure, but simpler for testing)
                 .build();
 
-        // Create a stub for the service
-        CandidateFilteringServiceGrpc.CandidateFilteringServiceBlockingStub blockingStub = CandidateFilteringServiceGrpc.newBlockingStub(channel);
-        CandidateFilteringServiceGrpc.CandidateFilteringServiceStub asyncStub = CandidateFilteringServiceGrpc.newStub(channel);
+        // Create a blocking stub (synchronous calls)
+        blockingStub = CandidateFilteringServiceGrpc.newBlockingStub(channel);
+    }
 
-        // Call the unary ScoringCandidateResume RPC
-        CandidateResume resume = CandidateResume.newBuilder()
-                .setCandidateId("1")
-                .setCandidateName("Alice")
-                .setResumeText("Experienced Java and Python developer")
-                .addSkills("Java")
-                .addSkills("Python")
-                .setYearsExperience(5)
+    /**
+     * Shutdown the client
+     */
+    public void shutdown() throws InterruptedException {
+        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+    }
+
+    /**
+     * Score a single candidate resume
+     */
+    public double scoreCandidate(String candidateId, String candidateName, String resumeText,
+                              List<String> skills, int yearsExperience) {
+        logger.info("Requesting score for candidate: " + candidateName);
+
+        // Build resume request
+        CandidateResume request = CandidateResume.newBuilder()
+                .setCandidateId(candidateId)
+                .setCandidateName(candidateName)
+                .setResumeText(resumeText)
+                .addAllSkills(skills)
+                .setYearsExperience(yearsExperience)
                 .build();
 
-        ResumeScore score = blockingStub.scoringCandidateResume(resume);
-        System.out.println("Score for candidate " + resume.getCandidateName() + ": " + score.getScore());
-
-        // Call the server-streaming QualifiedCandidateList RPC
-        QualificationCriteria criteria = QualificationCriteria.newBuilder()
-                .setMinScore(80.0)
-                .build();
-
-        StreamObserver<QualifiedCandidate> responseObserver = new StreamObserver<QualifiedCandidate>() {
-            @Override
-            public void onNext(QualifiedCandidate value) {
-                System.out.println("Qualified candidate: " + value.getCandidateName() + " with score " + value.getScore());
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                System.err.println("Error during stream: " + t.getMessage());
-            }
-
-            @Override
-            public void onCompleted() {
-                System.out.println("Completed receiving qualified candidates.");
-            }
-        };
-
-        asyncStub.qualifiedCandidateList(criteria, responseObserver);
-
-        // Keep the client alive for a while to receive streaming responses
+        ResumeScore response;
         try {
-            Thread.sleep(5000); // Adjust based on expected response time
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            // Call the service method
+            response = blockingStub.scoringCandidateResume(request);
+            logger.info("Resume score for " + candidateName + ": " + response.getScore());
+            return response.getScore();
+        } catch (StatusRuntimeException e) {
+            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+            return -1; // Indicate error
+        }
+    }
+
+    /**
+     * Get list of qualified candidates
+     */
+    public List<QualifiedCandidate> getQualifiedCandidates(double minScore) {
+        logger.info("Requesting qualified candidates with minimum score: " + minScore);
+
+        // Build qualification criteria
+        QualificationCriteria request = QualificationCriteria.newBuilder()
+                .setMinScore(minScore)
+                .build();
+
+        List<QualifiedCandidate> qualifiedCandidates = new ArrayList<>();
+        try {
+            // Call the streaming service method
+            Iterator<QualifiedCandidate> candidatesIterator = blockingStub.qualifiedCandidateList(request);
+
+            // Process each response as it arrives
+            while (candidatesIterator.hasNext()) {
+                QualifiedCandidate candidate = candidatesIterator.next();
+                qualifiedCandidates.add(candidate);
+                logger.info("Received qualified candidate: " + candidate.getCandidateName() +
+                           " (ID: " + candidate.getCandidateId() + ") with score: " + candidate.getScore());
+            }
+        } catch (StatusRuntimeException e) {
+            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
         }
 
-        // Shutdown the channel
-        channel.shutdownNow();
+        return qualifiedCandidates;
+    }
+
+    /**
+     * Main method to demonstrate client usage
+     */
+    public static void main(String[] args) throws InterruptedException {
+        CandidateFilteringClient client = null;
+        try {
+            // Connect to the server (localhost:50051 by default)
+            client = new CandidateFilteringClient("localhost", 50051);
+
+            System.out.println("\n=== Testing ScoringCandidateResume ===");
+            // Test 1: Score a new candidate resume
+            double score = client.scoreCandidate(
+                "C005",
+                "Pat Miller",
+                "Full stack developer with 4 years of experience in React and Node.js. " +
+                "Led a team of 3 developers in building an e-commerce platform.",
+                Arrays.asList("React", "Node.js", "JavaScript", "MongoDB"),
+                4
+            );
+            System.out.println("Score received: " + score);
+
+            // You can easily test with different data by adding more calls here
+            double score2 = client.scoreCandidate(
+                "C006",
+                "Emily Chen",
+                "Data scientist with expertise in machine learning and 3 years of experience " +
+                "working with neural networks and predictive modeling.",
+                Arrays.asList("Python", "TensorFlow", "Pandas", "SQL", "R"),
+                3
+            );
+            System.out.println("Score received for Emily Chen: " + score2);
+
+            System.out.println("\n=== Testing QualifiedCandidateList ===");
+            // Test with minimum score of 75
+            System.out.println("Qualified Candidates (minimum score: 75):");
+            List<QualifiedCandidate> qualifiedCandidates = client.getQualifiedCandidates(75.0);
+            System.out.println("Total qualified candidates: " + qualifiedCandidates.size());
+
+            // Display summary of qualified candidates
+            if (!qualifiedCandidates.isEmpty()) {
+                System.out.println("\nSummary of Qualified Candidates:");
+                for (QualifiedCandidate candidate : qualifiedCandidates) {
+                    System.out.printf("- %s (ID: %s): %.1f points%n",
+                            candidate.getCandidateName(),
+                            candidate.getCandidateId(),
+                            candidate.getScore());
+                }
+            }
+
+            // Test with a different threshold
+            System.out.println("\nHighly Qualified Candidates (minimum score: 85):");
+            List<QualifiedCandidate> highlyQualified = client.getQualifiedCandidates(85.0);
+            System.out.println("Total highly qualified candidates: " + highlyQualified.size());
+
+            if (!highlyQualified.isEmpty()) {
+                System.out.println("\nSummary of Highly Qualified Candidates:");
+                for (QualifiedCandidate candidate : highlyQualified) {
+                    System.out.printf("- %s (ID: %s): %.1f points%n",
+                            candidate.getCandidateName(),
+                            candidate.getCandidateId(),
+                            candidate.getScore());
+                }
+            }
+
+        } finally {
+            // Shutdown the client
+            if (client != null) {
+                client.shutdown();
+            }
+        }
     }
 }
