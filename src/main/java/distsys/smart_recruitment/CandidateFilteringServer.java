@@ -123,6 +123,7 @@ public class CandidateFilteringServer {
      */
     private static class CandidateFilteringServiceImpl extends CandidateFilteringServiceGrpc.CandidateFilteringServiceImplBase {
 
+        @Override
         public void scoringCandidateResume(CandidateResume request,
             StreamObserver<ResumeScore> responseObserver) {
 
@@ -142,6 +143,7 @@ public class CandidateFilteringServer {
             responseObserver.onCompleted();
         }
 
+        @Override
         public void qualifiedCandidateList(QualificationCriteria request,
             StreamObserver<QualifiedCandidate> responseObserver) {
 
