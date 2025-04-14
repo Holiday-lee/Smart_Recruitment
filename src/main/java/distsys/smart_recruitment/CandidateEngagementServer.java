@@ -46,16 +46,15 @@ public class CandidateEngagementServer extends CandidateEngagementServiceGrpc.Ca
 
     }
 
+    // CLIENT-STREAMING METHOD TYPE
+    // rpc ConfirmInterviewSlot(stream SlotSelection) returns (SchedulingConfirmation) {}
+       public StreamObserver<SlotSelection> confirmInterviewSlot(StreamObserver<SchedulingConfirmation> responseObserver) {
 
-   @Override
-       public io.grpc.stub.StreamObserver<SlotSelection> confirmInterviewSlot(
-               StreamObserver<SchedulingConfirmation> responseObserver) {
-
+           return new StreamObserver<SlotSelection>() {
+               
            // Create a list to collect all SlotSelection objects from the stream
            List<SlotSelection> slotSelections = new ArrayList<>();
 
-           // Return a StreamObserver to handle incoming SlotSelection stream
-           return new StreamObserver<SlotSelection>() {
 
                @Override
                public void onNext(SlotSelection slotSelection) {
@@ -97,7 +96,8 @@ public class CandidateEngagementServer extends CandidateEngagementServiceGrpc.Ca
            };
     }
 
-
+    // UNARY METHOD TYPE
+    // rpc SendStatusUpdate(ApplicationStatus) returns (NotificationStatus) {}
     @Override
     public void sendStatusUpdate(ApplicationStatus request, StreamObserver<NotificationStatus> responseObserver){
         // Process incoming ApplicationStatus request
