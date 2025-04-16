@@ -16,9 +16,11 @@ import generated.grpc.candidateengagementservice.SchedulingConfirmation;
 import generated.grpc.candidateengagementservice.SlotSelection;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -26,8 +28,8 @@ import java.util.logging.Logger;
  *   rpc ConfirmInterviewSlot(stream SlotSelection) returns (SchedulingConfirmation) {}
  *
  * UNARY METHOD TYPE / INPUT: Candidate ID and application status / OUTPUT: Notification status
- * rpc SendStatusUpdate(ApplicationStatus) returns (NotificationStatus) 
- * 
+ * rpc SendStatusUpdate(ApplicationStatus) returns (NotificationStatus)
+ *
  */
 public class CandidateEngagementClient {
 
@@ -43,11 +45,11 @@ public class CandidateEngagementClient {
                 .build();
 
         try {
-            // Create a blocking stub for SendStatusUpdate (Unary)
+            // Create a blocking stub for Unary
             CandidateEngagementServiceGrpc.CandidateEngagementServiceBlockingStub blockingStub =
                     CandidateEngagementServiceGrpc.newBlockingStub(channel);
 
-            // Create a stub for ConfirmInterviewSlot (Client Streaming)
+            // Create a stub for Client Streaming
             CandidateEngagementServiceGrpc.CandidateEngagementServiceStub asyncStub =
                     CandidateEngagementServiceGrpc.newStub(channel);
 
@@ -60,14 +62,17 @@ public class CandidateEngagementClient {
             // Wait for a bit to receive responses
             Thread.sleep(3000);
 
+        } catch (InterruptedException e) {
+            logger.log(Level.SEVERE, "Client interrupted: " + e.getMessage(), e);
         } finally {
-            // Shutdown the channel after the calls are complete
+            // hut down the channel after the calls are complete
+            logger.info("Shutting down channel...");
             channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-            System.out.println("Client shutdown complete.");
+            logger.info("Client shutdown complete.");
         }
     }
 
-    // Method to invoke SendStatusUpdate (Unary call)
+    // Method : SendStatusUpdate (Unary call)
     private static void sendStatusUpdate(CandidateEngagementServiceGrpc.CandidateEngagementServiceBlockingStub blockingStub) {
         // Build the request with empty values
         ApplicationStatus statusRequest = ApplicationStatus.newBuilder()
@@ -76,21 +81,25 @@ public class CandidateEngagementClient {
                 .setMessage("")
                 .build();
 
-        System.out.println("Sending status update request...");
+        logger.info("Sending status update request...");
 
         try {
             // Call the SendStatusUpdate method
             NotificationStatus response = blockingStub.sendStatusUpdate(statusRequest);
 
             // Log the response
-            System.out.println("Status Update sent. Delivered: " + response.getDelivered());
-            System.out.println("Send Time: " + response.getSendtime());
+            logger.info("Status Update sent. Delivered: " + response.getDelivered());
+            logger.info("Send Time: " + response.getSendtime());
+        } catch (StatusRuntimeException e) {
+            // Log the error and handle gRPC status codes
+            logger.log(Level.SEVERE, "gRPC error calling sendStatusUpdate: " + e.getStatus().getDescription(), e);
         } catch (Exception e) {
-            System.err.println("Error calling sendStatusUpdate: " + e.getMessage());
+            // Log any other errors
+            logger.log(Level.SEVERE, "Error calling sendStatusUpdate: " + e.getMessage(), e);
         }
     }
 
-    // Method to invoke ConfirmInterviewSlot (Client Streaming)
+    // Method: ConfirmInterviewSlot (Client Streaming)
     private static void confirmInterviewSlot(CandidateEngagementServiceGrpc.CandidateEngagementServiceStub asyncStub) {
         final CountDownLatch finishLatch = new CountDownLatch(1);
 
@@ -99,26 +108,25 @@ public class CandidateEngagementClient {
             @Override
             public void onNext(SchedulingConfirmation schedulingConfirmation) {
                 // Handle the confirmation received from the server
-                System.out.println("Received confirmation: " + schedulingConfirmation.getConfirmed());
+                logger.info("Received confirmation: " + schedulingConfirmation.getConfirmed());
             }
 
             @Override
             public void onError(Throwable t) {
                 // Handle any errors
-                System.err.println("Error during stream: " + t.getMessage());
+                logger.log(Level.SEVERE, "Error during stream: " + t.getMessage(), t);
                 finishLatch.countDown();
             }
 
             @Override
             public void onCompleted() {
-                // Handle the stream completion
-                System.out.println("Interview slot confirmation process completed.");
-                finishLatch.countDown();
+                // Handle the completion of the stream
+                logger.info("Completed receiving interview slots.");
             }
         });
 
         try {
-            System.out.println("Sending slot selection request...");
+            logger.info("Sending slot selection request...");
 
             // Send SlotSelection to the server with empty values
             SlotSelection slot = SlotSelection.newBuilder()
@@ -130,17 +138,27 @@ public class CandidateEngagementClient {
             // Send slot
             requestObserver.onNext(slot);
 
-            // Complete the request (which tells the server that no more slots will be sent)
-            requestObserver.onCompleted();
 
-            // Wait for server to respond
-            if (!finishLatch.await(1, TimeUnit.MINUTES)) {
-                System.err.println("confirmInterviewSlot can not finish within 1 minute");
-            }
+            // Simulate checking for invalid input and cancelling the request if needed
+            if (slot.getCandidateId().isEmpty() || slot.getSelectedTime().isEmpty() || slot.getSelectedLocation().isEmpty()) {
+		String errorMessage = "Invalid slot selection: Candidate ID, time, or location is empty. Cancelling request.";
+		logger.warning(errorMessage);
+		requestObserver.onError(new IllegalArgumentException(errorMessage));
+		    return;  // Stop further processing if input is invalid
+             }
 
-        } catch (Exception e) {
-            System.err.println("Error in confirmInterviewSlot: " + e.getMessage());
-            requestObserver.onError(e);
-        }
-    }
-}
+		              // Complete the request stream (no more slots will be sent)
+		              requestObserver.onCompleted();
+
+		              // Wait for the server to complete the stream and respond
+		              if (!finishLatch.await(1, TimeUnit.MINUTES)) {
+		                  logger.severe("confirmInterviewSlot did not finish within 1 minute");
+		              }
+
+		          } catch (Exception e) {
+		              // Log errors in sending the stream and cancel the request
+		              logger.log(Level.SEVERE, "Error in confirmInterviewSlot: " + e.getMessage(), e);
+		              requestObserver.onError(e);
+		          }
+		      }
+		  }

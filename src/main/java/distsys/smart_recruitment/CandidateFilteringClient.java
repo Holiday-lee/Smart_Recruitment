@@ -17,10 +17,7 @@ import generated.grpc.candidatefilteringservice.ResumeScore;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import io.grpc.stub.StreamObserver;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,98 +30,91 @@ import java.util.logging.Logger;
  * rpc QualifiedCandidateList(QualificationCriteria) returns (stream QualifiedCandidate)
  */
 public class CandidateFilteringClient {
+
     private static final Logger logger = Logger.getLogger(CandidateFilteringClient.class.getName());
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws InterruptedException {
+
+        // Create the gRPC channel
         String host = "localhost";
         int port = 50051;
-
-        ManagedChannel channel = ManagedChannelBuilder.
-                forAddress(host, port)
-                .usePlaintext()
+        
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(host, port)
+                .usePlaintext() 
                 .build();
 
-        try {
-            // Create a blocking stub for both methods
-            CandidateFilteringServiceGrpc.CandidateFilteringServiceBlockingStub blockingStub =
-                    CandidateFilteringServiceGrpc.newBlockingStub(channel);
+        // Create the blocking stub for Unary
+        CandidateFilteringServiceGrpc.CandidateFilteringServiceBlockingStub blockingStub =
+                CandidateFilteringServiceGrpc.newBlockingStub(channel);
 
-            // Call ScoringCandidateResume method
-            scoreCandidate(blockingStub);
+        // Create the asynchronous stub for Server Streaming
+        CandidateFilteringServiceGrpc.CandidateFilteringServiceStub asyncStub =
+                CandidateFilteringServiceGrpc.newStub(channel);
 
-            // Call QualifiedCandidateList method
-            getQualifiedCandidates(blockingStub);
+        // Unary Method (Scoring a Candidate's Resume)
+        scoreCandidateResume(blockingStub);
 
-            // Wait for a bit to receive responses
-            Thread.sleep(3000);
+        // Server Streaming Method (Getting Qualified Candidates)
+        getQualifiedCandidates(asyncStub);
 
-        } finally {
-            // Shutdown the channel after the calls are complete
-            channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-            System.out.println("Client shutdown complete.");
-        }
+        // Shutdown the channel after use
+        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
     /**
-     * UNARY METHOD TYPE / INPUT: A candicate's resume / OUTPUT: A score for the resume
-     * rpc ScoringCandidateResume(CandidateResume) returns (ResumeScore)
+     * Unary RPC for scoring a candidate's resume.
      */
-    private static void scoreCandidate(CandidateFilteringServiceGrpc.CandidateFilteringServiceBlockingStub blockingStub) {
-        // Build resume request with empty values
+    private static void scoreCandidateResume(CandidateFilteringServiceGrpc.CandidateFilteringServiceBlockingStub blockingStub) {
+        // Create a request for scoring a candidate's resume
         CandidateResume scoreRequest = CandidateResume.newBuilder()
                 .setCandidateId("test-id")
                 .setCandidateName("Test Candidate")
                 .setResumeText("This is a test resume text.")
-                .addSkills("Java")  // Add at least one skill
-                .setYearsExperience(3)  // Set some experience
+                .addSkills("Java")
+                .setYearsExperience(3)
                 .build();
 
-        System.out.println("Sending candidate resume request...");
+        logger.info("Sending candidate resume request to the server.");
 
         try {
-            // Call the scoringCandidateResume method
+            // Call the scoringCandidateResume method & get the response
             ResumeScore response = blockingStub.scoringCandidateResume(scoreRequest);
-
-            // Log the response
-            System.out.println("Resume score received: " + response.getScore() + " for candidate ID: " + response.getCandidateId());
-        } catch (Exception e) {
-            System.err.println("Error calling scoringCandidateResume: " + e.getMessage());
+            logger.info("Resume score received: " + response.getScore());
+        } catch (StatusRuntimeException e) {
+            logger.log(Level.SEVERE, "Call failed: " + e.getStatus().getDescription(), e);
         }
     }
 
     /**
-     * SERVER-STREAMING METHOD TYPE / INPUT: Criteria filter qualified candidates / OUTPUT: A stream of qualified candidates
-     * rpc QualifiedCandidateList(QualificationCriteria) returns (stream QualifiedCandidate)
+     * Server-Streaming RPC for getting a list of qualified candidates.
      */
-    private static void getQualifiedCandidates(CandidateFilteringServiceGrpc.CandidateFilteringServiceBlockingStub blockingStub) {
-        System.out.println("\nRequesting qualified candidates...");
-
-        // Build qualification criteria
+    private static void getQualifiedCandidates(CandidateFilteringServiceGrpc.CandidateFilteringServiceStub asyncStub) {
+        // Create the request for filtering qualified candidates
         QualificationCriteria request = QualificationCriteria.newBuilder()
-                .setMinScore(70.0)  // Set some minimum score
+                .setMinScore(70.0) // Set some minimum score
                 .build();
+        logger.info("Requesting qualified candidates with minimum score of 70.0");
 
-        try {
-            // Call the streaming service method
-            Iterator<QualifiedCandidate> candidatesIterator = blockingStub.qualifiedCandidateList(request);
-
-            System.out.println("Qualified candidates with minimum score 70.0:");
-
-            // Process each response as it arrives
-            int count = 0;
-            while (candidatesIterator.hasNext()) {
-                QualifiedCandidate candidate = candidatesIterator.next();
-                count++;
-                System.out.println("  " + count + ". " + candidate.getCandidateName() +
+        // Make the asynchronous call with a StreamObserver to handle the streaming responses
+        asyncStub.qualifiedCandidateList(request, new StreamObserver<QualifiedCandidate>() {
+            @Override
+            public void onNext(QualifiedCandidate candidate) {
+                // Handle each qualified candidate as it arrives
+                logger.info("Received qualified candidate: " + candidate.getCandidateName() +
                         " (ID: " + candidate.getCandidateId() + ") with score: " + candidate.getScore());
             }
 
-            if (count == 0) {
-                System.out.println("  No qualified candidates found.");
+            @Override
+            public void onError(Throwable t) {
+                // Handle errors that occur during the stream
+                logger.log(Level.SEVERE, "Error during streaming", t);
             }
 
-        } catch (StatusRuntimeException e) {
-            System.err.println("Error calling qualifiedCandidateList: " + e.getMessage());
-        }
+            @Override
+            public void onCompleted() {
+                // Notify when the server has finished sending responses
+                logger.info("Server has finished sending responses.");
+            }
+        });
     }
 }

@@ -15,10 +15,11 @@ import io.grpc.stub.StreamObserver;
 import generated.grpc.interviewschedulingservice.InterviewSchedulingServiceGrpc;
 import generated.grpc.interviewschedulingservice.CandidateName;
 import generated.grpc.interviewschedulingservice.InterviewSlot;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class InterviewSchedulingClient {
-    
+
     private static final Logger logger = Logger.getLogger(InterviewSchedulingClient.class.getName());
 
 
@@ -34,8 +35,8 @@ public class InterviewSchedulingClient {
     // BIDIRECTIONAL-STREAMING METHOD TYPE
     // INPUT: Stream of candidate name
     // OUTPUT: Stream of interview slot
-    
-        // Bi-dire => asyncStub
+
+         // Create the asynchronous stub for BI-Directional
         InterviewSchedulingServiceGrpc.InterviewSchedulingServiceStub asyncStub = InterviewSchedulingServiceGrpc.newStub(channel);
 
         // Create a stream observer to handle the response(interviewSlot) stream
@@ -43,19 +44,19 @@ public class InterviewSchedulingClient {
             @Override
             public void onNext(InterviewSlot value) {
                 // Print the received interview slot
-                System.out.println("Received slot: " + value.getTime() + " at " + value.getLocation());
+                logger.info("Received slot: " + value.getTime() + " at " + value.getLocation());
             }
 
             @Override
             public void onError(Throwable t) {
                 // Handle error
-                System.err.println("Error receiving interview slots: " + t.getMessage());
+                logger.log(Level.SEVERE, "Error receiving interview slots: " + t.getMessage(), t);
             }
 
             @Override
             public void onCompleted() {
                 // Handle the completion of the stream
-                System.out.println("Completed receiving interview slots.");
+                logger.info("Completed receiving interview slots.");
             }
         };
 
@@ -65,14 +66,21 @@ public class InterviewSchedulingClient {
 
         try {
             // Send a candidate name with empty values for testing
-            requestObserver.onNext(CandidateName.newBuilder().setCandidateId("").setCandidateName("").build());
 
-            // Indicate the end of the stream
+           logger.info("Sending candidate names nd request for scheduling interview slots");
+           CandidateName candidate = CandidateName.newBuilder()
+			   .setCandidateId("")
+			   .setCandidateName("")
+			   .build();
+			requestObserver.onNext(candidate);
+
+            // End of the stream
             requestObserver.onCompleted();
+            logger.info("Done sending candidate names, waiting for interview slots response");
 
         } catch (Exception e) {
             // Handle exception
-            System.err.println("Error during request stream: " + e.getMessage());
+            logger.log(Level.SEVERE, "Error during request stream: " + e.getMessage(), e);
             requestObserver.onError(e);
         }
 
@@ -80,10 +88,11 @@ public class InterviewSchedulingClient {
         try {
             Thread.sleep(5000); // Wait for responses to come in
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error while sleeping: " + e.getMessage(), e);
         }
 
         // Shutdown the channel
+        logger.info("Shutting down the channel...");
         channel.shutdownNow();
     }
 }
