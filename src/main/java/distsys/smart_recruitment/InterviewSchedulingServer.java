@@ -12,64 +12,72 @@ package distsys.smart_recruitment;
 import io.grpc.stub.StreamObserver;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import io.grpc.Status;
 import generated.grpc.interviewschedulingservice.InterviewSchedulingServiceGrpc;
 import generated.grpc.interviewschedulingservice.CandidateName;
 import generated.grpc.interviewschedulingservice.InterviewSlot;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
-public class InterviewSchedulingServer {
+public class InterviewSchedulingServer extends InterviewSchedulingServiceGrpc.InterviewSchedulingServiceImplBase {
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        // Create a new instance of the server
-        Server server = ServerBuilder.forPort(8080)
-                .addService(new InterviewSchedulingServiceImpl())
-                .build();
+    private static final Logger logger = Logger.getLogger(InterviewSchedulingServer.class.getName());
 
-        // Start the server
-        server.start();
-        System.out.println("Server started, listening on port 8080");
+    public static void main(String[] args){
+        InterviewSchedulingServer interviewSchedulingServer = new InterviewSchedulingServer();
 
-        // Keep the server running
-        server.awaitTermination();
-    }
+        int port = 50052;
 
-    // Implementation of the InterviewSchedulingService
-    static class InterviewSchedulingServiceImpl extends InterviewSchedulingServiceGrpc.InterviewSchedulingServiceImplBase {
-        
-        @Override
-        public StreamObserver<CandidateName> arrangeInterviewSlot(StreamObserver<InterviewSlot> responseObserver) {
-            return new StreamObserver<CandidateName>() {
-                
-                @Override
-                public void onNext(CandidateName candidate) {
-                    // Simulate slot assignment (you can enhance this logic)
-                    System.out.println("Received candidate: " + candidate.getCandidateName());
-
-                    // Creating a dummy interview slot
-                    InterviewSlot slot = InterviewSlot.newBuilder()
-                            .setTime("10:00 AM")
-                            .setLocation("Zoom Meeting")
-                            .build();
-
-                    // Sending the interview slot back to the client
-                    responseObserver.onNext(slot);
-                }
-
-                @Override
-                public void onError(Throwable t) {
-                    // Handle any errors that occur
-                    System.err.println("Error in processing: " + t.getMessage());
-                    responseObserver.onError(Status.INTERNAL.withDescription("Error during processing").asRuntimeException());
-                }
-
-                @Override
-                public void onCompleted() {
-                    // When the stream ends, we complete the response
-                    responseObserver.onCompleted();
-                }
-            };
+        try{
+            Server server = ServerBuilder.forPort(port)
+                    .addService(interviewSchedulingServer)
+                    .build()
+                    .start();
+                    logger.info("Server started, listening on " + port);
+                    System.out.println("Server started, listening on " + port);
+                    server.awaitTermination();
+        } catch (IOException e){
+            e.printStackTrace();
+        } catch (InterruptedException e){
+            e.printStackTrace();
         }
     }
+
+    // BIDIRECTIONAL-STREAMING METHOD TYPE
+    // INPUT: Stream of candidate name
+    // OUTPUT: Stream of interview slot
+    // Auto-scheduling interview slots. The client sends a stream of candidate name and the server returns(arranges) a stream of interview slot with 1 candidate have few slots to choose from
+    //rpc ArrangeInterviewSlot(stream CandidateName) returns (stream InterviewSlot) {}
+
+
+    public StreamObserver<CandidateName> arrangeInterviewSlot(StreamObserver<InterviewSlot> responseObserver) {
+        return new StreamObserver<CandidateName>(){
+
+            @Override
+            public void onNext(CandidateName candidate){
+                System.out.println("Received candidate: " + candidate.getCandidateName());
+
+                // Creating interview slot
+                InterviewSlot slot = InterviewSlot.newBuilder()
+                        .setTime("")
+                        .setLocation("")
+                        .build();
+
+                responseObserver.onNext(slot);
+            }
+
+            @Override
+            public void onError(Throwable t){
+                System.err.println("Error during stream processing: " + t.getMessage());
+                responseObserver.onError(t);
+            }
+
+            @Override
+            public void onCompleted(){
+                responseObserver.onCompleted();
+            }
+
+        };
+    }
+
 }

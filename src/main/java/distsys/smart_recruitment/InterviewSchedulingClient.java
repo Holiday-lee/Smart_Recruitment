@@ -15,18 +15,30 @@ import io.grpc.stub.StreamObserver;
 import generated.grpc.interviewschedulingservice.InterviewSchedulingServiceGrpc;
 import generated.grpc.interviewschedulingservice.CandidateName;
 import generated.grpc.interviewschedulingservice.InterviewSlot;
+import java.util.logging.Logger;
 
 public class InterviewSchedulingClient {
+    
+    private static final Logger logger = Logger.getLogger(InterviewSchedulingClient.class.getName());
 
-    public static void main(String[] args) {
-        // Set up the channel and stub
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8080)
+
+    public static void main(String[] args) throws Exception {
+        String host = "localhost";
+        int port = 50052;
+
+        ManagedChannel channel = ManagedChannelBuilder.
+                forAddress(host, port)
                 .usePlaintext()
                 .build();
 
+    // BIDIRECTIONAL-STREAMING METHOD TYPE
+    // INPUT: Stream of candidate name
+    // OUTPUT: Stream of interview slot
+    
+        // Bi-dire => asyncStub
         InterviewSchedulingServiceGrpc.InterviewSchedulingServiceStub asyncStub = InterviewSchedulingServiceGrpc.newStub(channel);
 
-        // Create a stream observer to handle the response stream
+        // Create a stream observer to handle the response(interviewSlot) stream
         StreamObserver<InterviewSlot> responseObserver = new StreamObserver<InterviewSlot>() {
             @Override
             public void onNext(InterviewSlot value) {
@@ -48,13 +60,12 @@ public class InterviewSchedulingClient {
         };
 
         // Create the stream observer for sending candidate names
+        // Bi-dire => asyncStub(no need block & wait)
         StreamObserver<CandidateName> requestObserver = asyncStub.arrangeInterviewSlot(responseObserver);
 
         try {
-            // Send candidate names in a stream
-            requestObserver.onNext(CandidateName.newBuilder().setCandidateId("1").setCandidateName("Alice").build());
-            requestObserver.onNext(CandidateName.newBuilder().setCandidateId("2").setCandidateName("Bob").build());
-            requestObserver.onNext(CandidateName.newBuilder().setCandidateId("3").setCandidateName("Charlie").build());
+            // Send a candidate name with empty values for testing
+            requestObserver.onNext(CandidateName.newBuilder().setCandidateId("").setCandidateName("").build());
 
             // Indicate the end of the stream
             requestObserver.onCompleted();
