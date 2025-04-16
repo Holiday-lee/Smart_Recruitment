@@ -17,6 +17,8 @@ import generated.grpc.interviewschedulingservice.CandidateName;
 import generated.grpc.interviewschedulingservice.InterviewSlot;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import distsys.smart_recruitment.auth.BearerToken;
+import distsys.smart_recruitment.auth.JwtUtil;
 
 public class InterviewSchedulingClient {
 
@@ -32,12 +34,20 @@ public class InterviewSchedulingClient {
                 .usePlaintext()
                 .build();
 
+        // Generate JWT token for authentication
+	String jwt = JwtUtil.generateToken("InterviewSchedulingClient");
+        logger.info("Generated JWT token for authentication");
+
+        // Create authentication credentials with the token
+        BearerToken token = new BearerToken(jwt);
+
     // BIDIRECTIONAL-STREAMING METHOD TYPE
     // INPUT: Stream of candidate name
     // OUTPUT: Stream of interview slot
 
          // Create the asynchronous stub for BI-Directional
-        InterviewSchedulingServiceGrpc.InterviewSchedulingServiceStub asyncStub = InterviewSchedulingServiceGrpc.newStub(channel);
+        InterviewSchedulingServiceGrpc.InterviewSchedulingServiceStub asyncStub = InterviewSchedulingServiceGrpc.newStub(channel)
+        .withCallCredentials(token); // add token
 
         // Create a stream observer to handle the response(interviewSlot) stream
         StreamObserver<InterviewSlot> responseObserver = new StreamObserver<InterviewSlot>() {

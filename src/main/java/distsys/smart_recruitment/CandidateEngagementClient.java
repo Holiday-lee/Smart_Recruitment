@@ -9,6 +9,8 @@ package distsys.smart_recruitment;
  * @author jiaki
  */
 
+import distsys.smart_recruitment.auth.BearerToken;
+import distsys.smart_recruitment.auth.JwtUtil;
 import generated.grpc.candidateengagementservice.ApplicationStatus;
 import generated.grpc.candidateengagementservice.CandidateEngagementServiceGrpc;
 import generated.grpc.candidateengagementservice.NotificationStatus;
@@ -45,13 +47,22 @@ public class CandidateEngagementClient {
                 .build();
 
         try {
-            // Create a blocking stub for Unary
-            CandidateEngagementServiceGrpc.CandidateEngagementServiceBlockingStub blockingStub =
-                    CandidateEngagementServiceGrpc.newBlockingStub(channel);
+            // Generate JWT token for authentication
+            String jwt = JwtUtil.generateToken("CandidateEngagementClient");
+            logger.info("Generated JWT token for authentication");
 
-            // Create a stub for Client Streaming
+            // Create authentication credentials with the token
+            BearerToken token = new BearerToken(jwt);
+
+            // Create a blocking stub for Unary with authentication
+            CandidateEngagementServiceGrpc.CandidateEngagementServiceBlockingStub blockingStub =
+                    CandidateEngagementServiceGrpc.newBlockingStub(channel)
+                    .withCallCredentials(token);
+
+            // Create a stub for Client Streaming with authentication
             CandidateEngagementServiceGrpc.CandidateEngagementServiceStub asyncStub =
-                    CandidateEngagementServiceGrpc.newStub(channel);
+                    CandidateEngagementServiceGrpc.newStub(channel)
+                    .withCallCredentials(token);
 
             // Call SendStatusUpdate method
             sendStatusUpdate(blockingStub);
@@ -65,7 +76,7 @@ public class CandidateEngagementClient {
         } catch (InterruptedException e) {
             logger.log(Level.SEVERE, "Client interrupted: " + e.getMessage(), e);
         } finally {
-            // hut down the channel after the calls are complete
+            // Shut down the channel after the calls are complete
             logger.info("Shutting down channel...");
             channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
             logger.info("Client shutdown complete.");
@@ -141,24 +152,24 @@ public class CandidateEngagementClient {
 
             // Simulate checking for invalid input and cancelling the request if needed
             if (slot.getCandidateId().isEmpty() || slot.getSelectedTime().isEmpty() || slot.getSelectedLocation().isEmpty()) {
-		String errorMessage = "Invalid slot selection: Candidate ID, time, or location is empty. Cancelling request.";
-		logger.warning(errorMessage);
-		requestObserver.onError(new IllegalArgumentException(errorMessage));
-		    return;  // Stop further processing if input is invalid
-             }
+                String errorMessage = "Invalid slot selection: Candidate ID, time, or location is empty. Cancelling request.";
+                logger.warning(errorMessage);
+                requestObserver.onError(new IllegalArgumentException(errorMessage));
+                return;  // Stop further processing if input is invalid
+            }
 
-		              // Complete the request stream (no more slots will be sent)
-		              requestObserver.onCompleted();
+            // Complete the request stream (no more slots will be sent)
+            requestObserver.onCompleted();
 
-		              // Wait for the server to complete the stream and respond
-		              if (!finishLatch.await(1, TimeUnit.MINUTES)) {
-		                  logger.severe("confirmInterviewSlot did not finish within 1 minute");
-		              }
+            // Wait for the server to complete the stream and respond
+            if (!finishLatch.await(1, TimeUnit.MINUTES)) {
+                logger.severe("confirmInterviewSlot did not finish within 1 minute");
+            }
 
-		          } catch (Exception e) {
-		              // Log errors in sending the stream and cancel the request
-		              logger.log(Level.SEVERE, "Error in confirmInterviewSlot: " + e.getMessage(), e);
-		              requestObserver.onError(e);
-		          }
-		      }
-		  }
+        } catch (Exception e) {
+            // Log errors in sending the stream and cancel the request
+            logger.log(Level.SEVERE, "Error in confirmInterviewSlot: " + e.getMessage(), e);
+            requestObserver.onError(e);
+        }
+    }
+}

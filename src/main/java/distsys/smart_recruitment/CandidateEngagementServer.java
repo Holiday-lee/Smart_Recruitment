@@ -4,6 +4,8 @@
  */
 package distsys.smart_recruitment;
 
+import distsys.smart_recruitment.auth.AuthorizationServerInterceptor;
+import distsys.smart_recruitment.auth.Constants;
 import generated.grpc.candidateengagementservice.ApplicationStatus;
 import generated.grpc.candidateengagementservice.CandidateEngagementServiceGrpc;
 import generated.grpc.candidateengagementservice.NotificationStatus;
@@ -32,10 +34,11 @@ public class CandidateEngagementServer extends CandidateEngagementServiceGrpc.Ca
         try{
             Server server = ServerBuilder.forPort(port)
                     .addService(candidateEngagementServer)
+                    .intercept(new AuthorizationServerInterceptor()) // Add JWT authentication interceptor
                     .build()
                     .start();
                     logger.info("Server started, listening on " + port);
-                    System.out.println("Server started, listening on " + port);
+                    logger.info("Server started, listening on " + port);
                     server.awaitTermination();
         } catch (IOException e){
             e.printStackTrace();
@@ -48,6 +51,9 @@ public class CandidateEngagementServer extends CandidateEngagementServiceGrpc.Ca
     // rpc ConfirmInterviewSlot(stream SlotSelection) returns (SchedulingConfirmation) {}
     @Override
     public StreamObserver<SlotSelection> confirmInterviewSlot(StreamObserver<SchedulingConfirmation> responseObserver){
+        // Get the authenticated client ID
+        String clientId = Constants.CLIENT_ID_CONTEXT_KEY.get();
+        logger.info("Processing interview slot confirmation from client: " + clientId);
 
         return new StreamObserver<SlotSelection>(){
 
@@ -57,12 +63,12 @@ public class CandidateEngagementServer extends CandidateEngagementServiceGrpc.Ca
             @Override
             public void onNext(SlotSelection slotSelection){
                 slotSelections.add(slotSelection);
-                System.out.println("Received SlotSelection for candidate: " + slotSelection.getCandidateId() + " time: " + slotSelection.getSelectedTime()+ " Location: " + slotSelection.getSelectedLocation());
+                logger.info("Received SlotSelection for candidate: " + slotSelection.getCandidateId() + " time: " + slotSelection.getSelectedTime()+ " Location: " + slotSelection.getSelectedLocation());
             }
 
             @Override
             public void onError(Throwable t){
-                System.err.println("Error during stream processing: " + t.getMessage());
+                logger.info("Error during stream processing: " + t.getMessage());
                 responseObserver.onError(t);
             }
 
@@ -85,11 +91,15 @@ public class CandidateEngagementServer extends CandidateEngagementServiceGrpc.Ca
     // rpc SendStatusUpdate(ApplicationStatus) returns (NotificationStatus) {}
     @Override
     public void sendStatusUpdate(ApplicationStatus request, StreamObserver<NotificationStatus> responseObserver){
+        // Get the authenticated client ID
+        String clientId = Constants.CLIENT_ID_CONTEXT_KEY.get();
+        logger.info("Processing status update from client: " + clientId);
+
         String candidateId = request.getCandidateId();
         String status = request.getStatus();
         String message = request.getMessage();
 
-        System.out.println("Received status update for candidate " + candidateId + ": " + status + " - " + message);
+        logger.info("Received status update for candidate " + candidateId + ": " + status + " - " + message);
 
         // Create notificationStatus response
         NotificationStatus notificationStatus = NotificationStatus.newBuilder()
@@ -101,5 +111,4 @@ public class CandidateEngagementServer extends CandidateEngagementServiceGrpc.Ca
         responseObserver.onNext(notificationStatus);
         responseObserver.onCompleted();
     }
-
 }

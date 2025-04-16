@@ -2,6 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 package distsys.smart_recruitment;
 
 /**
@@ -9,6 +10,8 @@ package distsys.smart_recruitment;
  * @author jiaki
  */
 
+import distsys.smart_recruitment.auth.BearerToken;
+import distsys.smart_recruitment.auth.JwtUtil;
 import generated.grpc.candidatefilteringservice.CandidateFilteringServiceGrpc;
 import generated.grpc.candidatefilteringservice.CandidateResume;
 import generated.grpc.candidatefilteringservice.QualificationCriteria;
@@ -38,18 +41,27 @@ public class CandidateFilteringClient {
         // Create the gRPC channel
         String host = "localhost";
         int port = 50051;
-        
+
         ManagedChannel channel = ManagedChannelBuilder.forAddress(host, port)
-                .usePlaintext() 
+                .usePlaintext()
                 .build();
 
-        // Create the blocking stub for Unary
-        CandidateFilteringServiceGrpc.CandidateFilteringServiceBlockingStub blockingStub =
-                CandidateFilteringServiceGrpc.newBlockingStub(channel);
+        // Generate JWT token for authentication
+        String jwt = JwtUtil.generateToken("CandidateFilteringClient");
+        logger.info("Generated JWT token for authentication");
 
-        // Create the asynchronous stub for Server Streaming
+        // Create authentication credentials with the token
+        BearerToken token = new BearerToken(jwt);
+
+        // Create the blocking stub for Unary with authentication
+        CandidateFilteringServiceGrpc.CandidateFilteringServiceBlockingStub blockingStub =
+                CandidateFilteringServiceGrpc.newBlockingStub(channel)
+                .withCallCredentials(token);
+
+        // Create the asynchronous stub for Server Streaming with authentication
         CandidateFilteringServiceGrpc.CandidateFilteringServiceStub asyncStub =
-                CandidateFilteringServiceGrpc.newStub(channel);
+                CandidateFilteringServiceGrpc.newStub(channel)
+                .withCallCredentials(token);
 
         // Unary Method (Scoring a Candidate's Resume)
         scoreCandidateResume(blockingStub);

@@ -2,6 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 package distsys.smart_recruitment;
 
 /**
@@ -9,6 +10,7 @@ package distsys.smart_recruitment;
  * @author jiaki
  */
 
+import distsys.smart_recruitment.auth.AuthorizationServerInterceptor;
 import generated.grpc.candidatefilteringservice.CandidateFilteringServiceGrpc;
 import generated.grpc.candidatefilteringservice.CandidateResume;
 import generated.grpc.candidatefilteringservice.QualificationCriteria;
@@ -21,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import distsys.smart_recruitment.auth.Constants;
 
 /**
  * Server implementation for CandidateFilteringService
@@ -39,10 +42,11 @@ public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.Cand
         try {
             Server server = ServerBuilder.forPort(port)
                     .addService(candidateFilteringServer)
+                    .intercept(new AuthorizationServerInterceptor()) // Add JWT authentication interceptor
                     .build()
                     .start();
             logger.info("Server started, listening on " + port);
-            System.out.println("Server started, listening on " + port);
+
             server.awaitTermination();
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,7 +63,11 @@ public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.Cand
      */
     @Override
     public void scoringCandidateResume(CandidateResume request, StreamObserver<ResumeScore> responseObserver) {
-        System.out.println("Received request to score resume for candidate: " + request.getCandidateName());
+        // Get the authenticated client ID
+        String clientId = Constants.CLIENT_ID_CONTEXT_KEY.get();
+        logger.info("Processing scoring request from client: " + clientId);
+
+        logger.info("Received request to score resume for candidate: " + request.getCandidateName());
 
         // Calculate score based on the resume
         double score = calculateResumeScore(request);
@@ -86,7 +94,11 @@ public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.Cand
      */
     @Override
     public void qualifiedCandidateList(QualificationCriteria request, StreamObserver<QualifiedCandidate> responseObserver) {
-        System.out.println("Received request for qualified candidates with minimum score: " + request.getMinScore());
+        // Get the authenticated client ID
+        String clientId = Constants.CLIENT_ID_CONTEXT_KEY.get();
+        logger.info("Processing qualified candidate request from client: " + clientId);
+
+        logger.info("Received request for qualified candidates with minimum score: " + request.getMinScore());
 
         // Retrieve candidates from database (this would access real database in production)
         List<CandidateResume> candidateList = getCandidatesFromDatabase();

@@ -9,6 +9,8 @@ package distsys.smart_recruitment;
  * @author jiaki
  */
 
+import distsys.smart_recruitment.auth.AuthorizationServerInterceptor;
+import distsys.smart_recruitment.auth.Constants;
 import io.grpc.stub.StreamObserver;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -31,10 +33,11 @@ public class InterviewSchedulingServer extends InterviewSchedulingServiceGrpc.In
         try{
             Server server = ServerBuilder.forPort(port)
                     .addService(interviewSchedulingServer)
+                    .intercept(new AuthorizationServerInterceptor()) // Add JWT authentication interceptor
                     .build()
                     .start();
                     logger.info("Server started, listening on " + port);
-                    System.out.println("Server started, listening on " + port);
+                    logger.info("Server started, listening on " + port);
                     server.awaitTermination();
         } catch (IOException e){
             e.printStackTrace();
@@ -49,13 +52,17 @@ public class InterviewSchedulingServer extends InterviewSchedulingServiceGrpc.In
     // Auto-scheduling interview slots. The client sends a stream of candidate name and the server returns(arranges) a stream of interview slot with 1 candidate have few slots to choose from
     //rpc ArrangeInterviewSlot(stream CandidateName) returns (stream InterviewSlot) {}
 
-
+    @Override
     public StreamObserver<CandidateName> arrangeInterviewSlot(StreamObserver<InterviewSlot> responseObserver) {
+        // Get the authenticated client ID
+        String clientId = Constants.CLIENT_ID_CONTEXT_KEY.get();
+        logger.info("Processing interview scheduling request from client: " + clientId);
+
         return new StreamObserver<CandidateName>(){
 
             @Override
             public void onNext(CandidateName candidate){
-                System.out.println("Received candidate: " + candidate.getCandidateName());
+                logger.info("Received candidate: " + candidate.getCandidateName());
 
                 // Creating interview slot
                 InterviewSlot slot = InterviewSlot.newBuilder()
@@ -68,7 +75,7 @@ public class InterviewSchedulingServer extends InterviewSchedulingServiceGrpc.In
 
             @Override
             public void onError(Throwable t){
-                System.err.println("Error during stream processing: " + t.getMessage());
+                logger.info("Error during stream processing: " + t.getMessage());
                 responseObserver.onError(t);
             }
 
@@ -79,5 +86,4 @@ public class InterviewSchedulingServer extends InterviewSchedulingServiceGrpc.In
 
         };
     }
-
 }
