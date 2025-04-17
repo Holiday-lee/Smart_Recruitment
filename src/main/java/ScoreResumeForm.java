@@ -75,7 +75,7 @@ public class ScoreResumeForm extends javax.swing.JFrame {
             }
         });
 
-        // Add window listener for cleanup
+        // close window = close the gRPC
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -194,7 +194,7 @@ public class ScoreResumeForm extends javax.swing.JFrame {
 
     // Submit button
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // Get resume text from text area
+        // get resume text from text area
         String resumeText = textArea1.getText().trim();
 
         if (resumeText.isEmpty()) {
@@ -209,22 +209,22 @@ public class ScoreResumeForm extends javax.swing.JFrame {
             // Extract information from resume text
             Map<String, String> extractedInfo = extractResumeInfo(resumeText);
 
-            // Create candidate ID
+            // generate a candidate ID
             String candidateId = "candidate_" + System.currentTimeMillis();
 
-            // Build gRPC request
+            // build gRPC request
             CandidateResume.Builder resumeBuilder = CandidateResume.newBuilder()
                 .setCandidateId(candidateId)
                 .setResumeText(resumeText);
 
-            // Add candidate name if found
+            // add candidate name
             if (extractedInfo.containsKey("name")) {
                 resumeBuilder.setCandidateName(extractedInfo.get("name"));
             } else {
                 resumeBuilder.setCandidateName("Anonymous Candidate");
             }
 
-            // Add years of experience if found
+            // add years of experience
             if (extractedInfo.containsKey("experience")) {
                 try {
                     int years = Integer.parseInt(extractedInfo.get("experience"));
@@ -236,7 +236,7 @@ public class ScoreResumeForm extends javax.swing.JFrame {
                 resumeBuilder.setYearsExperience(0);
             }
 
-            // Add skills if found
+            // add skills
             if (extractedInfo.containsKey("skills")) {
                 String[] skills = extractedInfo.get("skills").split(",");
                 for (String skill : skills) {
@@ -246,17 +246,17 @@ public class ScoreResumeForm extends javax.swing.JFrame {
                 }
             }
 
-            // Build the resume object
+            // build the resume object
             CandidateResume candidateResume = resumeBuilder.build();
 
-            // Call gRPC service
+            // call gRPC service
             ResumeScore response = blockingStub.scoringCandidateResume(candidateResume);
 
-            // Store the results
+            // store the results
             scoredResumes.put(candidateId, response);
             candidateResumes.put(candidateId, candidateResume);
 
-            // Display result
+            // display result
             displayResults(response, extractedInfo);
 
         } catch (Exception ex) {
@@ -268,7 +268,7 @@ public class ScoreResumeForm extends javax.swing.JFrame {
         }
     }
 
-    // Method to extract information from resume text
+    // extractREsumeInfo method
     private Map<String, String> extractResumeInfo(String resumeText) {
         Map<String, String> info = new HashMap<>();
 
@@ -319,21 +319,25 @@ public class ScoreResumeForm extends javax.swing.JFrame {
 
 
 
-    // Handler for Submit New Request button
+    // submit wew request button
     private void newRequestButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // Clear the text areas
         textArea1.setText("");
         jTextArea1.setText("");
     }
 
-    // Handler for Back to Menu button
-    private void backToMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // Close this form and return to main menu
-        closeGrpcConnection();
-        this.dispose();
-        // If you have a main menu form, you can show it here
-        // new MainMenuForm().setVisible(true);
-    }
+	// back to Menu button
+	private void backToMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {
+		// Close this form and return to main menu
+		closeGrpcConnection();
+		this.dispose();
+		// Open the menu form
+		java.awt.EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				new Main().setVisible(true);
+			}
+		});
+	}
 
     // Method to close gRPC connection
     private void closeGrpcConnection() {
