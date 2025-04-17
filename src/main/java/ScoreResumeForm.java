@@ -1,3 +1,17 @@
+
+import generated.grpc.candidatefilteringservice.CandidateFilteringServiceGrpc;
+import generated.grpc.candidatefilteringservice.CandidateResume;
+import generated.grpc.candidatefilteringservice.ResumeScore;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import distsys.smart_recruitment.auth.BearerToken; // for authorise problem
+import distsys.smart_recruitment.auth.JwtUtil; // for authorise problem
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -9,12 +23,67 @@
  */
 public class ScoreResumeForm extends javax.swing.JFrame {
 
+    // to store the candidate & resume score result - static to be accessible from other forms
+    private static Map<String, ResumeScore> scoredResumes = new HashMap<>();
+    private static Map<String, CandidateResume> candidateResumes = new HashMap<>();
+
+    private ManagedChannel channel;
+    private CandidateFilteringServiceGrpc.CandidateFilteringServiceBlockingStub blockingStub;
+
     /**
      * Creates new form ScoreResumeForm
      */
     public ScoreResumeForm() {
         initComponents();
+        setupGrpcConnection(); // set up to gRPC service
+        addEventListeners(); // add event listeners to buttons
+        jTextArea1.setEditable(false); // results text area should be read-only
     }
+
+    // To set up the gRPC service
+	private void setupGrpcConnection() {
+		// Connect to your gRPC service
+		channel = ManagedChannelBuilder.forAddress("localhost", 50051)
+				.usePlaintext()
+				.build();
+
+		// Generate JWT token for authentication
+		String jwt = JwtUtil.generateToken("CandidateFilteringClient");
+
+		// Create authentication credentials with the token
+		BearerToken token = new BearerToken(jwt);
+
+		// Add authentication to the stub
+		blockingStub = CandidateFilteringServiceGrpc.newBlockingStub(channel)
+				.withCallCredentials(token);
+	}
+
+
+    // Add event listeners to buttons
+    private void addEventListeners() {
+        // Submit new request button
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newRequestButtonActionPerformed(evt);
+            }
+        });
+
+        // Back to menu button
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backToMenuButtonActionPerformed(evt);
+            }
+        });
+
+        // Add window listener for cleanup
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                closeGrpcConnection();
+            }
+        });
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -25,40 +94,268 @@ public class ScoreResumeForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        submitButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        textArea1 = new java.awt.TextArea();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Scoring Candidate Resume");
 
-        jButton1.setText("Submit");
+        submitButton.setText("Submit");
+        submitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Please paste the resume content and click submit: ");
+
+        jButton2.setText("Submit a New Request");
+
+        jButton3.setText("Back to Menu");
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jLabel3.setText("Scoring Result:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(110, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(102, 102, 102))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(281, 281, 281))
             .addGroup(layout.createSequentialGroup()
-                .addGap(131, 131, 131)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jButton2)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(textArea1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 713, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addGap(113, 113, 113)
-                .addComponent(jButton1)
-                .addContainerGap(129, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(submitButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(textArea1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
+                .addGap(24, 24, 24))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+
+    // Submit button
+    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // Get resume text from text area
+        String resumeText = textArea1.getText().trim();
+
+        if (resumeText.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Please paste resume content first.",
+                "Empty Content",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            // Extract information from resume text
+            Map<String, String> extractedInfo = extractResumeInfo(resumeText);
+
+            // Create candidate ID
+            String candidateId = "candidate_" + System.currentTimeMillis();
+
+            // Build gRPC request
+            CandidateResume.Builder resumeBuilder = CandidateResume.newBuilder()
+                .setCandidateId(candidateId)
+                .setResumeText(resumeText);
+
+            // Add candidate name if found
+            if (extractedInfo.containsKey("name")) {
+                resumeBuilder.setCandidateName(extractedInfo.get("name"));
+            } else {
+                resumeBuilder.setCandidateName("Anonymous Candidate");
+            }
+
+            // Add years of experience if found
+            if (extractedInfo.containsKey("experience")) {
+                try {
+                    int years = Integer.parseInt(extractedInfo.get("experience"));
+                    resumeBuilder.setYearsExperience(years);
+                } catch (NumberFormatException e) {
+                    resumeBuilder.setYearsExperience(0);
+                }
+            } else {
+                resumeBuilder.setYearsExperience(0);
+            }
+
+            // Add skills if found
+            if (extractedInfo.containsKey("skills")) {
+                String[] skills = extractedInfo.get("skills").split(",");
+                for (String skill : skills) {
+                    if (!skill.trim().isEmpty()) {
+                        resumeBuilder.addSkills(skill.trim());
+                    }
+                }
+            }
+
+            // Build the resume object
+            CandidateResume candidateResume = resumeBuilder.build();
+
+            // Call gRPC service
+            ResumeScore response = blockingStub.scoringCandidateResume(candidateResume);
+
+            // Store the results
+            scoredResumes.put(candidateId, response);
+            candidateResumes.put(candidateId, candidateResume);
+
+            // Display result
+            displayResults(response, extractedInfo);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Error analyzing resume: " + ex.getMessage(),
+                "Service Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Method to extract information from resume text
+    private Map<String, String> extractResumeInfo(String resumeText) {
+        Map<String, String> info = new HashMap<>();
+
+        // Name detection - looks for patterns like "Name: John Doe" or name at the beginning
+        Pattern namePattern = Pattern.compile("(?i)(?:name\\s*:\\s*|^\\s*)(\\w+\\s+\\w+)");
+        Matcher nameMatcher = namePattern.matcher(resumeText);
+        if (nameMatcher.find()) {
+            info.put("name", nameMatcher.group(1).trim());
+        }
+
+        // Experience detection - looks for patterns like "5 years of experience"
+        Pattern expPattern = Pattern.compile("(?i)(\\d+)\\s+(?:years?\\s+(?:of\\s+)?experience|years?\\s+exp)");
+        Matcher expMatcher = expPattern.matcher(resumeText);
+        if (expMatcher.find()) {
+            info.put("experience", expMatcher.group(1));
+        }
+
+        // Skills detection - looks for a skills section
+        Pattern skillsPattern = Pattern.compile("(?i)(?:skills|technical skills|core competencies)\\s*:?\\s*([^\\n\\r.]*(?:[\\n\\r.][^\\n\\r.]*){0,5})");
+        Matcher skillsMatcher = skillsPattern.matcher(resumeText);
+        if (skillsMatcher.find()) {
+            String skillsText = skillsMatcher.group(1).replaceAll("[\\n\\r\\t•●■]+", ",");
+            skillsText = skillsText.replaceAll("\\s+", " ");
+            skillsText = skillsText.replaceAll(",\\s*,", ",");
+            info.put("skills", skillsText);
+        }
+
+        return info;
+    }
+
+    // Method to display results in the text area
+	private void displayResults(ResumeScore response, Map<String, String> extractedInfo) {
+		// Get the score as an integer for clearer display
+		int intScore = (int) response.getScore();
+
+		// Create a formatted results string for the text area
+		StringBuilder results = new StringBuilder();
+		results.append("Resume Score: ").append(intScore).append("/100");
+
+		// Display only the score in the results text area
+		jTextArea1.setText(results.toString());
+
+		// Optional: you can also log the detailed information if needed
+		System.out.println("Name: " + extractedInfo.getOrDefault("name", "Not detected"));
+		System.out.println("Experience: " + extractedInfo.getOrDefault("experience", "Not detected") + " years");
+		System.out.println("Skills: " + extractedInfo.getOrDefault("skills", "Not detected"));
+	}
+
+
+
+    // Handler for Submit New Request button
+    private void newRequestButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // Clear the text areas
+        textArea1.setText("");
+        jTextArea1.setText("");
+    }
+
+    // Handler for Back to Menu button
+    private void backToMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // Close this form and return to main menu
+        closeGrpcConnection();
+        this.dispose();
+        // If you have a main menu form, you can show it here
+        // new MainMenuForm().setVisible(true);
+    }
+
+    // Method to close gRPC connection
+    private void closeGrpcConnection() {
+        if (channel != null && !channel.isShutdown()) {
+            try {
+                channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Static methods to access scored resumes from other forms
+    public static Map<String, ResumeScore> getScoredResumes() {
+        return scoredResumes;
+    }
+
+    public static Map<String, CandidateResume> getCandidateResumes() {
+        return candidateResumes;
+    }
+
+
 
     /**
      * @param args the command line arguments
@@ -67,7 +364,7 @@ public class ScoreResumeForm extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -96,7 +393,18 @@ public class ScoreResumeForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JButton submitButton;
+    private java.awt.TextArea textArea1;
     // End of variables declaration//GEN-END:variables
+
+
+
 }
