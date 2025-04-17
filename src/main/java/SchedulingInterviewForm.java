@@ -9,13 +9,25 @@
  */
 public class SchedulingInterviewForm extends javax.swing.JFrame {
 
+    private Main mainMenu;
+
     /**
      * Creates new form SchedulingInterviewForm
      */
-    public SchedulingInterviewForm() {
+
+    // Update constructor to accept Main form so that the Back to Menu links to Main menu 
+    public SchedulingInterviewForm(Main mainMenu) {
         initComponents();
+        this.mainMenu = mainMenu;
+
     }
 
+    
+    // constructor needed for NetBeans designer
+    private SchedulingInterviewForm() {
+        initComponents();
+    }
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -25,17 +37,27 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jButton1.setText("Back to Menu");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(255, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(67, 67, 67))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(262, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(15, 15, 15))
         );
 
         pack();
@@ -77,5 +99,6 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }

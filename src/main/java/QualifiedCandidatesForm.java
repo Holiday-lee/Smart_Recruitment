@@ -1,3 +1,15 @@
+
+import distsys.smart_recruitment.auth.BearerToken;
+import distsys.smart_recruitment.auth.JwtUtil;
+import generated.grpc.candidatefilteringservice.CandidateFilteringServiceGrpc;
+import generated.grpc.candidatefilteringservice.QualificationCriteria;
+import generated.grpc.candidatefilteringservice.QualifiedCandidate;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+import io.grpc.stub.StreamObserver;
+import java.util.concurrent.TimeUnit;
+import javax.swing.SwingUtilities;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -13,16 +25,16 @@ public class QualifiedCandidatesForm extends javax.swing.JFrame {
     /**
      * Creates new form QualifiedCandidatesForm
      */
-    // Update constructor to accept Main form
+    // Update constructor to accept Main form so that the Back to Menu links to Main menu 
     public QualifiedCandidatesForm(Main mainMenu) {
         initComponents();
         this.mainMenu = mainMenu;
 
         // Initialise with empty text field
-        jTextField1.setText("");
+        minimumScoreCriteria.setText("");
 
          // Clear the results area
-        jTextArea1.setText("");
+        qualifiedCandidateList.setText("");
 
     }
 
@@ -41,23 +53,22 @@ public class QualifiedCandidatesForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        minimumScoreCriteria = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        submitButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton2 = new javax.swing.JButton();
+        qualifiedCandidateList = new javax.swing.JTextArea();
+        backToMenuButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Qualified Candidate List");
 
-        jTextField1.setText("jTextField1");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        minimumScoreCriteria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                minimumScoreCriteriaActionPerformed(evt);
             }
         });
 
@@ -67,21 +78,21 @@ public class QualifiedCandidatesForm extends javax.swing.JFrame {
 
         jLabel4.setText("qualified candidates.");
 
-        jButton1.setText("Submit");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        submitButton.setText("Submit");
+        submitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                submitButtonActionPerformed(evt);
             }
         });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        qualifiedCandidateList.setColumns(20);
+        qualifiedCandidateList.setRows(5);
+        jScrollPane1.setViewportView(qualifiedCandidateList);
 
-        jButton2.setText("Back to Menu");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        backToMenuButton.setText("Back to Menu");
+        backToMenuButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                backToMenuButtonActionPerformed(evt);
             }
         });
 
@@ -98,9 +109,9 @@ public class QualifiedCandidatesForm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(minimumScoreCriteria, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(64, 64, 64))
             .addGroup(layout.createSequentialGroup()
                 .addGap(116, 116, 116)
@@ -108,7 +119,7 @@ public class QualifiedCandidatesForm extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(backToMenuButton)
                 .addGap(27, 27, 27))
         );
         layout.setVerticalGroup(
@@ -123,78 +134,133 @@ public class QualifiedCandidatesForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(minimumScoreCriteria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(submitButton))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(backToMenuButton)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void minimumScoreCriteriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minimumScoreCriteriaActionPerformed
 
 
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_minimumScoreCriteriaActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void backToMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToMenuButtonActionPerformed
         // back to menu button
         mainMenu.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_backToMenuButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        // Submit button handler
-        // Clear previous results
-        jTextArea1.setText("");
+private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    // Submit button handler
+    // Clear previous results
+    qualifiedCandidateList.setText("");
+
+    try {
+        // Get the minimum score from the text field
+        double minScore = Double.parseDouble(minimumScoreCriteria.getText());
+
+        // Create the gRPC channel
+        String host = "localhost";
+        int port = 50051;
+
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(host, port)
+                .usePlaintext()
+                .build();
 
         try {
-            // Get the minimum score from the text field
-            double minScore = Double.parseDouble(jTextField1.getText());
+            // Generate JWT token for authentication
+            String jwt = JwtUtil.generateToken("CandidateFilteringClient");
 
-            // Create the service client
-            CandidateFilteringService service = new CandidateFilteringService();
+            // Create authentication credentials with the token
+            BearerToken token = new BearerToken(jwt);
 
-            // Call the service to get qualified candidates
-            service.getQualifiedCandidates(minScore, new CandidateFilteringService.ResultCallback() {
+            // Create the asynchronous stub with authentication
+            CandidateFilteringServiceGrpc.CandidateFilteringServiceStub asyncStub =
+                    CandidateFilteringServiceGrpc.newStub(channel)
+                    .withCallCredentials(token);
 
-                // Keep track of how many candidates received
-                private int candidateCount = 0;
+            // Create the request for filtering qualified candidates
+            QualificationCriteria request = QualificationCriteria.newBuilder()
+                    .setMinScore(minScore)
+                    .build();
 
+            // For tracking the number of candidates received
+            final int[] candidateCount = {0};
+
+            // Make the asynchronous call with a StreamObserver to handle the streaming responses
+            asyncStub.qualifiedCandidateList(request, new StreamObserver<QualifiedCandidate>() {
                 @Override
-                public void onCandidateReceived(String id, String name, double score) {
+                public void onNext(QualifiedCandidate candidate) {
+                    // Handle each qualified candidate as it arrives
+                    candidateCount[0]++;
+
                     // Append the candidate info to the text area
-                    candidateCount++;
-                    jTextArea1.append(candidateCount + ". " + name + " (ID: " + id + ")\n");
-                    jTextArea1.append("   Score: " + score + "\n\n");
+                    // Note: We need to use SwingUtilities.invokeLater to update the UI from a background thread
+                    SwingUtilities.invokeLater(() -> {
+                        qualifiedCandidateList.append(candidateCount[0] + ". " + candidate.getCandidateName() +
+                                " (ID: " + candidate.getCandidateId() + ")\n");
+                        qualifiedCandidateList.append("   Score: " + candidate.getScore() + "\n\n");
+                    });
                 }
 
                 @Override
-                public void onError(String errorMessage) {
-                    jTextArea1.setText("Error retrieving candidates:\n" + errorMessage);
+                public void onError(Throwable t) {
+                    // Handle errors that occur during the stream
+                    SwingUtilities.invokeLater(() -> {
+                        qualifiedCandidateList.setText("Error retrieving candidates:\n" + t.getMessage());
+                    });
+
+                    // Clean up the channel
+                    try {
+                        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+                    } catch (InterruptedException e) {
+                        // Ignore
+                    }
                 }
 
                 @Override
                 public void onCompleted() {
-                    if (candidateCount == 0) {
-                        jTextArea1.setText("No qualified candidates found with score >= " + minScore);
-                    } else {
-                        jTextArea1.append("Total qualified candidates: " + candidateCount);
+                    // Notify when the server has finished sending responses
+                    SwingUtilities.invokeLater(() -> {
+                        if (candidateCount[0] == 0) {
+                            qualifiedCandidateList.setText("No qualified candidates found with score >= " + minScore);
+                        } else {
+                            qualifiedCandidateList.append("Total qualified candidates: " + candidateCount[0]);
+                        }
+                    });
+
+                    // Clean up the channel
+                    try {
+                        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+                    } catch (InterruptedException e) {
+                        // Ignore
                     }
                 }
             });
 
-        } catch (NumberFormatException e) {
-            // Handle invalid input
-            jTextArea1.setText("Please enter a valid number for the minimum score.");
         } catch (Exception e) {
-            // Handle other errors
-            jTextArea1.setText("Error: " + e.getMessage());
+            qualifiedCandidateList.setText("Error: " + e.getMessage());
+
+            // Clean up the channel
+            try {
+                channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+            } catch (InterruptedException ie) {
+                // Ignore
+            }
         }
+
+    } catch (NumberFormatException e) {
+        // Handle invalid input
+        qualifiedCandidateList.setText("Please enter a valid number for the minimum score.");
     }
+}
 
     /**
      * @param args the command line arguments
@@ -232,14 +298,14 @@ public class QualifiedCandidatesForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton backToMenuButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField minimumScoreCriteria;
+    private javax.swing.JTextArea qualifiedCandidateList;
+    private javax.swing.JButton submitButton;
     // End of variables declaration//GEN-END:variables
 }

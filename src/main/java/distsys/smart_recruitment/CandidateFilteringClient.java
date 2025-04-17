@@ -79,11 +79,11 @@ public class CandidateFilteringClient {
     private static void scoreCandidateResume(CandidateFilteringServiceGrpc.CandidateFilteringServiceBlockingStub blockingStub) {
         // Create a request for scoring a candidate's resume
         CandidateResume scoreRequest = CandidateResume.newBuilder()
-                .setCandidateId("test-id")
-                .setCandidateName("Test Candidate")
-                .setResumeText("This is a test resume text.")
-                .addSkills("Java")
-                .setYearsExperience(3)
+                .setCandidateId("")
+                .setCandidateName("")
+                .setResumeText("")
+                .addSkills("")
+                .setYearsExperience(0)
                 .build();
 
         logger.info("Sending candidate resume request to the server.");

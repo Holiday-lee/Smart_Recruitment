@@ -130,8 +130,11 @@ public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.Cand
     private double calculateResumeScore(CandidateResume resume) {
         double score = 0;
 
-        // Add 10 points for each year of experience (up to 70 points = 7+ years)
-        score += Math.min(resume.getYearsExperience() * 10, 70);
+	// as in Client.java, yearOfExperience has set to 0
+	int yearsExp = resume.getYearsExperience();
+	if (yearsExp > 0) {
+            score += Math.min(yearsExp * 10, 70);
+	}
 
         // Add 5 points for each skill (up to 25 points)
         score += Math.min(resume.getSkillsCount() * 5, 25);
@@ -143,10 +146,7 @@ public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.Cand
         return score;
     }
 
-    /**
-     * Store a candidate in the database
-     * In a real application, this would insert into a real database
-     */
+    // Store a candidate in the database
     private void storeCandidateInDatabase(CandidateResume candidate, double score) {
         // Check if candidate already exists
         for (int i = 0; i < candidateDatabase.size(); i++) {
@@ -157,15 +157,12 @@ public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.Cand
             }
         }
 
-        // Add new candidate
+        // if no exist, add new candidate
         candidateDatabase.add(candidate);
         System.out.println("Candidate " + candidate.getCandidateName() + " added to database with score: " + score);
     }
 
-    /**
-     * Get candidates from the database
-     * In a real application, this would query a real database
-     */
+	// retrieve the candidate from database
     private List<CandidateResume> getCandidatesFromDatabase() {
         // For now, just return the in-memory list
         // In a production environment, this would be replaced with actual database queries

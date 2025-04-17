@@ -9,9 +9,18 @@
  */
 public class StatusUpdateForm extends javax.swing.JFrame {
 
+    private Main mainMenu;
     /**
      * Creates new form StatusUpdateForm
      */
+    
+    // Link to main menu button
+    public StatusUpdateForm(Main mainMenu) {
+        initComponents();
+        this.mainMenu = mainMenu;
+    }
+
+    // constructor needed for NetBeans designer
     public StatusUpdateForm() {
         initComponents();
     }
@@ -25,17 +34,27 @@ public class StatusUpdateForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jButton1.setText("Back to Menu");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(272, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(262, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(15, 15, 15))
         );
 
         pack();
@@ -77,5 +96,6 @@ public class StatusUpdateForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }

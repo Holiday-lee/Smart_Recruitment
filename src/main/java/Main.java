@@ -37,11 +37,11 @@ public class Main extends javax.swing.JFrame {
         jMenuItem5 = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        ScoringCandidateResumeButton = new javax.swing.JButton();
+        QualifiedCandidateListButton = new javax.swing.JButton();
+        SchedulingInterviewSlotButton = new javax.swing.JButton();
+        ConfirmingInterviewSlotButton = new javax.swing.JButton();
+        ApplicationStatusUpdateButton = new javax.swing.JButton();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -64,33 +64,43 @@ public class Main extends javax.swing.JFrame {
         jMenuItem5.setText("jMenuItem5");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Welcome to Smart Recruitment");
 
-        jButton1.setText("Scoring Candidate Resume");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        ScoringCandidateResumeButton.setText("Scoring Candidate Resume");
+        ScoringCandidateResumeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                ScoringCandidateResumeButtonActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Qualified Candidate List");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        QualifiedCandidateListButton.setText("Qualified Candidate List");
+        QualifiedCandidateListButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                QualifiedCandidateListButtonActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Scheduling Interview Slot");
-
-        jButton4.setText("Confirming Interview Slot");
-
-        jButton5.setText("Application Status Update");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        SchedulingInterviewSlotButton.setText("Scheduling Interview Slot");
+        SchedulingInterviewSlotButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                SchedulingInterviewSlotButtonActionPerformed(evt);
+            }
+        });
+
+        ConfirmingInterviewSlotButton.setText("Confirming Interview Slot");
+        ConfirmingInterviewSlotButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ConfirmingInterviewSlotButtonActionPerformed(evt);
+            }
+        });
+
+        ApplicationStatusUpdateButton.setText("Application Status Update");
+        ApplicationStatusUpdateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ApplicationStatusUpdateButtonActionPerformed(evt);
             }
         });
 
@@ -103,11 +113,11 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(100, 100, 100)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(SchedulingInterviewSlotButton, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(QualifiedCandidateListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ScoringCandidateResumeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ConfirmingInterviewSlotButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(ApplicationStatusUpdateButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(77, 77, 77)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -119,15 +129,15 @@ public class Main extends javax.swing.JFrame {
                 .addGap(44, 44, 44)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addComponent(ScoringCandidateResumeButton)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(QualifiedCandidateListButton)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
+                .addComponent(SchedulingInterviewSlotButton)
                 .addGap(18, 18, 18)
-                .addComponent(jButton4)
+                .addComponent(ConfirmingInterviewSlotButton)
                 .addGap(18, 18, 18)
-                .addComponent(jButton5)
+                .addComponent(ApplicationStatusUpdateButton)
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
@@ -136,25 +146,41 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    // Qualified candidate
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        QualifiedCandidatesForm form = new QualifiedCandidatesForm(this);
+    private void ScoringCandidateResumeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ScoringCandidateResumeButtonActionPerformed
+        ScoreResumeForm form = new ScoreResumeForm(this); // based on the name of my forms
         form.setVisible(true);
         this.setVisible(false);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_ScoringCandidateResumeButtonActionPerformed
 
-    
-    
-    
-    
+    private void ApplicationStatusUpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApplicationStatusUpdateButtonActionPerformed
+        StatusUpdateForm form = new StatusUpdateForm(this); // based on the name of my forms
+        form.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_ApplicationStatusUpdateButtonActionPerformed
+
+    // Qualified candidate
+    private void QualifiedCandidateListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QualifiedCandidateListButtonActionPerformed
+        QualifiedCandidatesForm form = new QualifiedCandidatesForm(this); // based on the name of my forms
+        form.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_QualifiedCandidateListButtonActionPerformed
+
+    private void SchedulingInterviewSlotButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        SchedulingInterviewForm form = new SchedulingInterviewForm(this); // based on the name of my forms
+        form.setVisible(true);
+        this.setVisible(false);
+    }                                                             
+
+    private void ConfirmingInterviewSlotButtonActionPerformed(java.awt.event.ActionEvent evt) {
+	ConfirmSlotForm form = new ConfirmSlotForm(this); // based on the name of my forms
+	form.setVisible(true);
+	this.setVisible(false);
+    }                                                             
+
+
+
+
+
     /**
      * @param args the command line arguments
      */
@@ -162,7 +188,7 @@ public class Main extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -191,11 +217,11 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton ApplicationStatusUpdateButton;
+    private javax.swing.JButton ConfirmingInterviewSlotButton;
+    private javax.swing.JButton QualifiedCandidateListButton;
+    private javax.swing.JButton SchedulingInterviewSlotButton;
+    private javax.swing.JButton ScoringCandidateResumeButton;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
     private javax.swing.JLabel jLabel1;

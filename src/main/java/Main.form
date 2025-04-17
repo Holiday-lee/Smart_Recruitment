@@ -99,11 +99,11 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="jButton3" alignment="1" min="-2" pref="192" max="-2" attributes="0"/>
-                              <Component id="jButton2" min="-2" pref="192" max="-2" attributes="0"/>
-                              <Component id="jButton1" min="-2" pref="192" max="-2" attributes="0"/>
-                              <Component id="jButton4" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jButton5" alignment="0" max="32767" attributes="0"/>
+                              <Component id="SchedulingInterviewSlotButton" alignment="1" min="-2" pref="192" max="-2" attributes="0"/>
+                              <Component id="QualifiedCandidateListButton" min="-2" pref="192" max="-2" attributes="0"/>
+                              <Component id="ScoringCandidateResumeButton" min="-2" pref="192" max="-2" attributes="0"/>
+                              <Component id="ConfirmingInterviewSlotButton" alignment="0" max="32767" attributes="0"/>
+                              <Component id="ApplicationStatusUpdateButton" alignment="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -121,15 +121,15 @@
                   <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                  <Component id="ScoringCandidateResumeButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                  <Component id="QualifiedCandidateListButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+                  <Component id="SchedulingInterviewSlotButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButton4" min="-2" max="-2" attributes="0"/>
+                  <Component id="ConfirmingInterviewSlotButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButton5" min="-2" max="-2" attributes="0"/>
+                  <Component id="ApplicationStatusUpdateButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace pref="40" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -142,38 +142,44 @@
             <Property name="text" type="java.lang.String" value="Welcome to Smart Recruitment"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton1">
+        <Component class="javax.swing.JButton" name="ScoringCandidateResumeButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Scoring Candidate Resume"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ScoringCandidateResumeButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton2">
+        <Component class="javax.swing.JButton" name="QualifiedCandidateListButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Qualified Candidate List"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="QualifiedCandidateListButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton3">
+        <Component class="javax.swing.JButton" name="SchedulingInterviewSlotButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Scheduling Interview Slot"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SchedulingInterviewSlotButtonActionPerformed"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton4">
+        <Component class="javax.swing.JButton" name="ConfirmingInterviewSlotButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Confirming Interview Slot"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ConfirmingInterviewSlotButtonActionPerformed"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton5">
+        <Component class="javax.swing.JButton" name="ApplicationStatusUpdateButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Application Status Update"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ApplicationStatusUpdateButtonActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

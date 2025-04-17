@@ -9,9 +9,17 @@
  */
 public class ConfirmSlotForm extends javax.swing.JFrame {
 
+    private Main mainMenu;
+
     /**
      * Creates new form ConfirmSlotForm
      */
+    public ConfirmSlotForm(Main mainMenu) {
+        initComponents();
+        this.mainMenu = mainMenu;
+    }
+    
+    // constructor needed for NetBeans designer
     public ConfirmSlotForm() {
         initComponents();
     }
