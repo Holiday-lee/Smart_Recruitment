@@ -38,7 +38,7 @@ public class CandidateFilteringClient {
 
     public static void main(String[] args) throws InterruptedException {
 
-        // Create the gRPC channel
+        // set up for gRPC channel
         String host = "localhost";
         int port = 50051;
 
@@ -46,38 +46,37 @@ public class CandidateFilteringClient {
                 .usePlaintext()
                 .build();
 
-        // Generate JWT token for authentication
+        // generate JWT token & authentication credentials
         String jwt = JwtUtil.generateToken("CandidateFilteringClient");
-        logger.info("Generated JWT token for authentication");
-
-        // Create authentication credentials with the token
+        logger.info("JWT token is generated for authentication");
         BearerToken token = new BearerToken(jwt);
 
-        // Create the blocking stub for Unary with authentication
+        // blocking stub for Unary + .with authentication
         CandidateFilteringServiceGrpc.CandidateFilteringServiceBlockingStub blockingStub =
                 CandidateFilteringServiceGrpc.newBlockingStub(channel)
-                .withCallCredentials(token);
+                .withCallCredentials(token); // authentication
 
-        // Create the asynchronous stub for Server Streaming with authentication
+        // asy stub for server streaming + .with authentication
         CandidateFilteringServiceGrpc.CandidateFilteringServiceStub asyncStub =
                 CandidateFilteringServiceGrpc.newStub(channel)
-                .withCallCredentials(token);
+                .withCallCredentials(token); // add authentication
 
-        // Unary Method (Scoring a Candidate's Resume)
         scoreCandidateResume(blockingStub);
 
-        // Server Streaming Method (Getting Qualified Candidates)
         getQualifiedCandidates(asyncStub);
 
-        // Shutdown the channel after use
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
     /**
-     * Unary RPC for scoring a candidate's resume.
+     *  UNARY METHOD TYPE
+     * INPUT: A candicate's resume
+	 * OUTPUT: A score for the resume
+	 * rpc ScoringCandidateResume(CandidateResume) returns (ResumeScore) {}
      */
+
     private static void scoreCandidateResume(CandidateFilteringServiceGrpc.CandidateFilteringServiceBlockingStub blockingStub) {
-        // Create a request for scoring a candidate's resume
+        // Create  scorinRequest
         CandidateResume scoreRequest = CandidateResume.newBuilder()
                 .setCandidateName("")
                 .setResumeText("")
@@ -85,7 +84,7 @@ public class CandidateFilteringClient {
                 .setYearsExperience(0)
                 .build();
 
-        logger.info("Sending candidate resume request to the server.");
+        logger.info("Send candidate resume request to the server.");
 
         try {
             // Call the scoringCandidateResume method & get the response
@@ -97,14 +96,18 @@ public class CandidateFilteringClient {
     }
 
     /**
-     * Server-Streaming RPC for getting a list of qualified candidates.
+     *  SERVER-STREAMING METHOD TYPE
+     *   INPUT: Criteria to filter qualified candidates/threshold: resume scores over/equal 80 marks
+     *   OUTPUT: A stream of qualified candidates
+     *   rpc QualifiedCandidateList(QualificationCriteria) returns (stream QualifiedCandidate)
      */
     private static void getQualifiedCandidates(CandidateFilteringServiceGrpc.CandidateFilteringServiceStub asyncStub) {
-        // Create the request for filtering qualified candidates
+
+        // create request object for filtering qualified candidates
         QualificationCriteria request = QualificationCriteria.newBuilder()
-                .setMinScore(70.0) // Set some minimum score
+                .setMinScore(0.0) // Set some minimum score
                 .build();
-        logger.info("Requesting qualified candidates with minimum score of 70.0");
+        logger.info("Filtering qualified candidates with the requested minimum score.");
 
         // Make the asynchronous call with a StreamObserver to handle the streaming responses
         asyncStub.qualifiedCandidateList(request, new StreamObserver<QualifiedCandidate>() {

@@ -25,13 +25,11 @@ import java.util.List;
 import java.util.logging.Logger;
 import distsys.smart_recruitment.auth.Constants;
 
-/**
- * Server implementation for CandidateFilteringService
- */
+
 public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.CandidateFilteringServiceImplBase {
     private static final Logger logger = Logger.getLogger(CandidateFilteringServer.class.getName());
 
-    // This list will store candidates received from the GUI
+    // store resume list from user input on GUI
     private List<CandidateResume> candidateDatabase = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -45,6 +43,7 @@ public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.Cand
                     .intercept(new AuthorizationServerInterceptor()) // Add JWT authentication interceptor
                     .build()
                     .start();
+            logger.info("Server started, listening on " + port);
             logger.info("Server started, listening on " + port);
 
             server.awaitTermination();
@@ -69,15 +68,13 @@ public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.Cand
         // Calculate score based on the resume
         double score = calculateResumeScore(request);
 
-        // Store the candidate in our database (you can replace this with actual database operations)
+        // store the candidate in arrayList
         storeCandidateInDatabase(request, score);
 
-        // Create response
         ResumeScore response = ResumeScore.newBuilder()
                 .setScore(score)
                 .build();
 
-        // Send response back to client
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
@@ -93,7 +90,7 @@ public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.Cand
 
         logger.info("Received request for qualified candidates with minimum score: " + request.getMinScore());
 
-        // Retrieve candidates from database (this would access real database in production)
+        // Retrieve candidates
         List<CandidateResume> candidateList = getCandidatesFromDatabase();
 
         // Filter candidates based on criteria
@@ -112,7 +109,7 @@ public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.Cand
             }
         }
 
-        // Signal the end of the stream
+        //end of the stream
         responseObserver.onCompleted();
     }
 
