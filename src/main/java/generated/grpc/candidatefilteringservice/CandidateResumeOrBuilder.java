@@ -12,45 +12,30 @@ public interface CandidateResumeOrBuilder extends
    * lowerCase for message field type as per proto3 syntax
    * </pre>
    *
-   * <code>string candidate_id = 1;</code>
+   * <code>string candidate_name = 1;</code>
    */
-  java.lang.String getCandidateId();
+  java.lang.String getCandidateName();
   /**
    * <pre>
    * lowerCase for message field type as per proto3 syntax
    * </pre>
    *
-   * <code>string candidate_id = 1;</code>
-   */
-  com.google.protobuf.ByteString
-      getCandidateIdBytes();
-
-  /**
-   * <code>string candidate_name = 2;</code>
-   */
-  java.lang.String getCandidateName();
-  /**
-   * <code>string candidate_name = 2;</code>
+   * <code>string candidate_name = 1;</code>
    */
   com.google.protobuf.ByteString
       getCandidateNameBytes();
 
   /**
-   * <code>string resume_text = 3;</code>
+   * <code>int32 years_experience = 2;</code>
    */
-  java.lang.String getResumeText();
-  /**
-   * <code>string resume_text = 3;</code>
-   */
-  com.google.protobuf.ByteString
-      getResumeTextBytes();
+  int getYearsExperience();
 
   /**
    * <pre>
    * List of skills (e.g., ["Java", "Python"])
    * </pre>
    *
-   * <code>repeated string skills = 4;</code>
+   * <code>repeated string skills = 3;</code>
    */
   java.util.List<java.lang.String>
       getSkillsList();
@@ -59,7 +44,7 @@ public interface CandidateResumeOrBuilder extends
    * List of skills (e.g., ["Java", "Python"])
    * </pre>
    *
-   * <code>repeated string skills = 4;</code>
+   * <code>repeated string skills = 3;</code>
    */
   int getSkillsCount();
   /**
@@ -67,7 +52,7 @@ public interface CandidateResumeOrBuilder extends
    * List of skills (e.g., ["Java", "Python"])
    * </pre>
    *
-   * <code>repeated string skills = 4;</code>
+   * <code>repeated string skills = 3;</code>
    */
   java.lang.String getSkills(int index);
   /**
@@ -75,13 +60,18 @@ public interface CandidateResumeOrBuilder extends
    * List of skills (e.g., ["Java", "Python"])
    * </pre>
    *
-   * <code>repeated string skills = 4;</code>
+   * <code>repeated string skills = 3;</code>
    */
   com.google.protobuf.ByteString
       getSkillsBytes(int index);
 
   /**
-   * <code>int32 years_experience = 5;</code>
+   * <code>string resume_text = 4;</code>
    */
-  int getYearsExperience();
+  java.lang.String getResumeText();
+  /**
+   * <code>string resume_text = 4;</code>
+   */
+  com.google.protobuf.ByteString
+      getResumeTextBytes();
 }

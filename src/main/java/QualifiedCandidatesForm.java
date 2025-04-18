@@ -1,4 +1,3 @@
-
 import distsys.smart_recruitment.auth.BearerToken;
 import distsys.smart_recruitment.auth.JwtUtil;
 import generated.grpc.candidatefilteringservice.CandidateFilteringServiceGrpc;
@@ -9,6 +8,8 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 import java.util.concurrent.TimeUnit;
 import javax.swing.SwingUtilities;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -25,7 +26,7 @@ public class QualifiedCandidatesForm extends javax.swing.JFrame {
     /**
      * Creates new form QualifiedCandidatesForm
      */
-    // Update constructor to accept Main form so that the Back to Menu links to Main menu 
+    // Update constructor to accept Main form so that the Back to Menu links to Main menu
     public QualifiedCandidatesForm(Main mainMenu) {
         initComponents();
         this.mainMenu = mainMenu;
@@ -187,31 +188,21 @@ private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
                     .setMinScore(minScore)
                     .build();
 
-            // For tracking the number of candidates received
-            final int[] candidateCount = {0};
+            // Collect candidates in a list to display them all at once
+            List<QualifiedCandidate> candidates = new ArrayList<>();
 
             // Make the asynchronous call with a StreamObserver to handle the streaming responses
             asyncStub.qualifiedCandidateList(request, new StreamObserver<QualifiedCandidate>() {
                 @Override
                 public void onNext(QualifiedCandidate candidate) {
-                    // Handle each qualified candidate as it arrives
-                    candidateCount[0]++;
-
-                    // Append the candidate info to the text area
-                    // Note: We need to use SwingUtilities.invokeLater to update the UI from a background thread
-                    SwingUtilities.invokeLater(() -> {
-                        qualifiedCandidateList.append(candidateCount[0] + ". " + candidate.getCandidateName() +
-                                " (ID: " + candidate.getCandidateId() + ")\n");
-                        qualifiedCandidateList.append("   Score: " + candidate.getScore() + "\n\n");
-                    });
+                    // Store each candidate as it arrives
+                    candidates.add(candidate);
                 }
 
                 @Override
                 public void onError(Throwable t) {
                     // Handle errors that occur during the stream
-                    SwingUtilities.invokeLater(() -> {
-                        qualifiedCandidateList.setText("Error retrieving candidates:\n" + t.getMessage());
-                    });
+                    qualifiedCandidateList.setText("Error retrieving candidates:\n" + t.getMessage());
 
                     // Clean up the channel
                     try {
@@ -223,14 +214,23 @@ private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
 
                 @Override
                 public void onCompleted() {
-                    // Notify when the server has finished sending responses
-                    SwingUtilities.invokeLater(() -> {
-                        if (candidateCount[0] == 0) {
-                            qualifiedCandidateList.setText("No qualified candidates found with score >= " + minScore);
-                        } else {
-                            qualifiedCandidateList.append("Total qualified candidates: " + candidateCount[0]);
+                    // Display all candidates when the server has finished sending responses
+                    if (candidates.isEmpty()) {
+                        qualifiedCandidateList.setText("No qualified candidates found with score >= " + minScore);
+                    } else {
+                        // Clear any previous text
+                        qualifiedCandidateList.setText("");
+
+                        // Display each candidate with the correct numbering
+                        for (int i = 0; i < candidates.size(); i++) {
+                            QualifiedCandidate candidate = candidates.get(i);
+                            qualifiedCandidateList.append((i + 1) + ". " + candidate.getCandidateName());
+                            qualifiedCandidateList.append("  Score: " + candidate.getScore() + "\n\n");
                         }
-                    });
+
+                        // Add total count at the end
+                        qualifiedCandidateList.append("Total qualified candidates: " + candidates.size());
+                    }
 
                     // Clean up the channel
                     try {

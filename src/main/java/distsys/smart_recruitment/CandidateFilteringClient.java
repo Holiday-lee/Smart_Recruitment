@@ -79,7 +79,6 @@ public class CandidateFilteringClient {
     private static void scoreCandidateResume(CandidateFilteringServiceGrpc.CandidateFilteringServiceBlockingStub blockingStub) {
         // Create a request for scoring a candidate's resume
         CandidateResume scoreRequest = CandidateResume.newBuilder()
-                .setCandidateId("")
                 .setCandidateName("")
                 .setResumeText("")
                 .addSkills("")
@@ -112,8 +111,7 @@ public class CandidateFilteringClient {
             @Override
             public void onNext(QualifiedCandidate candidate) {
                 // Handle each qualified candidate as it arrives
-                logger.info("Received qualified candidate: " + candidate.getCandidateName() +
-                        " (ID: " + candidate.getCandidateId() + ") with score: " + candidate.getScore());
+                logger.info("Received qualified candidate: " + candidate.getCandidateName() + " with score: " + candidate.getScore());
             }
 
             @Override

@@ -96,18 +96,19 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="182" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="QualifiedCandidateListButton" min="-2" pref="192" max="-2" attributes="0"/>
-                              <Component id="ScoringCandidateResumeButton" min="-2" pref="192" max="-2" attributes="0"/>
-                              <Component id="SchedulingInterviewSlotButton" alignment="0" min="-2" pref="192" max="-2" attributes="0"/>
-                              <Component id="ApplicationStatusUpdateButton" alignment="0" min="-2" pref="192" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="81" max="-2" attributes="0"/>
                           <Component id="jLabel1" min="-2" pref="380" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="182" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="QualifiedCandidateListButton" max="32767" attributes="0"/>
+                              <Component id="ScoringCandidateResumeButton" max="32767" attributes="0"/>
+                              <Component id="SchedulingInterviewSlotButton" alignment="0" max="32767" attributes="0"/>
+                              <Component id="ReceiveCandidateSlotChoiceButton" alignment="0" max="32767" attributes="0"/>
+                              <Component id="SendingInterviewSlotsButton" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
                   <EmptySpace pref="132" max="32767" attributes="0"/>
@@ -125,9 +126,11 @@
                   <Component id="QualifiedCandidateListButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="SchedulingInterviewSlotButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
-                  <Component id="ApplicationStatusUpdateButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="46" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="SendingInterviewSlotsButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="ReceiveCandidateSlotChoiceButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="40" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -163,13 +166,18 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SchedulingInterviewSlotButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="ApplicationStatusUpdateButton">
+        <Component class="javax.swing.JButton" name="ReceiveCandidateSlotChoiceButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Application Status Update"/>
+            <Property name="text" type="java.lang.String" value="Receive Candidate Slot Choice"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ApplicationStatusUpdateButtonActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ReceiveCandidateSlotChoiceButtonActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="SendingInterviewSlotsButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Sending Interview Slots"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

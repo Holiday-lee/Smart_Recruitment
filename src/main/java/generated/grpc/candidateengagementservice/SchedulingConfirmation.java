@@ -5,7 +5,7 @@ package generated.grpc.candidateengagementservice;
 
 /**
  * <pre>
- * Confirmation of candidate's selected slot
+ * Confirmation of candidate's selected slot processing
  * </pre>
  *
  * Protobuf type {@code CandidateEngagementService.SchedulingConfirmation}
@@ -303,7 +303,7 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
-   * Confirmation of candidate's selected slot
+   * Confirmation of candidate's selected slot processing
    * </pre>
    *
    * Protobuf type {@code CandidateEngagementService.SchedulingConfirmation}

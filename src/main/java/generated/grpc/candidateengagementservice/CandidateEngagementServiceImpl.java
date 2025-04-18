@@ -44,24 +44,25 @@ public final class CandidateEngagementServiceImpl {
   static {
     java.lang.String[] descriptorData = {
       "\n CandidateEngagementService.proto\022\032Cand" +
-      "idateEngagementService\"O\n\rSlotSelection\022" +
-      "\024\n\014candidate_id\030\001 \001(\t\022\021\n\tslot_time\030\002 \001(\t" +
-      "\022\025\n\rslot_location\030\003 \001(\t\"Y\n\023CandidateSlot" +
-      "Choice\022\024\n\014candidate_id\030\001 \001(\t\022\023\n\013chosen_t" +
-      "ime\030\002 \001(\t\022\027\n\017chosen_location\030\003 \001(\t\"J\n\030Sl" +
-      "otDeliveryConfirmation\022\027\n\017slots_delivere" +
-      "d\030\001 \001(\010\022\025\n\rdelivery_time\030\002 \001(\t\"F\n\026Schedu" +
-      "lingConfirmation\022\021\n\tconfirmed\030\001 \001(\010\022\031\n\021c" +
-      "onfirmation_time\030\002 \001(\t2\224\002\n\032CandidateEnga" +
-      "gementService\022y\n\022SendInterviewSlots\022).Ca" +
-      "ndidateEngagementService.SlotSelection\0324" +
-      ".CandidateEngagementService.SlotDelivery" +
-      "Confirmation\"\000(\001\022{\n\022SubmitSelectedSlot\022/" +
-      ".CandidateEngagementService.CandidateSlo" +
-      "tChoice\0322.CandidateEngagementService.Sch" +
-      "edulingConfirmation\"\000BM\n)generated.grpc." +
-      "candidateengagementserviceB\036CandidateEng" +
-      "agementServiceImplP\001b\006proto3"
+      "idateEngagementService\"Q\n\rSlotSelection\022" +
+      "\026\n\016candidate_name\030\001 \001(\t\022\021\n\tslot_time\030\002 \001" +
+      "(\t\022\025\n\rslot_location\030\003 \001(\t\"[\n\023CandidateSl" +
+      "otChoice\022\026\n\016candidate_name\030\001 \001(\t\022\023\n\013chos" +
+      "en_time\030\002 \001(\t\022\027\n\017chosen_location\030\003 \001(\t\"J" +
+      "\n\030SlotDeliveryConfirmation\022\027\n\017slots_deli" +
+      "vered\030\001 \001(\010\022\025\n\rdelivery_time\030\002 \001(\t\"F\n\026Sc" +
+      "hedulingConfirmation\022\021\n\tconfirmed\030\001 \001(\010\022" +
+      "\031\n\021confirmation_time\030\002 \001(\t2\235\002\n\032Candidate" +
+      "EngagementService\022y\n\022SendInterviewSlots\022" +
+      ").CandidateEngagementService.SlotSelecti" +
+      "on\0324.CandidateEngagementService.SlotDeli" +
+      "veryConfirmation\"\000(\001\022\203\001\n\032ReceiveCandidat" +
+      "eSlotChoice\022/.CandidateEngagementService" +
+      ".CandidateSlotChoice\0322.CandidateEngageme" +
+      "ntService.SchedulingConfirmation\"\000BM\n)ge" +
+      "nerated.grpc.candidateengagementserviceB" +
+      "\036CandidateEngagementServiceImplP\001b\006proto" +
+      "3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -80,13 +81,13 @@ public final class CandidateEngagementServiceImpl {
     internal_static_CandidateEngagementService_SlotSelection_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_CandidateEngagementService_SlotSelection_descriptor,
-        new java.lang.String[] { "CandidateId", "SlotTime", "SlotLocation", });
+        new java.lang.String[] { "CandidateName", "SlotTime", "SlotLocation", });
     internal_static_CandidateEngagementService_CandidateSlotChoice_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_CandidateEngagementService_CandidateSlotChoice_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_CandidateEngagementService_CandidateSlotChoice_descriptor,
-        new java.lang.String[] { "CandidateId", "ChosenTime", "ChosenLocation", });
+        new java.lang.String[] { "CandidateName", "ChosenTime", "ChosenLocation", });
     internal_static_CandidateEngagementService_SlotDeliveryConfirmation_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_CandidateEngagementService_SlotDeliveryConfirmation_fieldAccessorTable = new

@@ -9,9 +9,13 @@ package distsys.smart_recruitment;
  * @author jiaki
  */
 
+import distsys.smart_recruitment.auth.JwtUtil;
+import distsys.smart_recruitment.auth.Constants;
+import io.grpc.Metadata;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
+import io.grpc.stub.MetadataUtils;
 import io.grpc.stub.StreamObserver;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -27,17 +31,46 @@ import generated.grpc.candidateengagementservice.SchedulingConfirmation;
 public class CandidateEngagementClient {
     private static final Logger logger = Logger.getLogger(CandidateEngagementClient.class.getName());
 
+    // JWT token key for authorization - should match the key used in the server interceptor
+    private static final Metadata.Key<String> JWT_METADATA_KEY = Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER);
+
+    // Default client ID for development
+    private static final String DEFAULT_CLIENT_ID = "client123";
+
     private final ManagedChannel channel;
     private final CandidateEngagementServiceGrpc.CandidateEngagementServiceBlockingStub blockingStub;
     private final CandidateEngagementServiceGrpc.CandidateEngagementServiceStub asyncStub;
+    private final String clientId;
 
     // Constructor for the client
     public CandidateEngagementClient(String host, int port) {
+        this(host, port, DEFAULT_CLIENT_ID);
+    }
+
+    // Constructor for the client with custom client ID
+    public CandidateEngagementClient(String host, int port, String clientId) {
+        this.clientId = clientId;
         this.channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext() // For development only, not secure for production
                 .build();
-        this.blockingStub = CandidateEngagementServiceGrpc.newBlockingStub(channel);
-        this.asyncStub = CandidateEngagementServiceGrpc.newStub(channel);
+
+        // Generate JWT token using JwtUtil
+        String jwtToken = "Bearer " + JwtUtil.generateToken(clientId);
+
+        // Create the auth metadata using the JWT token
+        Metadata metadata = new Metadata();
+        metadata.put(JWT_METADATA_KEY, jwtToken);
+
+        // Create stubs with attached auth metadata
+        this.blockingStub = MetadataUtils.attachHeaders(
+                CandidateEngagementServiceGrpc.newBlockingStub(channel),
+                metadata);
+
+        this.asyncStub = MetadataUtils.attachHeaders(
+                CandidateEngagementServiceGrpc.newStub(channel),
+                metadata);
+
+        logger.info("Client initialized with JWT token for client ID: " + clientId);
     }
 
     // Shutdown the channel
@@ -46,8 +79,8 @@ public class CandidateEngagementClient {
     }
 
     // Method to send interview slots to a candidate
-    public void sendInterviewSlots(String candidateId, String[] times, String[] locations) {
-        logger.info("Sending interview slots for candidate: " + candidateId);
+    public void sendInterviewSlots(String candidateName, String[] times, String[] locations) {
+        logger.info("Sending interview slots for candidate: " + candidateName);
 
         final CountDownLatch finishLatch = new CountDownLatch(1);
 
@@ -79,7 +112,7 @@ public class CandidateEngagementClient {
             // Send each slot
             for (int i = 0; i < times.length && i < locations.length; i++) {
                 SlotSelection slot = SlotSelection.newBuilder()
-                        .setCandidateId(candidateId)
+                        .setCandidateName(candidateName)
                         .setSlotTime(times[i])
                         .setSlotLocation(locations[i])
                         .build();
@@ -108,23 +141,53 @@ public class CandidateEngagementClient {
         }
     }
 
-    // Method to submit a candidate's slot choice
-    public void submitSelectedSlot(String candidateId, String chosenTime, String chosenLocation) {
-        logger.info("Submitting selected slot for candidate: " + candidateId);
+    // Method to receive a candidate's slot choice
+    public void receiveCandidateSlotChoice(String candidateName, String chosenTime, String chosenLocation) {
+        logger.info("Processing candidate slot choice for candidate: " + candidateName);
 
         CandidateSlotChoice choice = CandidateSlotChoice.newBuilder()
-                .setCandidateId(candidateId)
+                .setCandidateName(candidateName)
                 .setChosenTime(chosenTime)
                 .setChosenLocation(chosenLocation)
                 .build();
 
         try {
-            SchedulingConfirmation confirmation = blockingStub.submitSelectedSlot(choice);
+            SchedulingConfirmation confirmation = blockingStub.receiveCandidateSlotChoice(choice);
             logger.info("Received confirmation: confirmed = " + confirmation.getConfirmed() +
                     ", confirmation time = " + confirmation.getConfirmationTime());
         } catch (StatusRuntimeException e) {
             logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
             return;
+        }
+    }
+
+    /**
+     * Method to receive a candidate's slot choice and return the confirmation response
+     * This is used by the GUI to display confirmation details
+     *
+     * @param candidateName The name of the candidate
+     * @param chosenTime The time chosen by the candidate
+     * @param chosenLocation The location chosen by the candidate
+     * @return The SchedulingConfirmation from the server
+     * @throws StatusRuntimeException if the RPC call fails
+     */
+    public SchedulingConfirmation receiveCandidateSlotChoiceWithResponse(String candidateName, String chosenTime, String chosenLocation) {
+        logger.info("Processing candidate slot choice for candidate: " + candidateName);
+
+        CandidateSlotChoice choice = CandidateSlotChoice.newBuilder()
+                .setCandidateName(candidateName)
+                .setChosenTime(chosenTime)
+                .setChosenLocation(chosenLocation)
+                .build();
+
+        try {
+            SchedulingConfirmation confirmation = blockingStub.receiveCandidateSlotChoice(choice);
+            logger.info("Received confirmation: confirmed = " + confirmation.getConfirmed() +
+                    ", confirmation time = " + confirmation.getConfirmationTime());
+            return confirmation;
+        } catch (StatusRuntimeException e) {
+            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+            throw e; // Rethrow the exception for the GUI to handle
         }
     }
 
@@ -152,7 +215,7 @@ public class CandidateEngagementClient {
             while (!exit) {
                 System.out.println("\nCandidate Engagement Client");
                 System.out.println("1. Send Interview Slots");
-                System.out.println("2. Submit Selected Slot");
+                System.out.println("2. Process Candidate Slot Choice");
                 System.out.println("3. Exit");
                 System.out.print("Enter your choice (1-3): ");
 
@@ -167,8 +230,8 @@ public class CandidateEngagementClient {
                 switch (choice) {
                     case 1:
                         // Send interview slots
-                        System.out.print("Enter candidate ID: ");
-                        String candidateId = scanner.nextLine();
+                        System.out.print("Enter candidate name: ");
+                        String candidateName = scanner.nextLine();
 
                         System.out.print("How many slots do you want to send? ");
                         int numSlots = 0;
@@ -190,13 +253,13 @@ public class CandidateEngagementClient {
                             locations[i] = scanner.nextLine();
                         }
 
-                        client.sendInterviewSlots(candidateId, times, locations);
+                        client.sendInterviewSlots(candidateName, times, locations);
                         break;
 
                     case 2:
-                        // Submit selected slot
-                        System.out.print("Enter candidate ID: ");
-                        String candId = scanner.nextLine();
+                        // Process candidate slot choice
+                        System.out.print("Enter candidate name: ");
+                        String candName = scanner.nextLine();
 
                         System.out.print("Enter chosen time: ");
                         String chosenTime = scanner.nextLine();
@@ -204,7 +267,7 @@ public class CandidateEngagementClient {
                         System.out.print("Enter chosen location: ");
                         String chosenLocation = scanner.nextLine();
 
-                        client.submitSelectedSlot(candId, chosenTime, chosenLocation);
+                        client.receiveCandidateSlotChoice(candName, chosenTime, chosenLocation);
                         break;
 
                     case 3:

@@ -25,11 +25,10 @@ service CandidateFilteringService {
 
    //  Message defining the candidate's resume input
    message CandidateResume {
-     string candidate_id = 1;   // lowerCase for message field type as per proto3 syntax
-     string candidate_name = 2; 
-     string resume_text = 3;
-     repeated string skills = 4; // List of skills (e.g., ["Java", "Python"])
-     int32 years_experience = 5;
+     string candidate_name = 1; // lowerCase for message field type as per proto3 syntax
+     int32 years_experience = 2;
+     repeated string skills = 3; // List of skills (e.g., ["Java", "Python"])
+     string resume_text = 4;
    }
 
    // Message for setting qualification criteria
@@ -39,13 +38,11 @@ service CandidateFilteringService {
 
    // The response message containing the resume score
    message ResumeScore {
-     string candidate_id = 1;
-     double score = 2;
+     double score = 1;
    }
  
     // Message containing details of a qualified candidate
    message QualifiedCandidate {
-     string candidate_id = 1;
-     string candidate_name = 2;
+     string candidate_name = 1;
      double score = 3;
    }

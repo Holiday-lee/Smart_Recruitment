@@ -20,11 +20,10 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private CandidateResume() {
-    candidateId_ = "";
     candidateName_ = "";
-    resumeText_ = "";
-    skills_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     yearsExperience_ = 0;
+    skills_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    resumeText_ = "";
   }
 
   @java.lang.Override
@@ -54,33 +53,27 @@ private static final long serialVersionUID = 0L;
           case 10: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            candidateId_ = s;
+            candidateName_ = s;
             break;
           }
-          case 18: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 16: {
 
-            candidateName_ = s;
+            yearsExperience_ = input.readInt32();
             break;
           }
           case 26: {
             java.lang.String s = input.readStringRequireUtf8();
-
-            resumeText_ = s;
-            break;
-          }
-          case 34: {
-            java.lang.String s = input.readStringRequireUtf8();
-            if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+            if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
               skills_ = new com.google.protobuf.LazyStringArrayList();
-              mutable_bitField0_ |= 0x00000008;
+              mutable_bitField0_ |= 0x00000004;
             }
             skills_.add(s);
             break;
           }
-          case 40: {
+          case 34: {
+            java.lang.String s = input.readStringRequireUtf8();
 
-            yearsExperience_ = input.readInt32();
+            resumeText_ = s;
             break;
           }
           default: {
@@ -98,7 +91,7 @@ private static final long serialVersionUID = 0L;
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
         skills_ = skills_.getUnmodifiableView();
       }
       this.unknownFields = unknownFields.build();
@@ -119,52 +112,14 @@ private static final long serialVersionUID = 0L;
   }
 
   private int bitField0_;
-  public static final int CANDIDATE_ID_FIELD_NUMBER = 1;
-  private volatile java.lang.Object candidateId_;
-  /**
-   * <pre>
-   * lowerCase for message field type as per proto3 syntax
-   * </pre>
-   *
-   * <code>string candidate_id = 1;</code>
-   */
-  public java.lang.String getCandidateId() {
-    java.lang.Object ref = candidateId_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      candidateId_ = s;
-      return s;
-    }
-  }
-  /**
-   * <pre>
-   * lowerCase for message field type as per proto3 syntax
-   * </pre>
-   *
-   * <code>string candidate_id = 1;</code>
-   */
-  public com.google.protobuf.ByteString
-      getCandidateIdBytes() {
-    java.lang.Object ref = candidateId_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      candidateId_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int CANDIDATE_NAME_FIELD_NUMBER = 2;
+  public static final int CANDIDATE_NAME_FIELD_NUMBER = 1;
   private volatile java.lang.Object candidateName_;
   /**
-   * <code>string candidate_name = 2;</code>
+   * <pre>
+   * lowerCase for message field type as per proto3 syntax
+   * </pre>
+   *
+   * <code>string candidate_name = 1;</code>
    */
   public java.lang.String getCandidateName() {
     java.lang.Object ref = candidateName_;
@@ -179,7 +134,11 @@ private static final long serialVersionUID = 0L;
     }
   }
   /**
-   * <code>string candidate_name = 2;</code>
+   * <pre>
+   * lowerCase for message field type as per proto3 syntax
+   * </pre>
+   *
+   * <code>string candidate_name = 1;</code>
    */
   public com.google.protobuf.ByteString
       getCandidateNameBytes() {
@@ -195,10 +154,64 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int RESUME_TEXT_FIELD_NUMBER = 3;
+  public static final int YEARS_EXPERIENCE_FIELD_NUMBER = 2;
+  private int yearsExperience_;
+  /**
+   * <code>int32 years_experience = 2;</code>
+   */
+  public int getYearsExperience() {
+    return yearsExperience_;
+  }
+
+  public static final int SKILLS_FIELD_NUMBER = 3;
+  private com.google.protobuf.LazyStringList skills_;
+  /**
+   * <pre>
+   * List of skills (e.g., ["Java", "Python"])
+   * </pre>
+   *
+   * <code>repeated string skills = 3;</code>
+   */
+  public com.google.protobuf.ProtocolStringList
+      getSkillsList() {
+    return skills_;
+  }
+  /**
+   * <pre>
+   * List of skills (e.g., ["Java", "Python"])
+   * </pre>
+   *
+   * <code>repeated string skills = 3;</code>
+   */
+  public int getSkillsCount() {
+    return skills_.size();
+  }
+  /**
+   * <pre>
+   * List of skills (e.g., ["Java", "Python"])
+   * </pre>
+   *
+   * <code>repeated string skills = 3;</code>
+   */
+  public java.lang.String getSkills(int index) {
+    return skills_.get(index);
+  }
+  /**
+   * <pre>
+   * List of skills (e.g., ["Java", "Python"])
+   * </pre>
+   *
+   * <code>repeated string skills = 3;</code>
+   */
+  public com.google.protobuf.ByteString
+      getSkillsBytes(int index) {
+    return skills_.getByteString(index);
+  }
+
+  public static final int RESUME_TEXT_FIELD_NUMBER = 4;
   private volatile java.lang.Object resumeText_;
   /**
-   * <code>string resume_text = 3;</code>
+   * <code>string resume_text = 4;</code>
    */
   public java.lang.String getResumeText() {
     java.lang.Object ref = resumeText_;
@@ -213,7 +226,7 @@ private static final long serialVersionUID = 0L;
     }
   }
   /**
-   * <code>string resume_text = 3;</code>
+   * <code>string resume_text = 4;</code>
    */
   public com.google.protobuf.ByteString
       getResumeTextBytes() {
@@ -227,60 +240,6 @@ private static final long serialVersionUID = 0L;
     } else {
       return (com.google.protobuf.ByteString) ref;
     }
-  }
-
-  public static final int SKILLS_FIELD_NUMBER = 4;
-  private com.google.protobuf.LazyStringList skills_;
-  /**
-   * <pre>
-   * List of skills (e.g., ["Java", "Python"])
-   * </pre>
-   *
-   * <code>repeated string skills = 4;</code>
-   */
-  public com.google.protobuf.ProtocolStringList
-      getSkillsList() {
-    return skills_;
-  }
-  /**
-   * <pre>
-   * List of skills (e.g., ["Java", "Python"])
-   * </pre>
-   *
-   * <code>repeated string skills = 4;</code>
-   */
-  public int getSkillsCount() {
-    return skills_.size();
-  }
-  /**
-   * <pre>
-   * List of skills (e.g., ["Java", "Python"])
-   * </pre>
-   *
-   * <code>repeated string skills = 4;</code>
-   */
-  public java.lang.String getSkills(int index) {
-    return skills_.get(index);
-  }
-  /**
-   * <pre>
-   * List of skills (e.g., ["Java", "Python"])
-   * </pre>
-   *
-   * <code>repeated string skills = 4;</code>
-   */
-  public com.google.protobuf.ByteString
-      getSkillsBytes(int index) {
-    return skills_.getByteString(index);
-  }
-
-  public static final int YEARS_EXPERIENCE_FIELD_NUMBER = 5;
-  private int yearsExperience_;
-  /**
-   * <code>int32 years_experience = 5;</code>
-   */
-  public int getYearsExperience() {
-    return yearsExperience_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -297,20 +256,17 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!getCandidateIdBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, candidateId_);
-    }
     if (!getCandidateNameBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, candidateName_);
-    }
-    if (!getResumeTextBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, resumeText_);
-    }
-    for (int i = 0; i < skills_.size(); i++) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, skills_.getRaw(i));
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, candidateName_);
     }
     if (yearsExperience_ != 0) {
-      output.writeInt32(5, yearsExperience_);
+      output.writeInt32(2, yearsExperience_);
+    }
+    for (int i = 0; i < skills_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, skills_.getRaw(i));
+    }
+    if (!getResumeTextBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, resumeText_);
     }
     unknownFields.writeTo(output);
   }
@@ -321,14 +277,12 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!getCandidateIdBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, candidateId_);
-    }
     if (!getCandidateNameBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, candidateName_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, candidateName_);
     }
-    if (!getResumeTextBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, resumeText_);
+    if (yearsExperience_ != 0) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt32Size(2, yearsExperience_);
     }
     {
       int dataSize = 0;
@@ -338,9 +292,8 @@ private static final long serialVersionUID = 0L;
       size += dataSize;
       size += 1 * getSkillsList().size();
     }
-    if (yearsExperience_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(5, yearsExperience_);
+    if (!getResumeTextBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, resumeText_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -358,16 +311,14 @@ private static final long serialVersionUID = 0L;
     generated.grpc.candidatefilteringservice.CandidateResume other = (generated.grpc.candidatefilteringservice.CandidateResume) obj;
 
     boolean result = true;
-    result = result && getCandidateId()
-        .equals(other.getCandidateId());
     result = result && getCandidateName()
         .equals(other.getCandidateName());
-    result = result && getResumeText()
-        .equals(other.getResumeText());
-    result = result && getSkillsList()
-        .equals(other.getSkillsList());
     result = result && (getYearsExperience()
         == other.getYearsExperience());
+    result = result && getSkillsList()
+        .equals(other.getSkillsList());
+    result = result && getResumeText()
+        .equals(other.getResumeText());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -379,18 +330,16 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + CANDIDATE_ID_FIELD_NUMBER;
-    hash = (53 * hash) + getCandidateId().hashCode();
     hash = (37 * hash) + CANDIDATE_NAME_FIELD_NUMBER;
     hash = (53 * hash) + getCandidateName().hashCode();
-    hash = (37 * hash) + RESUME_TEXT_FIELD_NUMBER;
-    hash = (53 * hash) + getResumeText().hashCode();
+    hash = (37 * hash) + YEARS_EXPERIENCE_FIELD_NUMBER;
+    hash = (53 * hash) + getYearsExperience();
     if (getSkillsCount() > 0) {
       hash = (37 * hash) + SKILLS_FIELD_NUMBER;
       hash = (53 * hash) + getSkillsList().hashCode();
     }
-    hash = (37 * hash) + YEARS_EXPERIENCE_FIELD_NUMBER;
-    hash = (53 * hash) + getYearsExperience();
+    hash = (37 * hash) + RESUME_TEXT_FIELD_NUMBER;
+    hash = (53 * hash) + getResumeText().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -528,15 +477,13 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      candidateId_ = "";
-
       candidateName_ = "";
 
-      resumeText_ = "";
+      yearsExperience_ = 0;
 
       skills_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000008);
-      yearsExperience_ = 0;
+      bitField0_ = (bitField0_ & ~0x00000004);
+      resumeText_ = "";
 
       return this;
     }
@@ -566,15 +513,14 @@ private static final long serialVersionUID = 0L;
       generated.grpc.candidatefilteringservice.CandidateResume result = new generated.grpc.candidatefilteringservice.CandidateResume(this);
       int from_bitField0_ = bitField0_;
       int to_bitField0_ = 0;
-      result.candidateId_ = candidateId_;
       result.candidateName_ = candidateName_;
-      result.resumeText_ = resumeText_;
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      result.yearsExperience_ = yearsExperience_;
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         skills_ = skills_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000004);
       }
       result.skills_ = skills_;
-      result.yearsExperience_ = yearsExperience_;
+      result.resumeText_ = resumeText_;
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -624,30 +570,26 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(generated.grpc.candidatefilteringservice.CandidateResume other) {
       if (other == generated.grpc.candidatefilteringservice.CandidateResume.getDefaultInstance()) return this;
-      if (!other.getCandidateId().isEmpty()) {
-        candidateId_ = other.candidateId_;
-        onChanged();
-      }
       if (!other.getCandidateName().isEmpty()) {
         candidateName_ = other.candidateName_;
         onChanged();
       }
-      if (!other.getResumeText().isEmpty()) {
-        resumeText_ = other.resumeText_;
-        onChanged();
+      if (other.getYearsExperience() != 0) {
+        setYearsExperience(other.getYearsExperience());
       }
       if (!other.skills_.isEmpty()) {
         if (skills_.isEmpty()) {
           skills_ = other.skills_;
-          bitField0_ = (bitField0_ & ~0x00000008);
+          bitField0_ = (bitField0_ & ~0x00000004);
         } else {
           ensureSkillsIsMutable();
           skills_.addAll(other.skills_);
         }
         onChanged();
       }
-      if (other.getYearsExperience() != 0) {
-        setYearsExperience(other.getYearsExperience());
+      if (!other.getResumeText().isEmpty()) {
+        resumeText_ = other.resumeText_;
+        onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -679,98 +621,13 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private java.lang.Object candidateId_ = "";
-    /**
-     * <pre>
-     * lowerCase for message field type as per proto3 syntax
-     * </pre>
-     *
-     * <code>string candidate_id = 1;</code>
-     */
-    public java.lang.String getCandidateId() {
-      java.lang.Object ref = candidateId_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        candidateId_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <pre>
-     * lowerCase for message field type as per proto3 syntax
-     * </pre>
-     *
-     * <code>string candidate_id = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getCandidateIdBytes() {
-      java.lang.Object ref = candidateId_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        candidateId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <pre>
-     * lowerCase for message field type as per proto3 syntax
-     * </pre>
-     *
-     * <code>string candidate_id = 1;</code>
-     */
-    public Builder setCandidateId(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      candidateId_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <pre>
-     * lowerCase for message field type as per proto3 syntax
-     * </pre>
-     *
-     * <code>string candidate_id = 1;</code>
-     */
-    public Builder clearCandidateId() {
-      
-      candidateId_ = getDefaultInstance().getCandidateId();
-      onChanged();
-      return this;
-    }
-    /**
-     * <pre>
-     * lowerCase for message field type as per proto3 syntax
-     * </pre>
-     *
-     * <code>string candidate_id = 1;</code>
-     */
-    public Builder setCandidateIdBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      candidateId_ = value;
-      onChanged();
-      return this;
-    }
-
     private java.lang.Object candidateName_ = "";
     /**
-     * <code>string candidate_name = 2;</code>
+     * <pre>
+     * lowerCase for message field type as per proto3 syntax
+     * </pre>
+     *
+     * <code>string candidate_name = 1;</code>
      */
     public java.lang.String getCandidateName() {
       java.lang.Object ref = candidateName_;
@@ -785,7 +642,11 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>string candidate_name = 2;</code>
+     * <pre>
+     * lowerCase for message field type as per proto3 syntax
+     * </pre>
+     *
+     * <code>string candidate_name = 1;</code>
      */
     public com.google.protobuf.ByteString
         getCandidateNameBytes() {
@@ -801,7 +662,11 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>string candidate_name = 2;</code>
+     * <pre>
+     * lowerCase for message field type as per proto3 syntax
+     * </pre>
+     *
+     * <code>string candidate_name = 1;</code>
      */
     public Builder setCandidateName(
         java.lang.String value) {
@@ -814,7 +679,11 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>string candidate_name = 2;</code>
+     * <pre>
+     * lowerCase for message field type as per proto3 syntax
+     * </pre>
+     *
+     * <code>string candidate_name = 1;</code>
      */
     public Builder clearCandidateName() {
       
@@ -823,7 +692,11 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>string candidate_name = 2;</code>
+     * <pre>
+     * lowerCase for message field type as per proto3 syntax
+     * </pre>
+     *
+     * <code>string candidate_name = 1;</code>
      */
     public Builder setCandidateNameBytes(
         com.google.protobuf.ByteString value) {
@@ -837,80 +710,37 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object resumeText_ = "";
+    private int yearsExperience_ ;
     /**
-     * <code>string resume_text = 3;</code>
+     * <code>int32 years_experience = 2;</code>
      */
-    public java.lang.String getResumeText() {
-      java.lang.Object ref = resumeText_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        resumeText_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
+    public int getYearsExperience() {
+      return yearsExperience_;
     }
     /**
-     * <code>string resume_text = 3;</code>
+     * <code>int32 years_experience = 2;</code>
      */
-    public com.google.protobuf.ByteString
-        getResumeTextBytes() {
-      java.lang.Object ref = resumeText_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        resumeText_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string resume_text = 3;</code>
-     */
-    public Builder setResumeText(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      resumeText_ = value;
+    public Builder setYearsExperience(int value) {
+      
+      yearsExperience_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string resume_text = 3;</code>
+     * <code>int32 years_experience = 2;</code>
      */
-    public Builder clearResumeText() {
+    public Builder clearYearsExperience() {
       
-      resumeText_ = getDefaultInstance().getResumeText();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string resume_text = 3;</code>
-     */
-    public Builder setResumeTextBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      resumeText_ = value;
+      yearsExperience_ = 0;
       onChanged();
       return this;
     }
 
     private com.google.protobuf.LazyStringList skills_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     private void ensureSkillsIsMutable() {
-      if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (!((bitField0_ & 0x00000004) == 0x00000004)) {
         skills_ = new com.google.protobuf.LazyStringArrayList(skills_);
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000004;
        }
     }
     /**
@@ -918,7 +748,7 @@ private static final long serialVersionUID = 0L;
      * List of skills (e.g., ["Java", "Python"])
      * </pre>
      *
-     * <code>repeated string skills = 4;</code>
+     * <code>repeated string skills = 3;</code>
      */
     public com.google.protobuf.ProtocolStringList
         getSkillsList() {
@@ -929,7 +759,7 @@ private static final long serialVersionUID = 0L;
      * List of skills (e.g., ["Java", "Python"])
      * </pre>
      *
-     * <code>repeated string skills = 4;</code>
+     * <code>repeated string skills = 3;</code>
      */
     public int getSkillsCount() {
       return skills_.size();
@@ -939,7 +769,7 @@ private static final long serialVersionUID = 0L;
      * List of skills (e.g., ["Java", "Python"])
      * </pre>
      *
-     * <code>repeated string skills = 4;</code>
+     * <code>repeated string skills = 3;</code>
      */
     public java.lang.String getSkills(int index) {
       return skills_.get(index);
@@ -949,7 +779,7 @@ private static final long serialVersionUID = 0L;
      * List of skills (e.g., ["Java", "Python"])
      * </pre>
      *
-     * <code>repeated string skills = 4;</code>
+     * <code>repeated string skills = 3;</code>
      */
     public com.google.protobuf.ByteString
         getSkillsBytes(int index) {
@@ -960,7 +790,7 @@ private static final long serialVersionUID = 0L;
      * List of skills (e.g., ["Java", "Python"])
      * </pre>
      *
-     * <code>repeated string skills = 4;</code>
+     * <code>repeated string skills = 3;</code>
      */
     public Builder setSkills(
         int index, java.lang.String value) {
@@ -977,7 +807,7 @@ private static final long serialVersionUID = 0L;
      * List of skills (e.g., ["Java", "Python"])
      * </pre>
      *
-     * <code>repeated string skills = 4;</code>
+     * <code>repeated string skills = 3;</code>
      */
     public Builder addSkills(
         java.lang.String value) {
@@ -994,7 +824,7 @@ private static final long serialVersionUID = 0L;
      * List of skills (e.g., ["Java", "Python"])
      * </pre>
      *
-     * <code>repeated string skills = 4;</code>
+     * <code>repeated string skills = 3;</code>
      */
     public Builder addAllSkills(
         java.lang.Iterable<java.lang.String> values) {
@@ -1009,11 +839,11 @@ private static final long serialVersionUID = 0L;
      * List of skills (e.g., ["Java", "Python"])
      * </pre>
      *
-     * <code>repeated string skills = 4;</code>
+     * <code>repeated string skills = 3;</code>
      */
     public Builder clearSkills() {
       skills_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000008);
+      bitField0_ = (bitField0_ & ~0x00000004);
       onChanged();
       return this;
     }
@@ -1022,7 +852,7 @@ private static final long serialVersionUID = 0L;
      * List of skills (e.g., ["Java", "Python"])
      * </pre>
      *
-     * <code>repeated string skills = 4;</code>
+     * <code>repeated string skills = 3;</code>
      */
     public Builder addSkillsBytes(
         com.google.protobuf.ByteString value) {
@@ -1036,28 +866,71 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private int yearsExperience_ ;
+    private java.lang.Object resumeText_ = "";
     /**
-     * <code>int32 years_experience = 5;</code>
+     * <code>string resume_text = 4;</code>
      */
-    public int getYearsExperience() {
-      return yearsExperience_;
+    public java.lang.String getResumeText() {
+      java.lang.Object ref = resumeText_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        resumeText_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
     }
     /**
-     * <code>int32 years_experience = 5;</code>
+     * <code>string resume_text = 4;</code>
      */
-    public Builder setYearsExperience(int value) {
-      
-      yearsExperience_ = value;
+    public com.google.protobuf.ByteString
+        getResumeTextBytes() {
+      java.lang.Object ref = resumeText_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        resumeText_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string resume_text = 4;</code>
+     */
+    public Builder setResumeText(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      resumeText_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>int32 years_experience = 5;</code>
+     * <code>string resume_text = 4;</code>
      */
-    public Builder clearYearsExperience() {
+    public Builder clearResumeText() {
       
-      yearsExperience_ = 0;
+      resumeText_ = getDefaultInstance().getResumeText();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string resume_text = 4;</code>
+     */
+    public Builder setResumeTextBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      resumeText_ = value;
       onChanged();
       return this;
     }

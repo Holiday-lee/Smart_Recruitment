@@ -8,21 +8,11 @@ public interface CandidateNameOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string candidate_id = 1;</code>
-   */
-  java.lang.String getCandidateId();
-  /**
-   * <code>string candidate_id = 1;</code>
-   */
-  com.google.protobuf.ByteString
-      getCandidateIdBytes();
-
-  /**
-   * <code>string candidate_name = 2;</code>
+   * <code>string candidate_name = 1;</code>
    */
   java.lang.String getCandidateName();
   /**
-   * <code>string candidate_name = 2;</code>
+   * <code>string candidate_name = 1;</code>
    */
   com.google.protobuf.ByteString
       getCandidateNameBytes();

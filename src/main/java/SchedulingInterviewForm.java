@@ -11,8 +11,6 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 import distsys.smart_recruitment.auth.BearerToken;
 import distsys.smart_recruitment.auth.JwtUtil;
-import generated.grpc.candidatefilteringservice.CandidateResume;
-import generated.grpc.candidatefilteringservice.ResumeScore;
 import java.util.Map;
 
 /*
@@ -44,8 +42,8 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
         // Add event listeners
         addEventListeners();
 
-        // Load qualified candidates if available
-        loadQualifiedCandidates();
+        // Set initial instruction text
+        setInstructionText();
     }
 
     // Constructor needed for NetBeans designer
@@ -58,6 +56,9 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
         // Set up connection and event listeners
         setupGrpcConnection();
         addEventListeners();
+
+        // Set initial instruction text
+        setInstructionText();
     }
 
     private void setupGrpcConnection() {
@@ -112,58 +113,12 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
         });
     }
 
-    private void loadQualifiedCandidates() {
-        try {
-            // Access the data from ScoreResumeForm
-            Map<String, ResumeScore> scores = ScoreResumeForm.getScoredResumes();
-            Map<String, CandidateResume> candidates = ScoreResumeForm.getCandidateResumes();
-
-            // Get the minimum qualification score - assumes this is set in QualifiedCandidateList form
-            // If you don't have a method like this, use a default value such as 70.0
-            double minQualificationScore = 70.0; // Default value
-
-            if (scores.isEmpty() || candidates.isEmpty()) {
-                textArea1.setText("No candidate data available. Please score resumes first.");
-                return;
-            }
-
-            // Build a string of qualified candidates
-            StringBuilder candidateList = new StringBuilder();
-            candidateList.append("Qualified Candidates (Score >= " + minQualificationScore + "):\n\n");
-
-            // Add candidates with score >= minQualificationScore to the list
-            boolean hasQualifiedCandidates = false;
-            for (Map.Entry<String, ResumeScore> entry : scores.entrySet()) {
-                String candidateId = entry.getKey();
-                ResumeScore score = entry.getValue();
-                CandidateResume candidate = candidates.get(candidateId);
-
-                if (score != null && candidate != null && score.getScore() >= minQualificationScore) {
-                    candidateList.append(candidate.getCandidateName())
-                               .append(" (ID: ").append(candidateId)
-                               .append(", Score: ")
-                               .append((int)score.getScore())
-                               .append(")\n");
-                    hasQualifiedCandidates = true;
-                }
-            }
-
-            if (hasQualifiedCandidates) {
-                candidateList.append("\nPlease enter candidate information for interview scheduling.\n");
-                candidateList.append("Format: candidateID,candidateName (one per line)");
-                textArea1.setText(candidateList.toString());
-            } else {
-                textArea1.setText("No qualified candidates found (minimum score: " + minQualificationScore + ").\n" +
-                                  "Please score some resumes first or enter candidate information manually.\n\n" +
-                                  "Format: candidateID,candidateName (one per line)");
-            }
-        } catch (Exception e) {
-            System.err.println("Error loading qualified candidates: " + e.getMessage());
-            e.printStackTrace();
-            textArea1.setText("Error loading candidates: " + e.getMessage() +
-                              "\nPlease enter candidate information manually.\n" +
-                              "Format: candidateID,candidateName (one per line)");
-        }
+    private void setInstructionText() {
+        textArea1.setText("Please enter candidate names for interview scheduling.\n\n" +
+                          "Enter one candidate name per line. For example:\n\n" +
+                          "John Smith\n" +
+                          "Jane Doe\n" +
+                          "Alex Johnson\n");
     }
 
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,7 +126,7 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
 
         if (candidateInput.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                "Please enter candidate information first.",
+                "Please enter candidate names first.",
                 "Empty Input",
                 JOptionPane.WARNING_MESSAGE);
             return;
@@ -198,12 +153,12 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
             // Clear previous results
             textArea2.setText("Requesting interview slots...");
 
-            // Parse the input to get candidate IDs and names
-            List<String[]> candidates = extractCandidateInfo(candidateInput);
+            // Parse the input to get candidate names
+            List<String> candidateNames = extractCandidateNames(candidateInput);
 
-            if (candidates.isEmpty()) {
+            if (candidateNames.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
-                    "No valid candidate information found. Please enter at least one candidate.",
+                    "No valid candidate names found. Please enter at least one candidate.",
                     "No Candidates",
                     JOptionPane.WARNING_MESSAGE);
                 return;
@@ -219,11 +174,19 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
             // Create a stream observer to handle the response(interviewSlot) stream
             StreamObserver<InterviewSlot> responseObserver = new StreamObserver<InterviewSlot>() {
                 private int slotCount = 0;
+                private String currentCandidate = "";
 
                 @Override
                 public void onNext(InterviewSlot slot) {
                     // Add the slot to our display
                     slotCount++;
+
+                    // Add candidate name header if we have a new candidate
+                    if (!currentCandidate.equals(candidateNames.get((slotCount-1) / 3))) {
+                        currentCandidate = candidateNames.get((slotCount-1) / 3);
+                        slotsBuilder.append("\nFor candidate: ").append(currentCandidate).append("\n");
+                    }
+
                     slotsBuilder.append("Time: ").append(slot.getTime())
                                .append(", Location: ").append(slot.getLocation())
                                .append("\n");
@@ -266,18 +229,19 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
             StreamObserver<CandidateName> requestObserver = asyncStub.arrangeInterviewSlot(responseObserver);
 
             // Send each candidate as a separate request
-            for (String[] candidateInfo : candidates) {
-                String candidateId = candidateInfo[0];
-                String candidateName = candidateInfo[1];
+            for (String name : candidateNames) {
+                // Skip empty lines
+                if (name.trim().isEmpty()) {
+                    continue;
+                }
 
-                // Send the candidate name and ID
+                // Send the candidate name
                 CandidateName candidateNameProto = CandidateName.newBuilder()
-                        .setCandidateId(candidateId)
-                        .setCandidateName(candidateName)
+                        .setCandidateName(name)
                         .build();
 
                 requestObserver.onNext(candidateNameProto);
-                System.out.println("Sent candidate: " + candidateName + " (ID: " + candidateId + ")");
+                System.out.println("Sent candidate: " + name);
 
                 // Add a small delay between candidates to prevent overwhelming the server
                 try {
@@ -305,25 +269,9 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
         }
     }
 
-    // Extract candidate information (ID and name) from the text input
-    private List<String[]> extractCandidateInfo(String input) {
-        List<String[]> candidates = new ArrayList<>();
-
-        // First, check if we need to strip out the header/instructions
-        if (input.contains("Qualified Candidates")) {
-            // Find where the candidate list starts
-            int startIndex = input.indexOf("Qualified Candidates");
-            startIndex = input.indexOf("\n\n", startIndex) + 2;
-
-            // Find where the instructions start
-            int endIndex = input.indexOf("Please enter");
-            if (endIndex < 0) {
-                endIndex = input.length();
-            }
-
-            // Extract just the candidate part
-            input = input.substring(startIndex, endIndex).trim();
-        }
+    // Extract candidate names from the text input
+    private List<String> extractCandidateNames(String input) {
+        List<String> candidateNames = new ArrayList<>();
 
         // Split by newline
         String[] lines = input.split("\\r?\\n");
@@ -332,33 +280,12 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
         for (String line : lines) {
             line = line.trim();
             if (!line.isEmpty()) {
-                String candidateId;
-                String candidateName;
-
-                // Check if line matches the format "candidateID,candidateName"
-                if (line.contains(",")) {
-                    String[] parts = line.split(",", 2);
-                    candidateId = parts[0].trim();
-                    candidateName = parts[1].trim();
-                }
-                // Check if line matches the format "name (ID: id, Score: score)"
-                else if (line.contains(" (ID: ") && line.contains(", Score: ")) {
-                    int idStart = line.indexOf(" (ID: ") + 6;
-                    int idEnd = line.indexOf(", Score: ");
-                    candidateId = line.substring(idStart, idEnd).trim();
-                    candidateName = line.substring(0, line.indexOf(" (ID: ")).trim();
-                }
-                // Fallback: use the whole line as name and generate an ID
-                else {
-                    candidateName = line;
-                    candidateId = "temp_" + System.currentTimeMillis();
-                }
-
-                candidates.add(new String[] { candidateId, candidateName });
+                // Add each non-empty line as a candidate name
+                candidateNames.add(line);
             }
         }
 
-        return candidates;
+        return candidateNames;
     }
 
     private void backToMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -396,7 +323,7 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
@@ -418,7 +345,7 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
 
         jLabel1.setText("Scheduling Interview Slot");
 
-        jLabel2.setText("Please provide qualified candidate list and click SUBMIT button: ");
+        jLabel2.setText("Please enter candidate names (one per line) and click SUBMIT button: ");
 
         jLabel3.setText("Interview Slot Result:");
 
@@ -470,12 +397,12 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         // This will be handled by our addEventListeners method
         backToMenuButtonActionPerformed(evt);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }
 
     /**
      * @param args the command line arguments
@@ -512,7 +439,7 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify
     private javax.swing.JButton SubmitButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -520,5 +447,5 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private java.awt.TextArea textArea1;
     private java.awt.TextArea textArea2;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration
 }

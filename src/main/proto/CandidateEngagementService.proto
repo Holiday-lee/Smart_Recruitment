@@ -6,29 +6,31 @@ option java_outer_classname = "CandidateEngagementServiceImpl";
 
 package CandidateEngagementService;
 
-// CandidateEngagementService sends interview slots to candidates and confirms delivery
+// CandidateEngagementService manages the communication of interview slots to candidates and processes their responses
+// Note: The client side in all methods refers to the recruitment system
 service CandidateEngagementService {
+
   // CLIENT-STREAMING METHOD
-  // INPUT: A stream of interview slots for a candidate
+  // INPUT: A stream of interview slots for a candidate sent by the recruitment system
   // OUTPUT: Confirmation that slots were successfully sent to the candidate
   rpc SendInterviewSlots(stream SlotSelection) returns (SlotDeliveryConfirmation) {}
   
   // UNARY METHOD
-  // For candidate to later submit their selection (separate call)
-  rpc SubmitSelectedSlot(CandidateSlotChoice) returns (SchedulingConfirmation) {}
-  
+  // INPUT: A candidate's slot choice (received by the recruitment system)
+  // OUTPUT: Confirmation that the selection has been processed
+  rpc ReceiveCandidateSlotChoice(CandidateSlotChoice) returns (SchedulingConfirmation) {}
 }
 
 // Message defining interview slots to send to a candidate
 message SlotSelection {
-  string candidate_id = 1;
+  string candidate_name = 1;
   string slot_time = 2;
   string slot_location = 3;
 }
 
-// Message for a candidate to submit their chosen slot
+// Message for a candidate's chosen slot (received by the recruiter side)
 message CandidateSlotChoice {
-  string candidate_id = 1;
+  string candidate_name = 1;
   string chosen_time = 2;
   string chosen_location = 3;
 }
@@ -39,9 +41,8 @@ message SlotDeliveryConfirmation {
   string delivery_time = 2;
 }
 
-// Confirmation of candidate's selected slot
+// Confirmation of candidate's selected slot processing
 message SchedulingConfirmation {
   bool confirmed = 1;
   string confirmation_time = 2;
 }
-

@@ -8,17 +8,7 @@ public interface ResumeScoreOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string candidate_id = 1;</code>
-   */
-  java.lang.String getCandidateId();
-  /**
-   * <code>string candidate_id = 1;</code>
-   */
-  com.google.protobuf.ByteString
-      getCandidateIdBytes();
-
-  /**
-   * <code>double score = 2;</code>
+   * <code>double score = 1;</code>
    */
   double getScore();
 }

@@ -79,7 +79,6 @@ public class InterviewSchedulingClient {
 
            logger.info("Sending candidate names nd request for scheduling interview slots");
            CandidateName candidate = CandidateName.newBuilder()
-			   .setCandidateId("")
 			   .setCandidateName("")
 			   .build();
 			requestObserver.onNext(candidate);

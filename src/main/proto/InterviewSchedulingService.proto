@@ -18,10 +18,9 @@ service InterviewSchedulingService {
 
 }
 
-   //  Message defining the candidate's name and ID
+   //  Message defining the candidate's name 
    message CandidateName {
-     string candidate_id = 1;   
-     string candidate_name = 2; 
+     string candidate_name = 1; 
    }
 
    // The response message containing the arranged interview slots

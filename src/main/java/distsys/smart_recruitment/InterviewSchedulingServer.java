@@ -57,15 +57,12 @@ public class InterviewSchedulingServer extends InterviewSchedulingServiceGrpc.In
     // OUTPUT: Stream of interview slot
     @Override
     public StreamObserver<CandidateName> arrangeInterviewSlot(StreamObserver<InterviewSlot> responseObserver) {
-        // Get the authenticated client ID
-        String clientId = Constants.CLIENT_ID_CONTEXT_KEY.get();
-        logger.info("Processing interview scheduling request from client: " + clientId);
 
         return new StreamObserver<CandidateName>() {
 
             @Override
             public void onNext(CandidateName candidate) {
-                logger.info("Received candidate: " + candidate.getCandidateName() + " (ID: " + candidate.getCandidateId() + ")");
+                logger.info("Received candidate: " + candidate.getCandidateName() + " )");
 
                 // Generate 3-5 interview slots for the candidate
                 List<InterviewSlot> slots = generateInterviewSlots(candidate.getCandidateName());

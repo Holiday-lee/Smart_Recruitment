@@ -20,7 +20,6 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private ResumeScore() {
-    candidateId_ = "";
     score_ = 0D;
   }
 
@@ -48,13 +47,7 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
-
-            candidateId_ = s;
-            break;
-          }
-          case 17: {
+          case 9: {
 
             score_ = input.readDouble();
             break;
@@ -91,44 +84,10 @@ private static final long serialVersionUID = 0L;
             generated.grpc.candidatefilteringservice.ResumeScore.class, generated.grpc.candidatefilteringservice.ResumeScore.Builder.class);
   }
 
-  public static final int CANDIDATE_ID_FIELD_NUMBER = 1;
-  private volatile java.lang.Object candidateId_;
-  /**
-   * <code>string candidate_id = 1;</code>
-   */
-  public java.lang.String getCandidateId() {
-    java.lang.Object ref = candidateId_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      candidateId_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>string candidate_id = 1;</code>
-   */
-  public com.google.protobuf.ByteString
-      getCandidateIdBytes() {
-    java.lang.Object ref = candidateId_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      candidateId_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int SCORE_FIELD_NUMBER = 2;
+  public static final int SCORE_FIELD_NUMBER = 1;
   private double score_;
   /**
-   * <code>double score = 2;</code>
+   * <code>double score = 1;</code>
    */
   public double getScore() {
     return score_;
@@ -148,11 +107,8 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!getCandidateIdBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, candidateId_);
-    }
     if (score_ != 0D) {
-      output.writeDouble(2, score_);
+      output.writeDouble(1, score_);
     }
     unknownFields.writeTo(output);
   }
@@ -163,12 +119,9 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!getCandidateIdBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, candidateId_);
-    }
     if (score_ != 0D) {
       size += com.google.protobuf.CodedOutputStream
-        .computeDoubleSize(2, score_);
+        .computeDoubleSize(1, score_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -186,8 +139,6 @@ private static final long serialVersionUID = 0L;
     generated.grpc.candidatefilteringservice.ResumeScore other = (generated.grpc.candidatefilteringservice.ResumeScore) obj;
 
     boolean result = true;
-    result = result && getCandidateId()
-        .equals(other.getCandidateId());
     result = result && (
         java.lang.Double.doubleToLongBits(getScore())
         == java.lang.Double.doubleToLongBits(
@@ -203,8 +154,6 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + CANDIDATE_ID_FIELD_NUMBER;
-    hash = (53 * hash) + getCandidateId().hashCode();
     hash = (37 * hash) + SCORE_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         java.lang.Double.doubleToLongBits(getScore()));
@@ -345,8 +294,6 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      candidateId_ = "";
-
       score_ = 0D;
 
       return this;
@@ -375,7 +322,6 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public generated.grpc.candidatefilteringservice.ResumeScore buildPartial() {
       generated.grpc.candidatefilteringservice.ResumeScore result = new generated.grpc.candidatefilteringservice.ResumeScore(this);
-      result.candidateId_ = candidateId_;
       result.score_ = score_;
       onBuilt();
       return result;
@@ -425,10 +371,6 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(generated.grpc.candidatefilteringservice.ResumeScore other) {
       if (other == generated.grpc.candidatefilteringservice.ResumeScore.getDefaultInstance()) return this;
-      if (!other.getCandidateId().isEmpty()) {
-        candidateId_ = other.candidateId_;
-        onChanged();
-      }
       if (other.getScore() != 0D) {
         setScore(other.getScore());
       }
@@ -461,84 +403,15 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object candidateId_ = "";
-    /**
-     * <code>string candidate_id = 1;</code>
-     */
-    public java.lang.String getCandidateId() {
-      java.lang.Object ref = candidateId_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        candidateId_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>string candidate_id = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getCandidateIdBytes() {
-      java.lang.Object ref = candidateId_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        candidateId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string candidate_id = 1;</code>
-     */
-    public Builder setCandidateId(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      candidateId_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string candidate_id = 1;</code>
-     */
-    public Builder clearCandidateId() {
-      
-      candidateId_ = getDefaultInstance().getCandidateId();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string candidate_id = 1;</code>
-     */
-    public Builder setCandidateIdBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      candidateId_ = value;
-      onChanged();
-      return this;
-    }
-
     private double score_ ;
     /**
-     * <code>double score = 2;</code>
+     * <code>double score = 1;</code>
      */
     public double getScore() {
       return score_;
     }
     /**
-     * <code>double score = 2;</code>
+     * <code>double score = 1;</code>
      */
     public Builder setScore(double value) {
       
@@ -547,7 +420,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>double score = 2;</code>
+     * <code>double score = 1;</code>
      */
     public Builder clearScore() {
       

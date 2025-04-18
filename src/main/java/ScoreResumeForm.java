@@ -241,15 +241,11 @@ public class ScoreResumeForm extends javax.swing.JFrame {
         }
 
         try {
-            // Extract information from resume text
+            // extract information from resume text
             Map<String, String> extractedInfo = extractResumeInfo(resumeText);
-
-            // generate a candidate ID
-            String candidateId = "candidate_" + System.currentTimeMillis();
 
             // build gRPC request
             CandidateResume.Builder resumeBuilder = CandidateResume.newBuilder()
-                .setCandidateId(candidateId)
                 .setResumeText(resumeText);
 
             // add candidate name
@@ -292,10 +288,11 @@ public class ScoreResumeForm extends javax.swing.JFrame {
 
             // call gRPC service
             ResumeScore response = blockingStub.scoringCandidateResume(candidateResume);
+            String candidateName = null; // declare variable before use it as the key for MAP
 
             // store the results
-            scoredResumes.put(candidateId, response);
-            candidateResumes.put(candidateId, candidateResume);
+            scoredResumes.put(candidateName, response);
+            candidateResumes.put(candidateName, candidateResume);
 
             // display result
             displayResults(response, extractedInfo);

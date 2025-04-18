@@ -63,9 +63,6 @@ public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.Cand
      */
     @Override
     public void scoringCandidateResume(CandidateResume request, StreamObserver<ResumeScore> responseObserver) {
-        // Get the authenticated client ID
-        String clientId = Constants.CLIENT_ID_CONTEXT_KEY.get();
-        logger.info("Processing scoring request from client: " + clientId);
 
         logger.info("Received request to score resume for candidate: " + request.getCandidateName());
 
@@ -77,7 +74,6 @@ public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.Cand
 
         // Create response
         ResumeScore response = ResumeScore.newBuilder()
-                .setCandidateId(request.getCandidateId())
                 .setScore(score)
                 .build();
 
@@ -94,9 +90,6 @@ public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.Cand
      */
     @Override
     public void qualifiedCandidateList(QualificationCriteria request, StreamObserver<QualifiedCandidate> responseObserver) {
-        // Get the authenticated client ID
-        String clientId = Constants.CLIENT_ID_CONTEXT_KEY.get();
-        logger.info("Processing qualified candidate request from client: " + clientId);
 
         logger.info("Received request for qualified candidates with minimum score: " + request.getMinScore());
 
@@ -110,7 +103,6 @@ public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.Cand
             // If candidate meets the criteria
             if (score >= request.getMinScore()) {
                 QualifiedCandidate qualifiedCandidate = QualifiedCandidate.newBuilder()
-                        .setCandidateId(candidate.getCandidateId())
                         .setCandidateName(candidate.getCandidateName())
                         .setScore(score)
                         .build();
@@ -150,7 +142,7 @@ public class CandidateFilteringServer extends CandidateFilteringServiceGrpc.Cand
     private void storeCandidateInDatabase(CandidateResume candidate, double score) {
         // Check if candidate already exists
         for (int i = 0; i < candidateDatabase.size(); i++) {
-            if (candidateDatabase.get(i).getCandidateId().equals(candidate.getCandidateId())) {
+            if (candidateDatabase.get(i).getCandidateName().equals(candidate.getCandidateName())) {
                 // Replace existing candidate
                 candidateDatabase.set(i, candidate);
                 return;

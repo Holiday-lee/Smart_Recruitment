@@ -17,7 +17,8 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
 
 /**
  * <pre>
- * CandidateEngagementService sends interview slots to candidates and confirms delivery
+ * CandidateEngagementService manages the communication of interview slots to candidates and processes their responses
+ * Note: The client side in all methods refers to the recruitment system
  * </pre>
  */
 @javax.annotation.Generated(
@@ -63,35 +64,35 @@ public final class CandidateEngagementServiceGrpc {
   }
 
   private static volatile io.grpc.MethodDescriptor<generated.grpc.candidateengagementservice.CandidateSlotChoice,
-      generated.grpc.candidateengagementservice.SchedulingConfirmation> getSubmitSelectedSlotMethod;
+      generated.grpc.candidateengagementservice.SchedulingConfirmation> getReceiveCandidateSlotChoiceMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "SubmitSelectedSlot",
+      fullMethodName = SERVICE_NAME + '/' + "ReceiveCandidateSlotChoice",
       requestType = generated.grpc.candidateengagementservice.CandidateSlotChoice.class,
       responseType = generated.grpc.candidateengagementservice.SchedulingConfirmation.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<generated.grpc.candidateengagementservice.CandidateSlotChoice,
-      generated.grpc.candidateengagementservice.SchedulingConfirmation> getSubmitSelectedSlotMethod() {
-    io.grpc.MethodDescriptor<generated.grpc.candidateengagementservice.CandidateSlotChoice, generated.grpc.candidateengagementservice.SchedulingConfirmation> getSubmitSelectedSlotMethod;
-    if ((getSubmitSelectedSlotMethod = CandidateEngagementServiceGrpc.getSubmitSelectedSlotMethod) == null) {
+      generated.grpc.candidateengagementservice.SchedulingConfirmation> getReceiveCandidateSlotChoiceMethod() {
+    io.grpc.MethodDescriptor<generated.grpc.candidateengagementservice.CandidateSlotChoice, generated.grpc.candidateengagementservice.SchedulingConfirmation> getReceiveCandidateSlotChoiceMethod;
+    if ((getReceiveCandidateSlotChoiceMethod = CandidateEngagementServiceGrpc.getReceiveCandidateSlotChoiceMethod) == null) {
       synchronized (CandidateEngagementServiceGrpc.class) {
-        if ((getSubmitSelectedSlotMethod = CandidateEngagementServiceGrpc.getSubmitSelectedSlotMethod) == null) {
-          CandidateEngagementServiceGrpc.getSubmitSelectedSlotMethod = getSubmitSelectedSlotMethod = 
+        if ((getReceiveCandidateSlotChoiceMethod = CandidateEngagementServiceGrpc.getReceiveCandidateSlotChoiceMethod) == null) {
+          CandidateEngagementServiceGrpc.getReceiveCandidateSlotChoiceMethod = getReceiveCandidateSlotChoiceMethod = 
               io.grpc.MethodDescriptor.<generated.grpc.candidateengagementservice.CandidateSlotChoice, generated.grpc.candidateengagementservice.SchedulingConfirmation>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
-                  "CandidateEngagementService.CandidateEngagementService", "SubmitSelectedSlot"))
+                  "CandidateEngagementService.CandidateEngagementService", "ReceiveCandidateSlotChoice"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   generated.grpc.candidateengagementservice.CandidateSlotChoice.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   generated.grpc.candidateengagementservice.SchedulingConfirmation.getDefaultInstance()))
-                  .setSchemaDescriptor(new CandidateEngagementServiceMethodDescriptorSupplier("SubmitSelectedSlot"))
+                  .setSchemaDescriptor(new CandidateEngagementServiceMethodDescriptorSupplier("ReceiveCandidateSlotChoice"))
                   .build();
           }
         }
      }
-     return getSubmitSelectedSlotMethod;
+     return getReceiveCandidateSlotChoiceMethod;
   }
 
   /**
@@ -119,7 +120,8 @@ public final class CandidateEngagementServiceGrpc {
 
   /**
    * <pre>
-   * CandidateEngagementService sends interview slots to candidates and confirms delivery
+   * CandidateEngagementService manages the communication of interview slots to candidates and processes their responses
+   * Note: The client side in all methods refers to the recruitment system
    * </pre>
    */
   public static abstract class CandidateEngagementServiceImplBase implements io.grpc.BindableService {
@@ -127,7 +129,7 @@ public final class CandidateEngagementServiceGrpc {
     /**
      * <pre>
      * CLIENT-STREAMING METHOD
-     * INPUT: A stream of interview slots for a candidate
+     * INPUT: A stream of interview slots for a candidate sent by the recruitment system
      * OUTPUT: Confirmation that slots were successfully sent to the candidate
      * </pre>
      */
@@ -139,12 +141,13 @@ public final class CandidateEngagementServiceGrpc {
     /**
      * <pre>
      * UNARY METHOD
-     * For candidate to later submit their selection (separate call)
+     * INPUT: A candidate's slot choice (received by the recruitment system)
+     * OUTPUT: Confirmation that the selection has been processed
      * </pre>
      */
-    public void submitSelectedSlot(generated.grpc.candidateengagementservice.CandidateSlotChoice request,
+    public void receiveCandidateSlotChoice(generated.grpc.candidateengagementservice.CandidateSlotChoice request,
         io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SchedulingConfirmation> responseObserver) {
-      asyncUnimplementedUnaryCall(getSubmitSelectedSlotMethod(), responseObserver);
+      asyncUnimplementedUnaryCall(getReceiveCandidateSlotChoiceMethod(), responseObserver);
     }
 
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
@@ -157,19 +160,20 @@ public final class CandidateEngagementServiceGrpc {
                 generated.grpc.candidateengagementservice.SlotDeliveryConfirmation>(
                   this, METHODID_SEND_INTERVIEW_SLOTS)))
           .addMethod(
-            getSubmitSelectedSlotMethod(),
+            getReceiveCandidateSlotChoiceMethod(),
             asyncUnaryCall(
               new MethodHandlers<
                 generated.grpc.candidateengagementservice.CandidateSlotChoice,
                 generated.grpc.candidateengagementservice.SchedulingConfirmation>(
-                  this, METHODID_SUBMIT_SELECTED_SLOT)))
+                  this, METHODID_RECEIVE_CANDIDATE_SLOT_CHOICE)))
           .build();
     }
   }
 
   /**
    * <pre>
-   * CandidateEngagementService sends interview slots to candidates and confirms delivery
+   * CandidateEngagementService manages the communication of interview slots to candidates and processes their responses
+   * Note: The client side in all methods refers to the recruitment system
    * </pre>
    */
   public static final class CandidateEngagementServiceStub extends io.grpc.stub.AbstractStub<CandidateEngagementServiceStub> {
@@ -191,7 +195,7 @@ public final class CandidateEngagementServiceGrpc {
     /**
      * <pre>
      * CLIENT-STREAMING METHOD
-     * INPUT: A stream of interview slots for a candidate
+     * INPUT: A stream of interview slots for a candidate sent by the recruitment system
      * OUTPUT: Confirmation that slots were successfully sent to the candidate
      * </pre>
      */
@@ -204,19 +208,21 @@ public final class CandidateEngagementServiceGrpc {
     /**
      * <pre>
      * UNARY METHOD
-     * For candidate to later submit their selection (separate call)
+     * INPUT: A candidate's slot choice (received by the recruitment system)
+     * OUTPUT: Confirmation that the selection has been processed
      * </pre>
      */
-    public void submitSelectedSlot(generated.grpc.candidateengagementservice.CandidateSlotChoice request,
+    public void receiveCandidateSlotChoice(generated.grpc.candidateengagementservice.CandidateSlotChoice request,
         io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SchedulingConfirmation> responseObserver) {
       asyncUnaryCall(
-          getChannel().newCall(getSubmitSelectedSlotMethod(), getCallOptions()), request, responseObserver);
+          getChannel().newCall(getReceiveCandidateSlotChoiceMethod(), getCallOptions()), request, responseObserver);
     }
   }
 
   /**
    * <pre>
-   * CandidateEngagementService sends interview slots to candidates and confirms delivery
+   * CandidateEngagementService manages the communication of interview slots to candidates and processes their responses
+   * Note: The client side in all methods refers to the recruitment system
    * </pre>
    */
   public static final class CandidateEngagementServiceBlockingStub extends io.grpc.stub.AbstractStub<CandidateEngagementServiceBlockingStub> {
@@ -238,18 +244,20 @@ public final class CandidateEngagementServiceGrpc {
     /**
      * <pre>
      * UNARY METHOD
-     * For candidate to later submit their selection (separate call)
+     * INPUT: A candidate's slot choice (received by the recruitment system)
+     * OUTPUT: Confirmation that the selection has been processed
      * </pre>
      */
-    public generated.grpc.candidateengagementservice.SchedulingConfirmation submitSelectedSlot(generated.grpc.candidateengagementservice.CandidateSlotChoice request) {
+    public generated.grpc.candidateengagementservice.SchedulingConfirmation receiveCandidateSlotChoice(generated.grpc.candidateengagementservice.CandidateSlotChoice request) {
       return blockingUnaryCall(
-          getChannel(), getSubmitSelectedSlotMethod(), getCallOptions(), request);
+          getChannel(), getReceiveCandidateSlotChoiceMethod(), getCallOptions(), request);
     }
   }
 
   /**
    * <pre>
-   * CandidateEngagementService sends interview slots to candidates and confirms delivery
+   * CandidateEngagementService manages the communication of interview slots to candidates and processes their responses
+   * Note: The client side in all methods refers to the recruitment system
    * </pre>
    */
   public static final class CandidateEngagementServiceFutureStub extends io.grpc.stub.AbstractStub<CandidateEngagementServiceFutureStub> {
@@ -271,17 +279,18 @@ public final class CandidateEngagementServiceGrpc {
     /**
      * <pre>
      * UNARY METHOD
-     * For candidate to later submit their selection (separate call)
+     * INPUT: A candidate's slot choice (received by the recruitment system)
+     * OUTPUT: Confirmation that the selection has been processed
      * </pre>
      */
-    public com.google.common.util.concurrent.ListenableFuture<generated.grpc.candidateengagementservice.SchedulingConfirmation> submitSelectedSlot(
+    public com.google.common.util.concurrent.ListenableFuture<generated.grpc.candidateengagementservice.SchedulingConfirmation> receiveCandidateSlotChoice(
         generated.grpc.candidateengagementservice.CandidateSlotChoice request) {
       return futureUnaryCall(
-          getChannel().newCall(getSubmitSelectedSlotMethod(), getCallOptions()), request);
+          getChannel().newCall(getReceiveCandidateSlotChoiceMethod(), getCallOptions()), request);
     }
   }
 
-  private static final int METHODID_SUBMIT_SELECTED_SLOT = 0;
+  private static final int METHODID_RECEIVE_CANDIDATE_SLOT_CHOICE = 0;
   private static final int METHODID_SEND_INTERVIEW_SLOTS = 1;
 
   private static final class MethodHandlers<Req, Resp> implements
@@ -301,8 +310,8 @@ public final class CandidateEngagementServiceGrpc {
     @java.lang.SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
-        case METHODID_SUBMIT_SELECTED_SLOT:
-          serviceImpl.submitSelectedSlot((generated.grpc.candidateengagementservice.CandidateSlotChoice) request,
+        case METHODID_RECEIVE_CANDIDATE_SLOT_CHOICE:
+          serviceImpl.receiveCandidateSlotChoice((generated.grpc.candidateengagementservice.CandidateSlotChoice) request,
               (io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SchedulingConfirmation>) responseObserver);
           break;
         default:
@@ -370,7 +379,7 @@ public final class CandidateEngagementServiceGrpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new CandidateEngagementServiceFileDescriptorSupplier())
               .addMethod(getSendInterviewSlotsMethod())
-              .addMethod(getSubmitSelectedSlotMethod())
+              .addMethod(getReceiveCandidateSlotChoiceMethod())
               .build();
         }
       }

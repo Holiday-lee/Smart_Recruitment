@@ -8,14 +8,14 @@ public interface SlotSelectionOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string candidate_id = 1;</code>
+   * <code>string candidate_name = 1;</code>
    */
-  java.lang.String getCandidateId();
+  java.lang.String getCandidateName();
   /**
-   * <code>string candidate_id = 1;</code>
+   * <code>string candidate_name = 1;</code>
    */
   com.google.protobuf.ByteString
-      getCandidateIdBytes();
+      getCandidateNameBytes();
 
   /**
    * <code>string slot_time = 2;</code>

@@ -44,24 +44,22 @@ public final class CandidateFilteringServiceImpl {
   static {
     java.lang.String[] descriptorData = {
       "\n\037CandidateFilteringService.proto\022\031Candi" +
-      "dateFilteringService\"~\n\017CandidateResume\022" +
-      "\024\n\014candidate_id\030\001 \001(\t\022\026\n\016candidate_name\030" +
-      "\002 \001(\t\022\023\n\013resume_text\030\003 \001(\t\022\016\n\006skills\030\004 \003" +
-      "(\t\022\030\n\020years_experience\030\005 \001(\005\"*\n\025Qualific" +
-      "ationCriteria\022\021\n\tmin_score\030\001 \001(\001\"2\n\013Resu" +
-      "meScore\022\024\n\014candidate_id\030\001 \001(\t\022\r\n\005score\030\002" +
-      " \001(\001\"Q\n\022QualifiedCandidate\022\024\n\014candidate_" +
-      "id\030\001 \001(\t\022\026\n\016candidate_name\030\002 \001(\t\022\r\n\005scor" +
-      "e\030\003 \001(\0012\212\002\n\031CandidateFilteringService\022n\n" +
-      "\026ScoringCandidateResume\022*.CandidateFilte" +
-      "ringService.CandidateResume\032&.CandidateF" +
-      "ilteringService.ResumeScore\"\000\022}\n\026Qualifi" +
-      "edCandidateList\0220.CandidateFilteringServ" +
-      "ice.QualificationCriteria\032-.CandidateFil" +
-      "teringService.QualifiedCandidate\"\0000\001BK\n(" +
-      "generated.grpc.candidatefilteringservice" +
-      "B\035CandidateFilteringServiceImplP\001b\006proto" +
-      "3"
+      "dateFilteringService\"h\n\017CandidateResume\022" +
+      "\026\n\016candidate_name\030\001 \001(\t\022\030\n\020years_experie" +
+      "nce\030\002 \001(\005\022\016\n\006skills\030\003 \003(\t\022\023\n\013resume_text" +
+      "\030\004 \001(\t\"*\n\025QualificationCriteria\022\021\n\tmin_s" +
+      "core\030\001 \001(\001\"\034\n\013ResumeScore\022\r\n\005score\030\001 \001(\001" +
+      "\";\n\022QualifiedCandidate\022\026\n\016candidate_name" +
+      "\030\001 \001(\t\022\r\n\005score\030\003 \001(\0012\212\002\n\031CandidateFilte" +
+      "ringService\022n\n\026ScoringCandidateResume\022*." +
+      "CandidateFilteringService.CandidateResum" +
+      "e\032&.CandidateFilteringService.ResumeScor" +
+      "e\"\000\022}\n\026QualifiedCandidateList\0220.Candidat" +
+      "eFilteringService.QualificationCriteria\032" +
+      "-.CandidateFilteringService.QualifiedCan" +
+      "didate\"\0000\001BK\n(generated.grpc.candidatefi" +
+      "lteringserviceB\035CandidateFilteringServic" +
+      "eImplP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -80,7 +78,7 @@ public final class CandidateFilteringServiceImpl {
     internal_static_CandidateFilteringService_CandidateResume_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_CandidateFilteringService_CandidateResume_descriptor,
-        new java.lang.String[] { "CandidateId", "CandidateName", "ResumeText", "Skills", "YearsExperience", });
+        new java.lang.String[] { "CandidateName", "YearsExperience", "Skills", "ResumeText", });
     internal_static_CandidateFilteringService_QualificationCriteria_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_CandidateFilteringService_QualificationCriteria_fieldAccessorTable = new
@@ -92,13 +90,13 @@ public final class CandidateFilteringServiceImpl {
     internal_static_CandidateFilteringService_ResumeScore_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_CandidateFilteringService_ResumeScore_descriptor,
-        new java.lang.String[] { "CandidateId", "Score", });
+        new java.lang.String[] { "Score", });
     internal_static_CandidateFilteringService_QualifiedCandidate_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_CandidateFilteringService_QualifiedCandidate_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_CandidateFilteringService_QualifiedCandidate_descriptor,
-        new java.lang.String[] { "CandidateId", "CandidateName", "Score", });
+        new java.lang.String[] { "CandidateName", "Score", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

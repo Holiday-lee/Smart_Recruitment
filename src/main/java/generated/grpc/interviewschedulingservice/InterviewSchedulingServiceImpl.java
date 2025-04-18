@@ -34,16 +34,15 @@ public final class InterviewSchedulingServiceImpl {
   static {
     java.lang.String[] descriptorData = {
       "\n InterviewSchedulingService.proto\022\032Inte" +
-      "rviewSchedulingService\"=\n\rCandidateName\022" +
-      "\024\n\014candidate_id\030\001 \001(\t\022\026\n\016candidate_name\030" +
-      "\002 \001(\t\"/\n\rInterviewSlot\022\014\n\004time\030\001 \001(\t\022\020\n\010" +
-      "location\030\002 \001(\t2\220\001\n\032InterviewSchedulingSe" +
-      "rvice\022r\n\024ArrangeInterviewSlot\022).Intervie" +
-      "wSchedulingService.CandidateName\032).Inter" +
-      "viewSchedulingService.InterviewSlot\"\000(\0010" +
-      "\001BM\n)generated.grpc.interviewschedulings" +
-      "erviceB\036InterviewSchedulingServiceImplP\001" +
-      "b\006proto3"
+      "rviewSchedulingService\"\'\n\rCandidateName\022" +
+      "\026\n\016candidate_name\030\001 \001(\t\"/\n\rInterviewSlot" +
+      "\022\014\n\004time\030\001 \001(\t\022\020\n\010location\030\002 \001(\t2\220\001\n\032Int" +
+      "erviewSchedulingService\022r\n\024ArrangeInterv" +
+      "iewSlot\022).InterviewSchedulingService.Can" +
+      "didateName\032).InterviewSchedulingService." +
+      "InterviewSlot\"\000(\0010\001BM\n)generated.grpc.in" +
+      "terviewschedulingserviceB\036InterviewSched" +
+      "ulingServiceImplP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -62,7 +61,7 @@ public final class InterviewSchedulingServiceImpl {
     internal_static_InterviewSchedulingService_CandidateName_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_InterviewSchedulingService_CandidateName_descriptor,
-        new java.lang.String[] { "CandidateId", "CandidateName", });
+        new java.lang.String[] { "CandidateName", });
     internal_static_InterviewSchedulingService_InterviewSlot_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_InterviewSchedulingService_InterviewSlot_fieldAccessorTable = new
