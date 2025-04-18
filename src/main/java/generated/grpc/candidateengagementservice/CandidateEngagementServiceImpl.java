@@ -20,20 +20,20 @@ public final class CandidateEngagementServiceImpl {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_CandidateEngagementService_SlotSelection_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_CandidateEngagementService_ApplicationStatus_descriptor;
+    internal_static_CandidateEngagementService_CandidateSlotChoice_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_CandidateEngagementService_ApplicationStatus_fieldAccessorTable;
+      internal_static_CandidateEngagementService_CandidateSlotChoice_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_CandidateEngagementService_SlotDeliveryConfirmation_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_CandidateEngagementService_SlotDeliveryConfirmation_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
     internal_static_CandidateEngagementService_SchedulingConfirmation_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_CandidateEngagementService_SchedulingConfirmation_fieldAccessorTable;
-  static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_CandidateEngagementService_NotificationStatus_descriptor;
-  static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_CandidateEngagementService_NotificationStatus_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -44,23 +44,24 @@ public final class CandidateEngagementServiceImpl {
   static {
     java.lang.String[] descriptorData = {
       "\n CandidateEngagementService.proto\022\032Cand" +
-      "idateEngagementService\"W\n\rSlotSelection\022" +
-      "\024\n\014candidate_id\030\001 \001(\t\022\025\n\rselected_time\030\002" +
-      " \001(\t\022\031\n\021selected_location\030\003 \001(\t\"J\n\021Appli" +
-      "cationStatus\022\024\n\014candidate_id\030\001 \001(\t\022\016\n\006st" +
-      "atus\030\002 \001(\t\022\017\n\007message\030\003 \001(\t\"+\n\026Schedulin" +
-      "gConfirmation\022\021\n\tconfirmed\030\001 \001(\010\"9\n\022Noti" +
-      "ficationStatus\022\021\n\tdelivered\030\001 \001(\010\022\020\n\010sen" +
-      "dtime\030\002 \001(\t2\214\002\n\032CandidateEngagementServi" +
-      "ce\022y\n\024ConfirmInterviewSlot\022).CandidateEn" +
-      "gagementService.SlotSelection\0322.Candidat" +
-      "eEngagementService.SchedulingConfirmatio" +
-      "n\"\000(\001\022s\n\020SendStatusUpdate\022-.CandidateEng" +
-      "agementService.ApplicationStatus\032..Candi" +
-      "dateEngagementService.NotificationStatus" +
-      "\"\000BM\n)generated.grpc.candidateengagement" +
-      "serviceB\036CandidateEngagementServiceImplP" +
-      "\001b\006proto3"
+      "idateEngagementService\"O\n\rSlotSelection\022" +
+      "\024\n\014candidate_id\030\001 \001(\t\022\021\n\tslot_time\030\002 \001(\t" +
+      "\022\025\n\rslot_location\030\003 \001(\t\"Y\n\023CandidateSlot" +
+      "Choice\022\024\n\014candidate_id\030\001 \001(\t\022\023\n\013chosen_t" +
+      "ime\030\002 \001(\t\022\027\n\017chosen_location\030\003 \001(\t\"J\n\030Sl" +
+      "otDeliveryConfirmation\022\027\n\017slots_delivere" +
+      "d\030\001 \001(\010\022\025\n\rdelivery_time\030\002 \001(\t\"F\n\026Schedu" +
+      "lingConfirmation\022\021\n\tconfirmed\030\001 \001(\010\022\031\n\021c" +
+      "onfirmation_time\030\002 \001(\t2\224\002\n\032CandidateEnga" +
+      "gementService\022y\n\022SendInterviewSlots\022).Ca" +
+      "ndidateEngagementService.SlotSelection\0324" +
+      ".CandidateEngagementService.SlotDelivery" +
+      "Confirmation\"\000(\001\022{\n\022SubmitSelectedSlot\022/" +
+      ".CandidateEngagementService.CandidateSlo" +
+      "tChoice\0322.CandidateEngagementService.Sch" +
+      "edulingConfirmation\"\000BM\n)generated.grpc." +
+      "candidateengagementserviceB\036CandidateEng" +
+      "agementServiceImplP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -79,25 +80,25 @@ public final class CandidateEngagementServiceImpl {
     internal_static_CandidateEngagementService_SlotSelection_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_CandidateEngagementService_SlotSelection_descriptor,
-        new java.lang.String[] { "CandidateId", "SelectedTime", "SelectedLocation", });
-    internal_static_CandidateEngagementService_ApplicationStatus_descriptor =
+        new java.lang.String[] { "CandidateId", "SlotTime", "SlotLocation", });
+    internal_static_CandidateEngagementService_CandidateSlotChoice_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_CandidateEngagementService_ApplicationStatus_fieldAccessorTable = new
+    internal_static_CandidateEngagementService_CandidateSlotChoice_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_CandidateEngagementService_ApplicationStatus_descriptor,
-        new java.lang.String[] { "CandidateId", "Status", "Message", });
-    internal_static_CandidateEngagementService_SchedulingConfirmation_descriptor =
+        internal_static_CandidateEngagementService_CandidateSlotChoice_descriptor,
+        new java.lang.String[] { "CandidateId", "ChosenTime", "ChosenLocation", });
+    internal_static_CandidateEngagementService_SlotDeliveryConfirmation_descriptor =
       getDescriptor().getMessageTypes().get(2);
+    internal_static_CandidateEngagementService_SlotDeliveryConfirmation_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_CandidateEngagementService_SlotDeliveryConfirmation_descriptor,
+        new java.lang.String[] { "SlotsDelivered", "DeliveryTime", });
+    internal_static_CandidateEngagementService_SchedulingConfirmation_descriptor =
+      getDescriptor().getMessageTypes().get(3);
     internal_static_CandidateEngagementService_SchedulingConfirmation_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_CandidateEngagementService_SchedulingConfirmation_descriptor,
-        new java.lang.String[] { "Confirmed", });
-    internal_static_CandidateEngagementService_NotificationStatus_descriptor =
-      getDescriptor().getMessageTypes().get(3);
-    internal_static_CandidateEngagementService_NotificationStatus_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_CandidateEngagementService_NotificationStatus_descriptor,
-        new java.lang.String[] { "Delivered", "Sendtime", });
+        new java.lang.String[] { "Confirmed", "ConfirmationTime", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

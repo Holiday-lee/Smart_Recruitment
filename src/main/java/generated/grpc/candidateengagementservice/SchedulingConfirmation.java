@@ -5,7 +5,7 @@ package generated.grpc.candidateengagementservice;
 
 /**
  * <pre>
- * Confirmation message from the candidate of the selected slot.
+ * Confirmation of candidate's selected slot
  * </pre>
  *
  * Protobuf type {@code CandidateEngagementService.SchedulingConfirmation}
@@ -21,6 +21,7 @@ private static final long serialVersionUID = 0L;
   }
   private SchedulingConfirmation() {
     confirmed_ = false;
+    confirmationTime_ = "";
   }
 
   @java.lang.Override
@@ -50,6 +51,12 @@ private static final long serialVersionUID = 0L;
           case 8: {
 
             confirmed_ = input.readBool();
+            break;
+          }
+          case 18: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            confirmationTime_ = s;
             break;
           }
           default: {
@@ -93,6 +100,40 @@ private static final long serialVersionUID = 0L;
     return confirmed_;
   }
 
+  public static final int CONFIRMATION_TIME_FIELD_NUMBER = 2;
+  private volatile java.lang.Object confirmationTime_;
+  /**
+   * <code>string confirmation_time = 2;</code>
+   */
+  public java.lang.String getConfirmationTime() {
+    java.lang.Object ref = confirmationTime_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      confirmationTime_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string confirmation_time = 2;</code>
+   */
+  public com.google.protobuf.ByteString
+      getConfirmationTimeBytes() {
+    java.lang.Object ref = confirmationTime_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      confirmationTime_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -110,6 +151,9 @@ private static final long serialVersionUID = 0L;
     if (confirmed_ != false) {
       output.writeBool(1, confirmed_);
     }
+    if (!getConfirmationTimeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, confirmationTime_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -122,6 +166,9 @@ private static final long serialVersionUID = 0L;
     if (confirmed_ != false) {
       size += com.google.protobuf.CodedOutputStream
         .computeBoolSize(1, confirmed_);
+    }
+    if (!getConfirmationTimeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, confirmationTime_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -141,6 +188,8 @@ private static final long serialVersionUID = 0L;
     boolean result = true;
     result = result && (getConfirmed()
         == other.getConfirmed());
+    result = result && getConfirmationTime()
+        .equals(other.getConfirmationTime());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -155,6 +204,8 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + CONFIRMED_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
         getConfirmed());
+    hash = (37 * hash) + CONFIRMATION_TIME_FIELD_NUMBER;
+    hash = (53 * hash) + getConfirmationTime().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -252,7 +303,7 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
-   * Confirmation message from the candidate of the selected slot.
+   * Confirmation of candidate's selected slot
    * </pre>
    *
    * Protobuf type {@code CandidateEngagementService.SchedulingConfirmation}
@@ -294,6 +345,8 @@ private static final long serialVersionUID = 0L;
       super.clear();
       confirmed_ = false;
 
+      confirmationTime_ = "";
+
       return this;
     }
 
@@ -321,6 +374,7 @@ private static final long serialVersionUID = 0L;
     public generated.grpc.candidateengagementservice.SchedulingConfirmation buildPartial() {
       generated.grpc.candidateengagementservice.SchedulingConfirmation result = new generated.grpc.candidateengagementservice.SchedulingConfirmation(this);
       result.confirmed_ = confirmed_;
+      result.confirmationTime_ = confirmationTime_;
       onBuilt();
       return result;
     }
@@ -371,6 +425,10 @@ private static final long serialVersionUID = 0L;
       if (other == generated.grpc.candidateengagementservice.SchedulingConfirmation.getDefaultInstance()) return this;
       if (other.getConfirmed() != false) {
         setConfirmed(other.getConfirmed());
+      }
+      if (!other.getConfirmationTime().isEmpty()) {
+        confirmationTime_ = other.confirmationTime_;
+        onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -423,6 +481,75 @@ private static final long serialVersionUID = 0L;
     public Builder clearConfirmed() {
       
       confirmed_ = false;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object confirmationTime_ = "";
+    /**
+     * <code>string confirmation_time = 2;</code>
+     */
+    public java.lang.String getConfirmationTime() {
+      java.lang.Object ref = confirmationTime_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        confirmationTime_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string confirmation_time = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getConfirmationTimeBytes() {
+      java.lang.Object ref = confirmationTime_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        confirmationTime_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string confirmation_time = 2;</code>
+     */
+    public Builder setConfirmationTime(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      confirmationTime_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string confirmation_time = 2;</code>
+     */
+    public Builder clearConfirmationTime() {
+      
+      confirmationTime_ = getDefaultInstance().getConfirmationTime();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string confirmation_time = 2;</code>
+     */
+    public Builder setConfirmationTimeBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      confirmationTime_ = value;
       onChanged();
       return this;
     }

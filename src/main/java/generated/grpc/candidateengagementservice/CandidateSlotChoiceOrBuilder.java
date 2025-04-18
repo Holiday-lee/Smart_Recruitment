@@ -3,8 +3,8 @@
 
 package generated.grpc.candidateengagementservice;
 
-public interface SlotSelectionOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:CandidateEngagementService.SlotSelection)
+public interface CandidateSlotChoiceOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:CandidateEngagementService.CandidateSlotChoice)
     com.google.protobuf.MessageOrBuilder {
 
   /**
@@ -18,22 +18,22 @@ public interface SlotSelectionOrBuilder extends
       getCandidateIdBytes();
 
   /**
-   * <code>string slot_time = 2;</code>
+   * <code>string chosen_time = 2;</code>
    */
-  java.lang.String getSlotTime();
+  java.lang.String getChosenTime();
   /**
-   * <code>string slot_time = 2;</code>
+   * <code>string chosen_time = 2;</code>
    */
   com.google.protobuf.ByteString
-      getSlotTimeBytes();
+      getChosenTimeBytes();
 
   /**
-   * <code>string slot_location = 3;</code>
+   * <code>string chosen_location = 3;</code>
    */
-  java.lang.String getSlotLocation();
+  java.lang.String getChosenLocation();
   /**
-   * <code>string slot_location = 3;</code>
+   * <code>string chosen_location = 3;</code>
    */
   com.google.protobuf.ByteString
-      getSlotLocationBytes();
+      getChosenLocationBytes();
 }

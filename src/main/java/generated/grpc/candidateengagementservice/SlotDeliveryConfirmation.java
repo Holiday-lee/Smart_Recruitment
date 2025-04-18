@@ -5,23 +5,23 @@ package generated.grpc.candidateengagementservice;
 
 /**
  * <pre>
- * Response for notification delivery
+ * Confirmation that slots were successfully sent to the candidate
  * </pre>
  *
- * Protobuf type {@code CandidateEngagementService.NotificationStatus}
+ * Protobuf type {@code CandidateEngagementService.SlotDeliveryConfirmation}
  */
-public  final class NotificationStatus extends
+public  final class SlotDeliveryConfirmation extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:CandidateEngagementService.NotificationStatus)
-    NotificationStatusOrBuilder {
+    // @@protoc_insertion_point(message_implements:CandidateEngagementService.SlotDeliveryConfirmation)
+    SlotDeliveryConfirmationOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use NotificationStatus.newBuilder() to construct.
-  private NotificationStatus(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use SlotDeliveryConfirmation.newBuilder() to construct.
+  private SlotDeliveryConfirmation(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private NotificationStatus() {
-    delivered_ = false;
-    sendtime_ = "";
+  private SlotDeliveryConfirmation() {
+    slotsDelivered_ = false;
+    deliveryTime_ = "";
   }
 
   @java.lang.Override
@@ -29,7 +29,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private NotificationStatus(
+  private SlotDeliveryConfirmation(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -50,13 +50,13 @@ private static final long serialVersionUID = 0L;
             break;
           case 8: {
 
-            delivered_ = input.readBool();
+            slotsDelivered_ = input.readBool();
             break;
           }
           case 18: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            sendtime_ = s;
+            deliveryTime_ = s;
             break;
           }
           default: {
@@ -80,54 +80,54 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_NotificationStatus_descriptor;
+    return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_SlotDeliveryConfirmation_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_NotificationStatus_fieldAccessorTable
+    return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_SlotDeliveryConfirmation_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            generated.grpc.candidateengagementservice.NotificationStatus.class, generated.grpc.candidateengagementservice.NotificationStatus.Builder.class);
+            generated.grpc.candidateengagementservice.SlotDeliveryConfirmation.class, generated.grpc.candidateengagementservice.SlotDeliveryConfirmation.Builder.class);
   }
 
-  public static final int DELIVERED_FIELD_NUMBER = 1;
-  private boolean delivered_;
+  public static final int SLOTS_DELIVERED_FIELD_NUMBER = 1;
+  private boolean slotsDelivered_;
   /**
-   * <code>bool delivered = 1;</code>
+   * <code>bool slots_delivered = 1;</code>
    */
-  public boolean getDelivered() {
-    return delivered_;
+  public boolean getSlotsDelivered() {
+    return slotsDelivered_;
   }
 
-  public static final int SENDTIME_FIELD_NUMBER = 2;
-  private volatile java.lang.Object sendtime_;
+  public static final int DELIVERY_TIME_FIELD_NUMBER = 2;
+  private volatile java.lang.Object deliveryTime_;
   /**
-   * <code>string sendtime = 2;</code>
+   * <code>string delivery_time = 2;</code>
    */
-  public java.lang.String getSendtime() {
-    java.lang.Object ref = sendtime_;
+  public java.lang.String getDeliveryTime() {
+    java.lang.Object ref = deliveryTime_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      sendtime_ = s;
+      deliveryTime_ = s;
       return s;
     }
   }
   /**
-   * <code>string sendtime = 2;</code>
+   * <code>string delivery_time = 2;</code>
    */
   public com.google.protobuf.ByteString
-      getSendtimeBytes() {
-    java.lang.Object ref = sendtime_;
+      getDeliveryTimeBytes() {
+    java.lang.Object ref = deliveryTime_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      sendtime_ = b;
+      deliveryTime_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -148,11 +148,11 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (delivered_ != false) {
-      output.writeBool(1, delivered_);
+    if (slotsDelivered_ != false) {
+      output.writeBool(1, slotsDelivered_);
     }
-    if (!getSendtimeBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, sendtime_);
+    if (!getDeliveryTimeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, deliveryTime_);
     }
     unknownFields.writeTo(output);
   }
@@ -163,12 +163,12 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (delivered_ != false) {
+    if (slotsDelivered_ != false) {
       size += com.google.protobuf.CodedOutputStream
-        .computeBoolSize(1, delivered_);
+        .computeBoolSize(1, slotsDelivered_);
     }
-    if (!getSendtimeBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, sendtime_);
+    if (!getDeliveryTimeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, deliveryTime_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -180,16 +180,16 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof generated.grpc.candidateengagementservice.NotificationStatus)) {
+    if (!(obj instanceof generated.grpc.candidateengagementservice.SlotDeliveryConfirmation)) {
       return super.equals(obj);
     }
-    generated.grpc.candidateengagementservice.NotificationStatus other = (generated.grpc.candidateengagementservice.NotificationStatus) obj;
+    generated.grpc.candidateengagementservice.SlotDeliveryConfirmation other = (generated.grpc.candidateengagementservice.SlotDeliveryConfirmation) obj;
 
     boolean result = true;
-    result = result && (getDelivered()
-        == other.getDelivered());
-    result = result && getSendtime()
-        .equals(other.getSendtime());
+    result = result && (getSlotsDelivered()
+        == other.getSlotsDelivered());
+    result = result && getDeliveryTime()
+        .equals(other.getDeliveryTime());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -201,79 +201,79 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + DELIVERED_FIELD_NUMBER;
+    hash = (37 * hash) + SLOTS_DELIVERED_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-        getDelivered());
-    hash = (37 * hash) + SENDTIME_FIELD_NUMBER;
-    hash = (53 * hash) + getSendtime().hashCode();
+        getSlotsDelivered());
+    hash = (37 * hash) + DELIVERY_TIME_FIELD_NUMBER;
+    hash = (53 * hash) + getDeliveryTime().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static generated.grpc.candidateengagementservice.NotificationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.SlotDeliveryConfirmation parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static generated.grpc.candidateengagementservice.NotificationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.SlotDeliveryConfirmation parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static generated.grpc.candidateengagementservice.NotificationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.SlotDeliveryConfirmation parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static generated.grpc.candidateengagementservice.NotificationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.SlotDeliveryConfirmation parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static generated.grpc.candidateengagementservice.NotificationStatus parseFrom(byte[] data)
+  public static generated.grpc.candidateengagementservice.SlotDeliveryConfirmation parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static generated.grpc.candidateengagementservice.NotificationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.SlotDeliveryConfirmation parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static generated.grpc.candidateengagementservice.NotificationStatus parseFrom(java.io.InputStream input)
+  public static generated.grpc.candidateengagementservice.SlotDeliveryConfirmation parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static generated.grpc.candidateengagementservice.NotificationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.SlotDeliveryConfirmation parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static generated.grpc.candidateengagementservice.NotificationStatus parseDelimitedFrom(java.io.InputStream input)
+  public static generated.grpc.candidateengagementservice.SlotDeliveryConfirmation parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static generated.grpc.candidateengagementservice.NotificationStatus parseDelimitedFrom(
+  public static generated.grpc.candidateengagementservice.SlotDeliveryConfirmation parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static generated.grpc.candidateengagementservice.NotificationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.SlotDeliveryConfirmation parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static generated.grpc.candidateengagementservice.NotificationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.SlotDeliveryConfirmation parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -286,7 +286,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(generated.grpc.candidateengagementservice.NotificationStatus prototype) {
+  public static Builder newBuilder(generated.grpc.candidateengagementservice.SlotDeliveryConfirmation prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -303,29 +303,29 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
-   * Response for notification delivery
+   * Confirmation that slots were successfully sent to the candidate
    * </pre>
    *
-   * Protobuf type {@code CandidateEngagementService.NotificationStatus}
+   * Protobuf type {@code CandidateEngagementService.SlotDeliveryConfirmation}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:CandidateEngagementService.NotificationStatus)
-      generated.grpc.candidateengagementservice.NotificationStatusOrBuilder {
+      // @@protoc_insertion_point(builder_implements:CandidateEngagementService.SlotDeliveryConfirmation)
+      generated.grpc.candidateengagementservice.SlotDeliveryConfirmationOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_NotificationStatus_descriptor;
+      return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_SlotDeliveryConfirmation_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_NotificationStatus_fieldAccessorTable
+      return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_SlotDeliveryConfirmation_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              generated.grpc.candidateengagementservice.NotificationStatus.class, generated.grpc.candidateengagementservice.NotificationStatus.Builder.class);
+              generated.grpc.candidateengagementservice.SlotDeliveryConfirmation.class, generated.grpc.candidateengagementservice.SlotDeliveryConfirmation.Builder.class);
     }
 
-    // Construct using generated.grpc.candidateengagementservice.NotificationStatus.newBuilder()
+    // Construct using generated.grpc.candidateengagementservice.SlotDeliveryConfirmation.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -343,9 +343,9 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      delivered_ = false;
+      slotsDelivered_ = false;
 
-      sendtime_ = "";
+      deliveryTime_ = "";
 
       return this;
     }
@@ -353,17 +353,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_NotificationStatus_descriptor;
+      return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_SlotDeliveryConfirmation_descriptor;
     }
 
     @java.lang.Override
-    public generated.grpc.candidateengagementservice.NotificationStatus getDefaultInstanceForType() {
-      return generated.grpc.candidateengagementservice.NotificationStatus.getDefaultInstance();
+    public generated.grpc.candidateengagementservice.SlotDeliveryConfirmation getDefaultInstanceForType() {
+      return generated.grpc.candidateengagementservice.SlotDeliveryConfirmation.getDefaultInstance();
     }
 
     @java.lang.Override
-    public generated.grpc.candidateengagementservice.NotificationStatus build() {
-      generated.grpc.candidateengagementservice.NotificationStatus result = buildPartial();
+    public generated.grpc.candidateengagementservice.SlotDeliveryConfirmation build() {
+      generated.grpc.candidateengagementservice.SlotDeliveryConfirmation result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -371,10 +371,10 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public generated.grpc.candidateengagementservice.NotificationStatus buildPartial() {
-      generated.grpc.candidateengagementservice.NotificationStatus result = new generated.grpc.candidateengagementservice.NotificationStatus(this);
-      result.delivered_ = delivered_;
-      result.sendtime_ = sendtime_;
+    public generated.grpc.candidateengagementservice.SlotDeliveryConfirmation buildPartial() {
+      generated.grpc.candidateengagementservice.SlotDeliveryConfirmation result = new generated.grpc.candidateengagementservice.SlotDeliveryConfirmation(this);
+      result.slotsDelivered_ = slotsDelivered_;
+      result.deliveryTime_ = deliveryTime_;
       onBuilt();
       return result;
     }
@@ -413,21 +413,21 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof generated.grpc.candidateengagementservice.NotificationStatus) {
-        return mergeFrom((generated.grpc.candidateengagementservice.NotificationStatus)other);
+      if (other instanceof generated.grpc.candidateengagementservice.SlotDeliveryConfirmation) {
+        return mergeFrom((generated.grpc.candidateengagementservice.SlotDeliveryConfirmation)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(generated.grpc.candidateengagementservice.NotificationStatus other) {
-      if (other == generated.grpc.candidateengagementservice.NotificationStatus.getDefaultInstance()) return this;
-      if (other.getDelivered() != false) {
-        setDelivered(other.getDelivered());
+    public Builder mergeFrom(generated.grpc.candidateengagementservice.SlotDeliveryConfirmation other) {
+      if (other == generated.grpc.candidateengagementservice.SlotDeliveryConfirmation.getDefaultInstance()) return this;
+      if (other.getSlotsDelivered() != false) {
+        setSlotsDelivered(other.getSlotsDelivered());
       }
-      if (!other.getSendtime().isEmpty()) {
-        sendtime_ = other.sendtime_;
+      if (!other.getDeliveryTime().isEmpty()) {
+        deliveryTime_ = other.deliveryTime_;
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -445,11 +445,11 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      generated.grpc.candidateengagementservice.NotificationStatus parsedMessage = null;
+      generated.grpc.candidateengagementservice.SlotDeliveryConfirmation parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (generated.grpc.candidateengagementservice.NotificationStatus) e.getUnfinishedMessage();
+        parsedMessage = (generated.grpc.candidateengagementservice.SlotDeliveryConfirmation) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -459,97 +459,97 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private boolean delivered_ ;
+    private boolean slotsDelivered_ ;
     /**
-     * <code>bool delivered = 1;</code>
+     * <code>bool slots_delivered = 1;</code>
      */
-    public boolean getDelivered() {
-      return delivered_;
+    public boolean getSlotsDelivered() {
+      return slotsDelivered_;
     }
     /**
-     * <code>bool delivered = 1;</code>
+     * <code>bool slots_delivered = 1;</code>
      */
-    public Builder setDelivered(boolean value) {
+    public Builder setSlotsDelivered(boolean value) {
       
-      delivered_ = value;
+      slotsDelivered_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>bool delivered = 1;</code>
+     * <code>bool slots_delivered = 1;</code>
      */
-    public Builder clearDelivered() {
+    public Builder clearSlotsDelivered() {
       
-      delivered_ = false;
+      slotsDelivered_ = false;
       onChanged();
       return this;
     }
 
-    private java.lang.Object sendtime_ = "";
+    private java.lang.Object deliveryTime_ = "";
     /**
-     * <code>string sendtime = 2;</code>
+     * <code>string delivery_time = 2;</code>
      */
-    public java.lang.String getSendtime() {
-      java.lang.Object ref = sendtime_;
+    public java.lang.String getDeliveryTime() {
+      java.lang.Object ref = deliveryTime_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        sendtime_ = s;
+        deliveryTime_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string sendtime = 2;</code>
+     * <code>string delivery_time = 2;</code>
      */
     public com.google.protobuf.ByteString
-        getSendtimeBytes() {
-      java.lang.Object ref = sendtime_;
+        getDeliveryTimeBytes() {
+      java.lang.Object ref = deliveryTime_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        sendtime_ = b;
+        deliveryTime_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string sendtime = 2;</code>
+     * <code>string delivery_time = 2;</code>
      */
-    public Builder setSendtime(
+    public Builder setDeliveryTime(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      sendtime_ = value;
+      deliveryTime_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string sendtime = 2;</code>
+     * <code>string delivery_time = 2;</code>
      */
-    public Builder clearSendtime() {
+    public Builder clearDeliveryTime() {
       
-      sendtime_ = getDefaultInstance().getSendtime();
+      deliveryTime_ = getDefaultInstance().getDeliveryTime();
       onChanged();
       return this;
     }
     /**
-     * <code>string sendtime = 2;</code>
+     * <code>string delivery_time = 2;</code>
      */
-    public Builder setSendtimeBytes(
+    public Builder setDeliveryTimeBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      sendtime_ = value;
+      deliveryTime_ = value;
       onChanged();
       return this;
     }
@@ -566,41 +566,41 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:CandidateEngagementService.NotificationStatus)
+    // @@protoc_insertion_point(builder_scope:CandidateEngagementService.SlotDeliveryConfirmation)
   }
 
-  // @@protoc_insertion_point(class_scope:CandidateEngagementService.NotificationStatus)
-  private static final generated.grpc.candidateengagementservice.NotificationStatus DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:CandidateEngagementService.SlotDeliveryConfirmation)
+  private static final generated.grpc.candidateengagementservice.SlotDeliveryConfirmation DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new generated.grpc.candidateengagementservice.NotificationStatus();
+    DEFAULT_INSTANCE = new generated.grpc.candidateengagementservice.SlotDeliveryConfirmation();
   }
 
-  public static generated.grpc.candidateengagementservice.NotificationStatus getDefaultInstance() {
+  public static generated.grpc.candidateengagementservice.SlotDeliveryConfirmation getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<NotificationStatus>
-      PARSER = new com.google.protobuf.AbstractParser<NotificationStatus>() {
+  private static final com.google.protobuf.Parser<SlotDeliveryConfirmation>
+      PARSER = new com.google.protobuf.AbstractParser<SlotDeliveryConfirmation>() {
     @java.lang.Override
-    public NotificationStatus parsePartialFrom(
+    public SlotDeliveryConfirmation parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new NotificationStatus(input, extensionRegistry);
+      return new SlotDeliveryConfirmation(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<NotificationStatus> parser() {
+  public static com.google.protobuf.Parser<SlotDeliveryConfirmation> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<NotificationStatus> getParserForType() {
+  public com.google.protobuf.Parser<SlotDeliveryConfirmation> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public generated.grpc.candidateengagementservice.NotificationStatus getDefaultInstanceForType() {
+  public generated.grpc.candidateengagementservice.SlotDeliveryConfirmation getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

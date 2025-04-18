@@ -6,42 +6,42 @@ option java_outer_classname = "CandidateEngagementServiceImpl";
 
 package CandidateEngagementService;
 
-// CandidateEngagementService sends interview slots to each of the candidate and get the confirmation slot from them.
-
+// CandidateEngagementService sends interview slots to candidates and confirms delivery
 service CandidateEngagementService {
+  // CLIENT-STREAMING METHOD
+  // INPUT: A stream of interview slots for a candidate
+  // OUTPUT: Confirmation that slots were successfully sent to the candidate
+  rpc SendInterviewSlots(stream SlotSelection) returns (SlotDeliveryConfirmation) {}
   
-  // CLIENT-STREAMING METHOD TYPE
-  // INPUT: A stream of interview slots
-  // OUTPUT: A confirmation from the candidate
-    rpc ConfirmInterviewSlot(stream SlotSelection) returns (SchedulingConfirmation) {}
-
-  // UNARY METHOD TYPE
-  // INPUT: Candidate ID and application status
-  // OUTPUT: Notification status
-   rpc SendStatusUpdate(ApplicationStatus) returns (NotificationStatus) {}
+  // UNARY METHOD
+  // For candidate to later submit their selection (separate call)
+  rpc SubmitSelectedSlot(CandidateSlotChoice) returns (SchedulingConfirmation) {}
+  
 }
 
-// Message defining a interview slot to pick.
+// Message defining interview slots to send to a candidate
 message SlotSelection {
-  string candidate_id = 1;   
-  string selected_time = 2;           
-  string selected_location = 3;       
+  string candidate_id = 1;
+  string slot_time = 2;
+  string slot_location = 3;
 }
 
-// Message for application status updates
-message ApplicationStatus {
-   string candidate_id = 1;
-   string status = 2; // e.g., "In Review", "Selected for Interview", "Rejected", "Offer Extended"
-   string message = 3; // Additional details
+// Message for a candidate to submit their chosen slot
+message CandidateSlotChoice {
+  string candidate_id = 1;
+  string chosen_time = 2;
+  string chosen_location = 3;
 }
 
-// Confirmation message from the candidate of the selected slot.
+// Confirmation that slots were successfully sent to the candidate
+message SlotDeliveryConfirmation {
+  bool slots_delivered = 1;
+  string delivery_time = 2;
+}
+
+// Confirmation of candidate's selected slot
 message SchedulingConfirmation {
-  bool confirmed = 1;  
+  bool confirmed = 1;
+  string confirmation_time = 2;
 }
 
-// Response for notification delivery
-message NotificationStatus {
-   bool delivered = 1;
-   string sendtime = 2;
-}

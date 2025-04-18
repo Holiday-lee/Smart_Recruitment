@@ -16,6 +16,9 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall;
 import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
 
 /**
+ * <pre>
+ * CandidateEngagementService sends interview slots to candidates and confirms delivery
+ * </pre>
  */
 @javax.annotation.Generated(
     value = "by gRPC proto compiler (version 1.15.0)",
@@ -28,67 +31,67 @@ public final class CandidateEngagementServiceGrpc {
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<generated.grpc.candidateengagementservice.SlotSelection,
-      generated.grpc.candidateengagementservice.SchedulingConfirmation> getConfirmInterviewSlotMethod;
+      generated.grpc.candidateengagementservice.SlotDeliveryConfirmation> getSendInterviewSlotsMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "ConfirmInterviewSlot",
+      fullMethodName = SERVICE_NAME + '/' + "SendInterviewSlots",
       requestType = generated.grpc.candidateengagementservice.SlotSelection.class,
-      responseType = generated.grpc.candidateengagementservice.SchedulingConfirmation.class,
+      responseType = generated.grpc.candidateengagementservice.SlotDeliveryConfirmation.class,
       methodType = io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
   public static io.grpc.MethodDescriptor<generated.grpc.candidateengagementservice.SlotSelection,
-      generated.grpc.candidateengagementservice.SchedulingConfirmation> getConfirmInterviewSlotMethod() {
-    io.grpc.MethodDescriptor<generated.grpc.candidateengagementservice.SlotSelection, generated.grpc.candidateengagementservice.SchedulingConfirmation> getConfirmInterviewSlotMethod;
-    if ((getConfirmInterviewSlotMethod = CandidateEngagementServiceGrpc.getConfirmInterviewSlotMethod) == null) {
+      generated.grpc.candidateengagementservice.SlotDeliveryConfirmation> getSendInterviewSlotsMethod() {
+    io.grpc.MethodDescriptor<generated.grpc.candidateengagementservice.SlotSelection, generated.grpc.candidateengagementservice.SlotDeliveryConfirmation> getSendInterviewSlotsMethod;
+    if ((getSendInterviewSlotsMethod = CandidateEngagementServiceGrpc.getSendInterviewSlotsMethod) == null) {
       synchronized (CandidateEngagementServiceGrpc.class) {
-        if ((getConfirmInterviewSlotMethod = CandidateEngagementServiceGrpc.getConfirmInterviewSlotMethod) == null) {
-          CandidateEngagementServiceGrpc.getConfirmInterviewSlotMethod = getConfirmInterviewSlotMethod = 
-              io.grpc.MethodDescriptor.<generated.grpc.candidateengagementservice.SlotSelection, generated.grpc.candidateengagementservice.SchedulingConfirmation>newBuilder()
+        if ((getSendInterviewSlotsMethod = CandidateEngagementServiceGrpc.getSendInterviewSlotsMethod) == null) {
+          CandidateEngagementServiceGrpc.getSendInterviewSlotsMethod = getSendInterviewSlotsMethod = 
+              io.grpc.MethodDescriptor.<generated.grpc.candidateengagementservice.SlotSelection, generated.grpc.candidateengagementservice.SlotDeliveryConfirmation>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
               .setFullMethodName(generateFullMethodName(
-                  "CandidateEngagementService.CandidateEngagementService", "ConfirmInterviewSlot"))
+                  "CandidateEngagementService.CandidateEngagementService", "SendInterviewSlots"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   generated.grpc.candidateengagementservice.SlotSelection.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  generated.grpc.candidateengagementservice.SchedulingConfirmation.getDefaultInstance()))
-                  .setSchemaDescriptor(new CandidateEngagementServiceMethodDescriptorSupplier("ConfirmInterviewSlot"))
+                  generated.grpc.candidateengagementservice.SlotDeliveryConfirmation.getDefaultInstance()))
+                  .setSchemaDescriptor(new CandidateEngagementServiceMethodDescriptorSupplier("SendInterviewSlots"))
                   .build();
           }
         }
      }
-     return getConfirmInterviewSlotMethod;
+     return getSendInterviewSlotsMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<generated.grpc.candidateengagementservice.ApplicationStatus,
-      generated.grpc.candidateengagementservice.NotificationStatus> getSendStatusUpdateMethod;
+  private static volatile io.grpc.MethodDescriptor<generated.grpc.candidateengagementservice.CandidateSlotChoice,
+      generated.grpc.candidateengagementservice.SchedulingConfirmation> getSubmitSelectedSlotMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "SendStatusUpdate",
-      requestType = generated.grpc.candidateengagementservice.ApplicationStatus.class,
-      responseType = generated.grpc.candidateengagementservice.NotificationStatus.class,
+      fullMethodName = SERVICE_NAME + '/' + "SubmitSelectedSlot",
+      requestType = generated.grpc.candidateengagementservice.CandidateSlotChoice.class,
+      responseType = generated.grpc.candidateengagementservice.SchedulingConfirmation.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<generated.grpc.candidateengagementservice.ApplicationStatus,
-      generated.grpc.candidateengagementservice.NotificationStatus> getSendStatusUpdateMethod() {
-    io.grpc.MethodDescriptor<generated.grpc.candidateengagementservice.ApplicationStatus, generated.grpc.candidateengagementservice.NotificationStatus> getSendStatusUpdateMethod;
-    if ((getSendStatusUpdateMethod = CandidateEngagementServiceGrpc.getSendStatusUpdateMethod) == null) {
+  public static io.grpc.MethodDescriptor<generated.grpc.candidateengagementservice.CandidateSlotChoice,
+      generated.grpc.candidateengagementservice.SchedulingConfirmation> getSubmitSelectedSlotMethod() {
+    io.grpc.MethodDescriptor<generated.grpc.candidateengagementservice.CandidateSlotChoice, generated.grpc.candidateengagementservice.SchedulingConfirmation> getSubmitSelectedSlotMethod;
+    if ((getSubmitSelectedSlotMethod = CandidateEngagementServiceGrpc.getSubmitSelectedSlotMethod) == null) {
       synchronized (CandidateEngagementServiceGrpc.class) {
-        if ((getSendStatusUpdateMethod = CandidateEngagementServiceGrpc.getSendStatusUpdateMethod) == null) {
-          CandidateEngagementServiceGrpc.getSendStatusUpdateMethod = getSendStatusUpdateMethod = 
-              io.grpc.MethodDescriptor.<generated.grpc.candidateengagementservice.ApplicationStatus, generated.grpc.candidateengagementservice.NotificationStatus>newBuilder()
+        if ((getSubmitSelectedSlotMethod = CandidateEngagementServiceGrpc.getSubmitSelectedSlotMethod) == null) {
+          CandidateEngagementServiceGrpc.getSubmitSelectedSlotMethod = getSubmitSelectedSlotMethod = 
+              io.grpc.MethodDescriptor.<generated.grpc.candidateengagementservice.CandidateSlotChoice, generated.grpc.candidateengagementservice.SchedulingConfirmation>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
-                  "CandidateEngagementService.CandidateEngagementService", "SendStatusUpdate"))
+                  "CandidateEngagementService.CandidateEngagementService", "SubmitSelectedSlot"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  generated.grpc.candidateengagementservice.ApplicationStatus.getDefaultInstance()))
+                  generated.grpc.candidateengagementservice.CandidateSlotChoice.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  generated.grpc.candidateengagementservice.NotificationStatus.getDefaultInstance()))
-                  .setSchemaDescriptor(new CandidateEngagementServiceMethodDescriptorSupplier("SendStatusUpdate"))
+                  generated.grpc.candidateengagementservice.SchedulingConfirmation.getDefaultInstance()))
+                  .setSchemaDescriptor(new CandidateEngagementServiceMethodDescriptorSupplier("SubmitSelectedSlot"))
                   .build();
           }
         }
      }
-     return getSendStatusUpdateMethod;
+     return getSubmitSelectedSlotMethod;
   }
 
   /**
@@ -115,54 +118,59 @@ public final class CandidateEngagementServiceGrpc {
   }
 
   /**
+   * <pre>
+   * CandidateEngagementService sends interview slots to candidates and confirms delivery
+   * </pre>
    */
   public static abstract class CandidateEngagementServiceImplBase implements io.grpc.BindableService {
 
     /**
      * <pre>
-     * CLIENT-STREAMING METHOD TYPE
-     * INPUT: A stream of interview slots
-     * OUTPUT: A confirmation from the candidate
+     * CLIENT-STREAMING METHOD
+     * INPUT: A stream of interview slots for a candidate
+     * OUTPUT: Confirmation that slots were successfully sent to the candidate
      * </pre>
      */
-    public io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SlotSelection> confirmInterviewSlot(
-        io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SchedulingConfirmation> responseObserver) {
-      return asyncUnimplementedStreamingCall(getConfirmInterviewSlotMethod(), responseObserver);
+    public io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SlotSelection> sendInterviewSlots(
+        io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SlotDeliveryConfirmation> responseObserver) {
+      return asyncUnimplementedStreamingCall(getSendInterviewSlotsMethod(), responseObserver);
     }
 
     /**
      * <pre>
-     * UNARY METHOD TYPE
-     * INPUT: Candidate ID and application status
-     * OUTPUT: Notification status
+     * UNARY METHOD
+     * For candidate to later submit their selection (separate call)
      * </pre>
      */
-    public void sendStatusUpdate(generated.grpc.candidateengagementservice.ApplicationStatus request,
-        io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.NotificationStatus> responseObserver) {
-      asyncUnimplementedUnaryCall(getSendStatusUpdateMethod(), responseObserver);
+    public void submitSelectedSlot(generated.grpc.candidateengagementservice.CandidateSlotChoice request,
+        io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SchedulingConfirmation> responseObserver) {
+      asyncUnimplementedUnaryCall(getSubmitSelectedSlotMethod(), responseObserver);
     }
 
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
-            getConfirmInterviewSlotMethod(),
+            getSendInterviewSlotsMethod(),
             asyncClientStreamingCall(
               new MethodHandlers<
                 generated.grpc.candidateengagementservice.SlotSelection,
-                generated.grpc.candidateengagementservice.SchedulingConfirmation>(
-                  this, METHODID_CONFIRM_INTERVIEW_SLOT)))
+                generated.grpc.candidateengagementservice.SlotDeliveryConfirmation>(
+                  this, METHODID_SEND_INTERVIEW_SLOTS)))
           .addMethod(
-            getSendStatusUpdateMethod(),
+            getSubmitSelectedSlotMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                generated.grpc.candidateengagementservice.ApplicationStatus,
-                generated.grpc.candidateengagementservice.NotificationStatus>(
-                  this, METHODID_SEND_STATUS_UPDATE)))
+                generated.grpc.candidateengagementservice.CandidateSlotChoice,
+                generated.grpc.candidateengagementservice.SchedulingConfirmation>(
+                  this, METHODID_SUBMIT_SELECTED_SLOT)))
           .build();
     }
   }
 
   /**
+   * <pre>
+   * CandidateEngagementService sends interview slots to candidates and confirms delivery
+   * </pre>
    */
   public static final class CandidateEngagementServiceStub extends io.grpc.stub.AbstractStub<CandidateEngagementServiceStub> {
     private CandidateEngagementServiceStub(io.grpc.Channel channel) {
@@ -182,32 +190,34 @@ public final class CandidateEngagementServiceGrpc {
 
     /**
      * <pre>
-     * CLIENT-STREAMING METHOD TYPE
-     * INPUT: A stream of interview slots
-     * OUTPUT: A confirmation from the candidate
+     * CLIENT-STREAMING METHOD
+     * INPUT: A stream of interview slots for a candidate
+     * OUTPUT: Confirmation that slots were successfully sent to the candidate
      * </pre>
      */
-    public io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SlotSelection> confirmInterviewSlot(
-        io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SchedulingConfirmation> responseObserver) {
+    public io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SlotSelection> sendInterviewSlots(
+        io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SlotDeliveryConfirmation> responseObserver) {
       return asyncClientStreamingCall(
-          getChannel().newCall(getConfirmInterviewSlotMethod(), getCallOptions()), responseObserver);
+          getChannel().newCall(getSendInterviewSlotsMethod(), getCallOptions()), responseObserver);
     }
 
     /**
      * <pre>
-     * UNARY METHOD TYPE
-     * INPUT: Candidate ID and application status
-     * OUTPUT: Notification status
+     * UNARY METHOD
+     * For candidate to later submit their selection (separate call)
      * </pre>
      */
-    public void sendStatusUpdate(generated.grpc.candidateengagementservice.ApplicationStatus request,
-        io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.NotificationStatus> responseObserver) {
+    public void submitSelectedSlot(generated.grpc.candidateengagementservice.CandidateSlotChoice request,
+        io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SchedulingConfirmation> responseObserver) {
       asyncUnaryCall(
-          getChannel().newCall(getSendStatusUpdateMethod(), getCallOptions()), request, responseObserver);
+          getChannel().newCall(getSubmitSelectedSlotMethod(), getCallOptions()), request, responseObserver);
     }
   }
 
   /**
+   * <pre>
+   * CandidateEngagementService sends interview slots to candidates and confirms delivery
+   * </pre>
    */
   public static final class CandidateEngagementServiceBlockingStub extends io.grpc.stub.AbstractStub<CandidateEngagementServiceBlockingStub> {
     private CandidateEngagementServiceBlockingStub(io.grpc.Channel channel) {
@@ -227,18 +237,20 @@ public final class CandidateEngagementServiceGrpc {
 
     /**
      * <pre>
-     * UNARY METHOD TYPE
-     * INPUT: Candidate ID and application status
-     * OUTPUT: Notification status
+     * UNARY METHOD
+     * For candidate to later submit their selection (separate call)
      * </pre>
      */
-    public generated.grpc.candidateengagementservice.NotificationStatus sendStatusUpdate(generated.grpc.candidateengagementservice.ApplicationStatus request) {
+    public generated.grpc.candidateengagementservice.SchedulingConfirmation submitSelectedSlot(generated.grpc.candidateengagementservice.CandidateSlotChoice request) {
       return blockingUnaryCall(
-          getChannel(), getSendStatusUpdateMethod(), getCallOptions(), request);
+          getChannel(), getSubmitSelectedSlotMethod(), getCallOptions(), request);
     }
   }
 
   /**
+   * <pre>
+   * CandidateEngagementService sends interview slots to candidates and confirms delivery
+   * </pre>
    */
   public static final class CandidateEngagementServiceFutureStub extends io.grpc.stub.AbstractStub<CandidateEngagementServiceFutureStub> {
     private CandidateEngagementServiceFutureStub(io.grpc.Channel channel) {
@@ -258,20 +270,19 @@ public final class CandidateEngagementServiceGrpc {
 
     /**
      * <pre>
-     * UNARY METHOD TYPE
-     * INPUT: Candidate ID and application status
-     * OUTPUT: Notification status
+     * UNARY METHOD
+     * For candidate to later submit their selection (separate call)
      * </pre>
      */
-    public com.google.common.util.concurrent.ListenableFuture<generated.grpc.candidateengagementservice.NotificationStatus> sendStatusUpdate(
-        generated.grpc.candidateengagementservice.ApplicationStatus request) {
+    public com.google.common.util.concurrent.ListenableFuture<generated.grpc.candidateengagementservice.SchedulingConfirmation> submitSelectedSlot(
+        generated.grpc.candidateengagementservice.CandidateSlotChoice request) {
       return futureUnaryCall(
-          getChannel().newCall(getSendStatusUpdateMethod(), getCallOptions()), request);
+          getChannel().newCall(getSubmitSelectedSlotMethod(), getCallOptions()), request);
     }
   }
 
-  private static final int METHODID_SEND_STATUS_UPDATE = 0;
-  private static final int METHODID_CONFIRM_INTERVIEW_SLOT = 1;
+  private static final int METHODID_SUBMIT_SELECTED_SLOT = 0;
+  private static final int METHODID_SEND_INTERVIEW_SLOTS = 1;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -290,9 +301,9 @@ public final class CandidateEngagementServiceGrpc {
     @java.lang.SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
-        case METHODID_SEND_STATUS_UPDATE:
-          serviceImpl.sendStatusUpdate((generated.grpc.candidateengagementservice.ApplicationStatus) request,
-              (io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.NotificationStatus>) responseObserver);
+        case METHODID_SUBMIT_SELECTED_SLOT:
+          serviceImpl.submitSelectedSlot((generated.grpc.candidateengagementservice.CandidateSlotChoice) request,
+              (io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SchedulingConfirmation>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -304,9 +315,9 @@ public final class CandidateEngagementServiceGrpc {
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
-        case METHODID_CONFIRM_INTERVIEW_SLOT:
-          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.confirmInterviewSlot(
-              (io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SchedulingConfirmation>) responseObserver);
+        case METHODID_SEND_INTERVIEW_SLOTS:
+          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.sendInterviewSlots(
+              (io.grpc.stub.StreamObserver<generated.grpc.candidateengagementservice.SlotDeliveryConfirmation>) responseObserver);
         default:
           throw new AssertionError();
       }
@@ -358,8 +369,8 @@ public final class CandidateEngagementServiceGrpc {
         if (result == null) {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new CandidateEngagementServiceFileDescriptorSupplier())
-              .addMethod(getConfirmInterviewSlotMethod())
-              .addMethod(getSendStatusUpdateMethod())
+              .addMethod(getSendInterviewSlotsMethod())
+              .addMethod(getSubmitSelectedSlotMethod())
               .build();
         }
       }

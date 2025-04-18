@@ -5,24 +5,24 @@ package generated.grpc.candidateengagementservice;
 
 /**
  * <pre>
- * Message for application status updates
+ * Message for a candidate to submit their chosen slot
  * </pre>
  *
- * Protobuf type {@code CandidateEngagementService.ApplicationStatus}
+ * Protobuf type {@code CandidateEngagementService.CandidateSlotChoice}
  */
-public  final class ApplicationStatus extends
+public  final class CandidateSlotChoice extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:CandidateEngagementService.ApplicationStatus)
-    ApplicationStatusOrBuilder {
+    // @@protoc_insertion_point(message_implements:CandidateEngagementService.CandidateSlotChoice)
+    CandidateSlotChoiceOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use ApplicationStatus.newBuilder() to construct.
-  private ApplicationStatus(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use CandidateSlotChoice.newBuilder() to construct.
+  private CandidateSlotChoice(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ApplicationStatus() {
+  private CandidateSlotChoice() {
     candidateId_ = "";
-    status_ = "";
-    message_ = "";
+    chosenTime_ = "";
+    chosenLocation_ = "";
   }
 
   @java.lang.Override
@@ -30,7 +30,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private ApplicationStatus(
+  private CandidateSlotChoice(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -58,13 +58,13 @@ private static final long serialVersionUID = 0L;
           case 18: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            status_ = s;
+            chosenTime_ = s;
             break;
           }
           case 26: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            message_ = s;
+            chosenLocation_ = s;
             break;
           }
           default: {
@@ -88,15 +88,15 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_ApplicationStatus_descriptor;
+    return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_CandidateSlotChoice_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_ApplicationStatus_fieldAccessorTable
+    return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_CandidateSlotChoice_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            generated.grpc.candidateengagementservice.ApplicationStatus.class, generated.grpc.candidateengagementservice.ApplicationStatus.Builder.class);
+            generated.grpc.candidateengagementservice.CandidateSlotChoice.class, generated.grpc.candidateengagementservice.CandidateSlotChoice.Builder.class);
   }
 
   public static final int CANDIDATE_ID_FIELD_NUMBER = 1;
@@ -133,84 +133,68 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int STATUS_FIELD_NUMBER = 2;
-  private volatile java.lang.Object status_;
+  public static final int CHOSEN_TIME_FIELD_NUMBER = 2;
+  private volatile java.lang.Object chosenTime_;
   /**
-   * <pre>
-   * e.g., "In Review", "Selected for Interview", "Rejected", "Offer Extended"
-   * </pre>
-   *
-   * <code>string status = 2;</code>
+   * <code>string chosen_time = 2;</code>
    */
-  public java.lang.String getStatus() {
-    java.lang.Object ref = status_;
+  public java.lang.String getChosenTime() {
+    java.lang.Object ref = chosenTime_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      status_ = s;
+      chosenTime_ = s;
       return s;
     }
   }
   /**
-   * <pre>
-   * e.g., "In Review", "Selected for Interview", "Rejected", "Offer Extended"
-   * </pre>
-   *
-   * <code>string status = 2;</code>
+   * <code>string chosen_time = 2;</code>
    */
   public com.google.protobuf.ByteString
-      getStatusBytes() {
-    java.lang.Object ref = status_;
+      getChosenTimeBytes() {
+    java.lang.Object ref = chosenTime_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      status_ = b;
+      chosenTime_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
     }
   }
 
-  public static final int MESSAGE_FIELD_NUMBER = 3;
-  private volatile java.lang.Object message_;
+  public static final int CHOSEN_LOCATION_FIELD_NUMBER = 3;
+  private volatile java.lang.Object chosenLocation_;
   /**
-   * <pre>
-   * Additional details
-   * </pre>
-   *
-   * <code>string message = 3;</code>
+   * <code>string chosen_location = 3;</code>
    */
-  public java.lang.String getMessage() {
-    java.lang.Object ref = message_;
+  public java.lang.String getChosenLocation() {
+    java.lang.Object ref = chosenLocation_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      message_ = s;
+      chosenLocation_ = s;
       return s;
     }
   }
   /**
-   * <pre>
-   * Additional details
-   * </pre>
-   *
-   * <code>string message = 3;</code>
+   * <code>string chosen_location = 3;</code>
    */
   public com.google.protobuf.ByteString
-      getMessageBytes() {
-    java.lang.Object ref = message_;
+      getChosenLocationBytes() {
+    java.lang.Object ref = chosenLocation_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      message_ = b;
+      chosenLocation_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -234,11 +218,11 @@ private static final long serialVersionUID = 0L;
     if (!getCandidateIdBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, candidateId_);
     }
-    if (!getStatusBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, status_);
+    if (!getChosenTimeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, chosenTime_);
     }
-    if (!getMessageBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, message_);
+    if (!getChosenLocationBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, chosenLocation_);
     }
     unknownFields.writeTo(output);
   }
@@ -252,11 +236,11 @@ private static final long serialVersionUID = 0L;
     if (!getCandidateIdBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, candidateId_);
     }
-    if (!getStatusBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, status_);
+    if (!getChosenTimeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, chosenTime_);
     }
-    if (!getMessageBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, message_);
+    if (!getChosenLocationBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, chosenLocation_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -268,18 +252,18 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof generated.grpc.candidateengagementservice.ApplicationStatus)) {
+    if (!(obj instanceof generated.grpc.candidateengagementservice.CandidateSlotChoice)) {
       return super.equals(obj);
     }
-    generated.grpc.candidateengagementservice.ApplicationStatus other = (generated.grpc.candidateengagementservice.ApplicationStatus) obj;
+    generated.grpc.candidateengagementservice.CandidateSlotChoice other = (generated.grpc.candidateengagementservice.CandidateSlotChoice) obj;
 
     boolean result = true;
     result = result && getCandidateId()
         .equals(other.getCandidateId());
-    result = result && getStatus()
-        .equals(other.getStatus());
-    result = result && getMessage()
-        .equals(other.getMessage());
+    result = result && getChosenTime()
+        .equals(other.getChosenTime());
+    result = result && getChosenLocation()
+        .equals(other.getChosenLocation());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -293,78 +277,78 @@ private static final long serialVersionUID = 0L;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + CANDIDATE_ID_FIELD_NUMBER;
     hash = (53 * hash) + getCandidateId().hashCode();
-    hash = (37 * hash) + STATUS_FIELD_NUMBER;
-    hash = (53 * hash) + getStatus().hashCode();
-    hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
-    hash = (53 * hash) + getMessage().hashCode();
+    hash = (37 * hash) + CHOSEN_TIME_FIELD_NUMBER;
+    hash = (53 * hash) + getChosenTime().hashCode();
+    hash = (37 * hash) + CHOSEN_LOCATION_FIELD_NUMBER;
+    hash = (53 * hash) + getChosenLocation().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static generated.grpc.candidateengagementservice.ApplicationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.CandidateSlotChoice parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static generated.grpc.candidateengagementservice.ApplicationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.CandidateSlotChoice parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static generated.grpc.candidateengagementservice.ApplicationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.CandidateSlotChoice parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static generated.grpc.candidateengagementservice.ApplicationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.CandidateSlotChoice parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static generated.grpc.candidateengagementservice.ApplicationStatus parseFrom(byte[] data)
+  public static generated.grpc.candidateengagementservice.CandidateSlotChoice parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static generated.grpc.candidateengagementservice.ApplicationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.CandidateSlotChoice parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static generated.grpc.candidateengagementservice.ApplicationStatus parseFrom(java.io.InputStream input)
+  public static generated.grpc.candidateengagementservice.CandidateSlotChoice parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static generated.grpc.candidateengagementservice.ApplicationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.CandidateSlotChoice parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static generated.grpc.candidateengagementservice.ApplicationStatus parseDelimitedFrom(java.io.InputStream input)
+  public static generated.grpc.candidateengagementservice.CandidateSlotChoice parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static generated.grpc.candidateengagementservice.ApplicationStatus parseDelimitedFrom(
+  public static generated.grpc.candidateengagementservice.CandidateSlotChoice parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static generated.grpc.candidateengagementservice.ApplicationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.CandidateSlotChoice parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static generated.grpc.candidateengagementservice.ApplicationStatus parseFrom(
+  public static generated.grpc.candidateengagementservice.CandidateSlotChoice parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -377,7 +361,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(generated.grpc.candidateengagementservice.ApplicationStatus prototype) {
+  public static Builder newBuilder(generated.grpc.candidateengagementservice.CandidateSlotChoice prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -394,29 +378,29 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
-   * Message for application status updates
+   * Message for a candidate to submit their chosen slot
    * </pre>
    *
-   * Protobuf type {@code CandidateEngagementService.ApplicationStatus}
+   * Protobuf type {@code CandidateEngagementService.CandidateSlotChoice}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:CandidateEngagementService.ApplicationStatus)
-      generated.grpc.candidateengagementservice.ApplicationStatusOrBuilder {
+      // @@protoc_insertion_point(builder_implements:CandidateEngagementService.CandidateSlotChoice)
+      generated.grpc.candidateengagementservice.CandidateSlotChoiceOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_ApplicationStatus_descriptor;
+      return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_CandidateSlotChoice_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_ApplicationStatus_fieldAccessorTable
+      return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_CandidateSlotChoice_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              generated.grpc.candidateengagementservice.ApplicationStatus.class, generated.grpc.candidateengagementservice.ApplicationStatus.Builder.class);
+              generated.grpc.candidateengagementservice.CandidateSlotChoice.class, generated.grpc.candidateengagementservice.CandidateSlotChoice.Builder.class);
     }
 
-    // Construct using generated.grpc.candidateengagementservice.ApplicationStatus.newBuilder()
+    // Construct using generated.grpc.candidateengagementservice.CandidateSlotChoice.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -436,9 +420,9 @@ private static final long serialVersionUID = 0L;
       super.clear();
       candidateId_ = "";
 
-      status_ = "";
+      chosenTime_ = "";
 
-      message_ = "";
+      chosenLocation_ = "";
 
       return this;
     }
@@ -446,17 +430,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_ApplicationStatus_descriptor;
+      return generated.grpc.candidateengagementservice.CandidateEngagementServiceImpl.internal_static_CandidateEngagementService_CandidateSlotChoice_descriptor;
     }
 
     @java.lang.Override
-    public generated.grpc.candidateengagementservice.ApplicationStatus getDefaultInstanceForType() {
-      return generated.grpc.candidateengagementservice.ApplicationStatus.getDefaultInstance();
+    public generated.grpc.candidateengagementservice.CandidateSlotChoice getDefaultInstanceForType() {
+      return generated.grpc.candidateengagementservice.CandidateSlotChoice.getDefaultInstance();
     }
 
     @java.lang.Override
-    public generated.grpc.candidateengagementservice.ApplicationStatus build() {
-      generated.grpc.candidateengagementservice.ApplicationStatus result = buildPartial();
+    public generated.grpc.candidateengagementservice.CandidateSlotChoice build() {
+      generated.grpc.candidateengagementservice.CandidateSlotChoice result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -464,11 +448,11 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public generated.grpc.candidateengagementservice.ApplicationStatus buildPartial() {
-      generated.grpc.candidateengagementservice.ApplicationStatus result = new generated.grpc.candidateengagementservice.ApplicationStatus(this);
+    public generated.grpc.candidateengagementservice.CandidateSlotChoice buildPartial() {
+      generated.grpc.candidateengagementservice.CandidateSlotChoice result = new generated.grpc.candidateengagementservice.CandidateSlotChoice(this);
       result.candidateId_ = candidateId_;
-      result.status_ = status_;
-      result.message_ = message_;
+      result.chosenTime_ = chosenTime_;
+      result.chosenLocation_ = chosenLocation_;
       onBuilt();
       return result;
     }
@@ -507,26 +491,26 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof generated.grpc.candidateengagementservice.ApplicationStatus) {
-        return mergeFrom((generated.grpc.candidateengagementservice.ApplicationStatus)other);
+      if (other instanceof generated.grpc.candidateengagementservice.CandidateSlotChoice) {
+        return mergeFrom((generated.grpc.candidateengagementservice.CandidateSlotChoice)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(generated.grpc.candidateengagementservice.ApplicationStatus other) {
-      if (other == generated.grpc.candidateengagementservice.ApplicationStatus.getDefaultInstance()) return this;
+    public Builder mergeFrom(generated.grpc.candidateengagementservice.CandidateSlotChoice other) {
+      if (other == generated.grpc.candidateengagementservice.CandidateSlotChoice.getDefaultInstance()) return this;
       if (!other.getCandidateId().isEmpty()) {
         candidateId_ = other.candidateId_;
         onChanged();
       }
-      if (!other.getStatus().isEmpty()) {
-        status_ = other.status_;
+      if (!other.getChosenTime().isEmpty()) {
+        chosenTime_ = other.chosenTime_;
         onChanged();
       }
-      if (!other.getMessage().isEmpty()) {
-        message_ = other.message_;
+      if (!other.getChosenLocation().isEmpty()) {
+        chosenLocation_ = other.chosenLocation_;
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -544,11 +528,11 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      generated.grpc.candidateengagementservice.ApplicationStatus parsedMessage = null;
+      generated.grpc.candidateengagementservice.CandidateSlotChoice parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (generated.grpc.candidateengagementservice.ApplicationStatus) e.getUnfinishedMessage();
+        parsedMessage = (generated.grpc.candidateengagementservice.CandidateSlotChoice) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -627,180 +611,140 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object status_ = "";
+    private java.lang.Object chosenTime_ = "";
     /**
-     * <pre>
-     * e.g., "In Review", "Selected for Interview", "Rejected", "Offer Extended"
-     * </pre>
-     *
-     * <code>string status = 2;</code>
+     * <code>string chosen_time = 2;</code>
      */
-    public java.lang.String getStatus() {
-      java.lang.Object ref = status_;
+    public java.lang.String getChosenTime() {
+      java.lang.Object ref = chosenTime_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        status_ = s;
+        chosenTime_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <pre>
-     * e.g., "In Review", "Selected for Interview", "Rejected", "Offer Extended"
-     * </pre>
-     *
-     * <code>string status = 2;</code>
+     * <code>string chosen_time = 2;</code>
      */
     public com.google.protobuf.ByteString
-        getStatusBytes() {
-      java.lang.Object ref = status_;
+        getChosenTimeBytes() {
+      java.lang.Object ref = chosenTime_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        status_ = b;
+        chosenTime_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <pre>
-     * e.g., "In Review", "Selected for Interview", "Rejected", "Offer Extended"
-     * </pre>
-     *
-     * <code>string status = 2;</code>
+     * <code>string chosen_time = 2;</code>
      */
-    public Builder setStatus(
+    public Builder setChosenTime(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      status_ = value;
+      chosenTime_ = value;
       onChanged();
       return this;
     }
     /**
-     * <pre>
-     * e.g., "In Review", "Selected for Interview", "Rejected", "Offer Extended"
-     * </pre>
-     *
-     * <code>string status = 2;</code>
+     * <code>string chosen_time = 2;</code>
      */
-    public Builder clearStatus() {
+    public Builder clearChosenTime() {
       
-      status_ = getDefaultInstance().getStatus();
+      chosenTime_ = getDefaultInstance().getChosenTime();
       onChanged();
       return this;
     }
     /**
-     * <pre>
-     * e.g., "In Review", "Selected for Interview", "Rejected", "Offer Extended"
-     * </pre>
-     *
-     * <code>string status = 2;</code>
+     * <code>string chosen_time = 2;</code>
      */
-    public Builder setStatusBytes(
+    public Builder setChosenTimeBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      status_ = value;
+      chosenTime_ = value;
       onChanged();
       return this;
     }
 
-    private java.lang.Object message_ = "";
+    private java.lang.Object chosenLocation_ = "";
     /**
-     * <pre>
-     * Additional details
-     * </pre>
-     *
-     * <code>string message = 3;</code>
+     * <code>string chosen_location = 3;</code>
      */
-    public java.lang.String getMessage() {
-      java.lang.Object ref = message_;
+    public java.lang.String getChosenLocation() {
+      java.lang.Object ref = chosenLocation_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        message_ = s;
+        chosenLocation_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <pre>
-     * Additional details
-     * </pre>
-     *
-     * <code>string message = 3;</code>
+     * <code>string chosen_location = 3;</code>
      */
     public com.google.protobuf.ByteString
-        getMessageBytes() {
-      java.lang.Object ref = message_;
+        getChosenLocationBytes() {
+      java.lang.Object ref = chosenLocation_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        message_ = b;
+        chosenLocation_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <pre>
-     * Additional details
-     * </pre>
-     *
-     * <code>string message = 3;</code>
+     * <code>string chosen_location = 3;</code>
      */
-    public Builder setMessage(
+    public Builder setChosenLocation(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      message_ = value;
+      chosenLocation_ = value;
       onChanged();
       return this;
     }
     /**
-     * <pre>
-     * Additional details
-     * </pre>
-     *
-     * <code>string message = 3;</code>
+     * <code>string chosen_location = 3;</code>
      */
-    public Builder clearMessage() {
+    public Builder clearChosenLocation() {
       
-      message_ = getDefaultInstance().getMessage();
+      chosenLocation_ = getDefaultInstance().getChosenLocation();
       onChanged();
       return this;
     }
     /**
-     * <pre>
-     * Additional details
-     * </pre>
-     *
-     * <code>string message = 3;</code>
+     * <code>string chosen_location = 3;</code>
      */
-    public Builder setMessageBytes(
+    public Builder setChosenLocationBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      message_ = value;
+      chosenLocation_ = value;
       onChanged();
       return this;
     }
@@ -817,41 +761,41 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:CandidateEngagementService.ApplicationStatus)
+    // @@protoc_insertion_point(builder_scope:CandidateEngagementService.CandidateSlotChoice)
   }
 
-  // @@protoc_insertion_point(class_scope:CandidateEngagementService.ApplicationStatus)
-  private static final generated.grpc.candidateengagementservice.ApplicationStatus DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:CandidateEngagementService.CandidateSlotChoice)
+  private static final generated.grpc.candidateengagementservice.CandidateSlotChoice DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new generated.grpc.candidateengagementservice.ApplicationStatus();
+    DEFAULT_INSTANCE = new generated.grpc.candidateengagementservice.CandidateSlotChoice();
   }
 
-  public static generated.grpc.candidateengagementservice.ApplicationStatus getDefaultInstance() {
+  public static generated.grpc.candidateengagementservice.CandidateSlotChoice getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ApplicationStatus>
-      PARSER = new com.google.protobuf.AbstractParser<ApplicationStatus>() {
+  private static final com.google.protobuf.Parser<CandidateSlotChoice>
+      PARSER = new com.google.protobuf.AbstractParser<CandidateSlotChoice>() {
     @java.lang.Override
-    public ApplicationStatus parsePartialFrom(
+    public CandidateSlotChoice parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new ApplicationStatus(input, extensionRegistry);
+      return new CandidateSlotChoice(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<ApplicationStatus> parser() {
+  public static com.google.protobuf.Parser<CandidateSlotChoice> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ApplicationStatus> getParserForType() {
+  public com.google.protobuf.Parser<CandidateSlotChoice> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public generated.grpc.candidateengagementservice.ApplicationStatus getDefaultInstanceForType() {
+  public generated.grpc.candidateengagementservice.CandidateSlotChoice getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

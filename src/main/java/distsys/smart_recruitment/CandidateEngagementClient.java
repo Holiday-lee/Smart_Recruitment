@@ -9,13 +9,6 @@ package distsys.smart_recruitment;
  * @author jiaki
  */
 
-import distsys.smart_recruitment.auth.BearerToken;
-import distsys.smart_recruitment.auth.JwtUtil;
-import generated.grpc.candidateengagementservice.ApplicationStatus;
-import generated.grpc.candidateengagementservice.CandidateEngagementServiceGrpc;
-import generated.grpc.candidateengagementservice.NotificationStatus;
-import generated.grpc.candidateengagementservice.SchedulingConfirmation;
-import generated.grpc.candidateengagementservice.SlotSelection;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -24,152 +17,208 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Scanner;
+import generated.grpc.candidateengagementservice.CandidateEngagementServiceGrpc;
+import generated.grpc.candidateengagementservice.SlotSelection;
+import generated.grpc.candidateengagementservice.SlotDeliveryConfirmation;
+import generated.grpc.candidateengagementservice.CandidateSlotChoice;
+import generated.grpc.candidateengagementservice.SchedulingConfirmation;
 
-/**
- * CLIENT-STREAMING METHOD TYPE / INPUT: A stream of interview slots / OUTPUT: A confirmation from the candidate
- *   rpc ConfirmInterviewSlot(stream SlotSelection) returns (SchedulingConfirmation) {}
- *
- * UNARY METHOD TYPE / INPUT: Candidate ID and application status / OUTPUT: Notification status
- * rpc SendStatusUpdate(ApplicationStatus) returns (NotificationStatus)
- *
- */
 public class CandidateEngagementClient {
-
     private static final Logger logger = Logger.getLogger(CandidateEngagementClient.class.getName());
 
-    public static void main(String[] args) throws Exception {
-        String host = "localhost";
-        int port = 50053;
+    private final ManagedChannel channel;
+    private final CandidateEngagementServiceGrpc.CandidateEngagementServiceBlockingStub blockingStub;
+    private final CandidateEngagementServiceGrpc.CandidateEngagementServiceStub asyncStub;
 
-        ManagedChannel channel = ManagedChannelBuilder.
-                forAddress(host, port)
-                .usePlaintext()
+    // Constructor for the client
+    public CandidateEngagementClient(String host, int port) {
+        this.channel = ManagedChannelBuilder.forAddress(host, port)
+                .usePlaintext() // For development only, not secure for production
                 .build();
-
-        try {
-            // Generate JWT token for authentication
-            String jwt = JwtUtil.generateToken("CandidateEngagementClient");
-            logger.info("Generated JWT token for authentication");
-
-            // Create authentication credentials with the token
-            BearerToken token = new BearerToken(jwt);
-
-            // Create a blocking stub for Unary with authentication
-            CandidateEngagementServiceGrpc.CandidateEngagementServiceBlockingStub blockingStub =
-                    CandidateEngagementServiceGrpc.newBlockingStub(channel)
-                    .withCallCredentials(token);
-
-            // Create a stub for Client Streaming with authentication
-            CandidateEngagementServiceGrpc.CandidateEngagementServiceStub asyncStub =
-                    CandidateEngagementServiceGrpc.newStub(channel)
-                    .withCallCredentials(token);
-
-            // Call SendStatusUpdate method
-            sendStatusUpdate(blockingStub);
-
-            // Call ConfirmInterviewSlot method
-            confirmInterviewSlot(asyncStub);
-
-            // Wait for a bit to receive responses
-            Thread.sleep(3000);
-
-        } catch (InterruptedException e) {
-            logger.log(Level.SEVERE, "Client interrupted: " + e.getMessage(), e);
-        } finally {
-            // Shut down the channel after the calls are complete
-            logger.info("Shutting down channel...");
-            channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-            logger.info("Client shutdown complete.");
-        }
+        this.blockingStub = CandidateEngagementServiceGrpc.newBlockingStub(channel);
+        this.asyncStub = CandidateEngagementServiceGrpc.newStub(channel);
     }
 
-    // Method : SendStatusUpdate (Unary call)
-    private static void sendStatusUpdate(CandidateEngagementServiceGrpc.CandidateEngagementServiceBlockingStub blockingStub) {
-        // Build the request with empty values
-        ApplicationStatus statusRequest = ApplicationStatus.newBuilder()
-                .setCandidateId("")
-                .setStatus("")
-                .setMessage("")
-                .build();
-
-        logger.info("Sending status update request...");
-
-        try {
-            // Call the SendStatusUpdate method
-            NotificationStatus response = blockingStub.sendStatusUpdate(statusRequest);
-
-            // Log the response
-            logger.info("Status Update sent. Delivered: " + response.getDelivered());
-            logger.info("Send Time: " + response.getSendtime());
-        } catch (StatusRuntimeException e) {
-            // Log the error and handle gRPC status codes
-            logger.log(Level.SEVERE, "gRPC error calling sendStatusUpdate: " + e.getStatus().getDescription(), e);
-        } catch (Exception e) {
-            // Log any other errors
-            logger.log(Level.SEVERE, "Error calling sendStatusUpdate: " + e.getMessage(), e);
-        }
+    // Shutdown the channel
+    public void shutdown() throws InterruptedException {
+        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
-    // Method: ConfirmInterviewSlot (Client Streaming)
-    private static void confirmInterviewSlot(CandidateEngagementServiceGrpc.CandidateEngagementServiceStub asyncStub) {
+    // Method to send interview slots to a candidate
+    public void sendInterviewSlots(String candidateId, String[] times, String[] locations) {
+        logger.info("Sending interview slots for candidate: " + candidateId);
+
         final CountDownLatch finishLatch = new CountDownLatch(1);
 
-        // Create an observer to send the SlotSelections
-        StreamObserver<SlotSelection> requestObserver = asyncStub.confirmInterviewSlot(new StreamObserver<SchedulingConfirmation>() {
+        // Create a response observer
+        StreamObserver<SlotDeliveryConfirmation> responseObserver = new StreamObserver<SlotDeliveryConfirmation>() {
             @Override
-            public void onNext(SchedulingConfirmation schedulingConfirmation) {
-                // Handle the confirmation received from the server
-                logger.info("Received confirmation: " + schedulingConfirmation.getConfirmed());
+            public void onNext(SlotDeliveryConfirmation confirmation) {
+                logger.info("Received confirmation: slots delivered = " + confirmation.getSlotsDelivered() +
+                        ", delivery time = " + confirmation.getDeliveryTime());
             }
 
             @Override
             public void onError(Throwable t) {
-                // Handle any errors
-                logger.log(Level.SEVERE, "Error during stream: " + t.getMessage(), t);
+                logger.log(Level.WARNING, "Send interview slots failed: {0}", t.getMessage());
                 finishLatch.countDown();
             }
 
             @Override
             public void onCompleted() {
-                // Handle the completion of the stream
-                logger.info("Completed receiving interview slots.");
+                logger.info("Completed sending slots");
+                finishLatch.countDown();
             }
-        });
+        };
+
+        // Get the request observer
+        StreamObserver<SlotSelection> requestObserver = asyncStub.sendInterviewSlots(responseObserver);
 
         try {
-            logger.info("Sending slot selection request...");
+            // Send each slot
+            for (int i = 0; i < times.length && i < locations.length; i++) {
+                SlotSelection slot = SlotSelection.newBuilder()
+                        .setCandidateId(candidateId)
+                        .setSlotTime(times[i])
+                        .setSlotLocation(locations[i])
+                        .build();
 
-            // Send SlotSelection to the server with empty values
-            SlotSelection slot = SlotSelection.newBuilder()
-                    .setCandidateId("")
-                    .setSelectedTime("")
-                    .setSelectedLocation("")
-                    .build();
+                requestObserver.onNext(slot);
+                logger.info("Sent slot: time = " + times[i] + ", location = " + locations[i]);
 
-            // Send slot
-            requestObserver.onNext(slot);
-
-
-            // Simulate checking for invalid input and cancelling the request if needed
-            if (slot.getCandidateId().isEmpty() || slot.getSelectedTime().isEmpty() || slot.getSelectedLocation().isEmpty()) {
-                String errorMessage = "Invalid slot selection: Candidate ID, time, or location is empty. Cancelling request.";
-                logger.warning(errorMessage);
-                requestObserver.onError(new IllegalArgumentException(errorMessage));
-                return;  // Stop further processing if input is invalid
+                // Simulate some processing time
+                Thread.sleep(100);
             }
 
-            // Complete the request stream (no more slots will be sent)
+            // Mark the end of requests
             requestObserver.onCompleted();
 
-            // Wait for the server to complete the stream and respond
+            // Wait for the server to respond
             if (!finishLatch.await(1, TimeUnit.MINUTES)) {
-                logger.severe("confirmInterviewSlot did not finish within 1 minute");
+                logger.warning("sendInterviewSlots timed out");
             }
 
-        } catch (Exception e) {
-            // Log errors in sending the stream and cancel the request
-            logger.log(Level.SEVERE, "Error in confirmInterviewSlot: " + e.getMessage(), e);
-            requestObserver.onError(e);
+        } catch (StatusRuntimeException e) {
+            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+            return;
+        } catch (InterruptedException e) {
+            logger.log(Level.WARNING, "Send interview slots interrupted", e);
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    // Method to submit a candidate's slot choice
+    public void submitSelectedSlot(String candidateId, String chosenTime, String chosenLocation) {
+        logger.info("Submitting selected slot for candidate: " + candidateId);
+
+        CandidateSlotChoice choice = CandidateSlotChoice.newBuilder()
+                .setCandidateId(candidateId)
+                .setChosenTime(chosenTime)
+                .setChosenLocation(chosenLocation)
+                .build();
+
+        try {
+            SchedulingConfirmation confirmation = blockingStub.submitSelectedSlot(choice);
+            logger.info("Received confirmation: confirmed = " + confirmation.getConfirmed() +
+                    ", confirmation time = " + confirmation.getConfirmationTime());
+        } catch (StatusRuntimeException e) {
+            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+            return;
+        }
+    }
+
+    // Main method with an interactive example
+    public static void main(String[] args) throws InterruptedException {
+        String host = "localhost";
+        int port = 50051;
+
+        // Allow command-line args to override the defaults
+        if (args.length > 0) {
+            host = args[0];
+        }
+        if (args.length > 1) {
+            port = Integer.parseInt(args[1]);
+        }
+
+        // Create a client
+        CandidateEngagementClient client = new CandidateEngagementClient(host, port);
+
+        try {
+            // Interactive mode for testing
+            Scanner scanner = new Scanner(System.in);
+            boolean exit = false;
+
+            while (!exit) {
+                System.out.println("\nCandidate Engagement Client");
+                System.out.println("1. Send Interview Slots");
+                System.out.println("2. Submit Selected Slot");
+                System.out.println("3. Exit");
+                System.out.print("Enter your choice (1-3): ");
+
+                int choice = 0;
+                try {
+                    choice = Integer.parseInt(scanner.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("Please enter a valid number.");
+                    continue;
+                }
+
+                switch (choice) {
+                    case 1:
+                        // Send interview slots
+                        System.out.print("Enter candidate ID: ");
+                        String candidateId = scanner.nextLine();
+
+                        System.out.print("How many slots do you want to send? ");
+                        int numSlots = 0;
+                        try {
+                            numSlots = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println("Please enter a valid number.");
+                            continue;
+                        }
+
+                        String[] times = new String[numSlots];
+                        String[] locations = new String[numSlots];
+
+                        for (int i = 0; i < numSlots; i++) {
+                            System.out.print("Enter time for slot " + (i+1) + " (e.g., 2025-04-21 10:00): ");
+                            times[i] = scanner.nextLine();
+
+                            System.out.print("Enter location for slot " + (i+1) + " (e.g., Room A): ");
+                            locations[i] = scanner.nextLine();
+                        }
+
+                        client.sendInterviewSlots(candidateId, times, locations);
+                        break;
+
+                    case 2:
+                        // Submit selected slot
+                        System.out.print("Enter candidate ID: ");
+                        String candId = scanner.nextLine();
+
+                        System.out.print("Enter chosen time: ");
+                        String chosenTime = scanner.nextLine();
+
+                        System.out.print("Enter chosen location: ");
+                        String chosenLocation = scanner.nextLine();
+
+                        client.submitSelectedSlot(candId, chosenTime, chosenLocation);
+                        break;
+
+                    case 3:
+                        exit = true;
+                        break;
+
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                }
+            }
+
+        } finally {
+            // Make sure to shutdown the client
+            client.shutdown();
         }
     }
 }

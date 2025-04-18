@@ -6,10 +6,10 @@ package distsys.smart_recruitment;
 
 import distsys.smart_recruitment.auth.AuthorizationServerInterceptor;
 import distsys.smart_recruitment.auth.Constants;
-import generated.grpc.candidateengagementservice.ApplicationStatus;
 import generated.grpc.candidateengagementservice.CandidateEngagementServiceGrpc;
-import generated.grpc.candidateengagementservice.NotificationStatus;
+import generated.grpc.candidateengagementservice.CandidateSlotChoice;
 import generated.grpc.candidateengagementservice.SchedulingConfirmation;
+import generated.grpc.candidateengagementservice.SlotDeliveryConfirmation;
 import generated.grpc.candidateengagementservice.SlotSelection;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  *
@@ -48,22 +51,26 @@ public class CandidateEngagementServer extends CandidateEngagementServiceGrpc.Ca
     }
 
     // CLIENT-STREAMING METHOD TYPE
-    // rpc ConfirmInterviewSlot(stream SlotSelection) returns (SchedulingConfirmation) {}
+    // rpc SendInterviewSlots(stream SlotSelection) returns (SlotDeliveryConfirmation) {}
     @Override
-    public StreamObserver<SlotSelection> confirmInterviewSlot(StreamObserver<SchedulingConfirmation> responseObserver){
+    public StreamObserver<SlotSelection> sendInterviewSlots(StreamObserver<SlotDeliveryConfirmation> responseObserver){
         // Get the authenticated client ID
         String clientId = Constants.CLIENT_ID_CONTEXT_KEY.get();
-        logger.info("Processing interview slot confirmation from client: " + clientId);
+        logger.info("Processing interview slots from client: " + clientId);
 
         return new StreamObserver<SlotSelection>(){
 
             // Create a list to store all SlotSelection objects from the stream
             List<SlotSelection> slotSelections = new ArrayList<>();
+            String candidateId = "";
 
             @Override
             public void onNext(SlotSelection slotSelection){
                 slotSelections.add(slotSelection);
-                logger.info("Received SlotSelection for candidate: " + slotSelection.getCandidateId() + " time: " + slotSelection.getSelectedTime()+ " Location: " + slotSelection.getSelectedLocation());
+                candidateId = slotSelection.getCandidateId();
+                logger.info("Received SlotSelection for candidate: " + slotSelection.getCandidateId() +
+                           " time: " + slotSelection.getSlotTime() +
+                           " Location: " + slotSelection.getSlotLocation());
             }
 
             @Override
@@ -73,12 +80,22 @@ public class CandidateEngagementServer extends CandidateEngagementServiceGrpc.Ca
             }
 
             @Override
-            // once done collected stream slotSelection
+            // once done collecting stream slotSelection
             public void onCompleted(){
-                // Create the SchedulingConfirmation object based on the collected data
-                SchedulingConfirmation confirmation = SchedulingConfirmation.newBuilder()
-                        .setConfirmed(true) // = slot confirmed
+                // Generate timestamp and message ID
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String timestamp = sdf.format(new Date());
+                String messageId = UUID.randomUUID().toString();
+
+                // Create the SlotDeliveryConfirmation object based on the collected data
+                SlotDeliveryConfirmation confirmation = SlotDeliveryConfirmation.newBuilder()
+                        .setSlotsDelivered(true)
+                        .setDeliveryTime(timestamp)
                         .build();
+
+                logger.info("Sending slots delivery confirmation for candidate: " +
+                           (candidateId.isEmpty() ? "unknown" : candidateId) +
+                           ", total slots: " + slotSelections.size());
 
                 // Send back the response to client
                 responseObserver.onNext(confirmation);
@@ -88,27 +105,33 @@ public class CandidateEngagementServer extends CandidateEngagementServiceGrpc.Ca
     }
 
     // UNARY METHOD TYPE
-    // rpc SendStatusUpdate(ApplicationStatus) returns (NotificationStatus) {}
+    // rpc SubmitSelectedSlot(CandidateSlotChoice) returns (SchedulingConfirmation) {}
     @Override
-    public void sendStatusUpdate(ApplicationStatus request, StreamObserver<NotificationStatus> responseObserver){
+    public void submitSelectedSlot(CandidateSlotChoice request, StreamObserver<SchedulingConfirmation> responseObserver){
         // Get the authenticated client ID
         String clientId = Constants.CLIENT_ID_CONTEXT_KEY.get();
-        logger.info("Processing status update from client: " + clientId);
+        logger.info("Processing slot selection from client: " + clientId);
 
         String candidateId = request.getCandidateId();
-        String status = request.getStatus();
-        String message = request.getMessage();
+        String chosenTime = request.getChosenTime();
+        String chosenLocation = request.getChosenLocation();
 
-        logger.info("Received status update for candidate " + candidateId + ": " + status + " - " + message);
+        logger.info("Received slot selection from candidate " + candidateId +
+                   ": time = " + chosenTime +
+                   ", location = " + chosenLocation);
 
-        // Create notificationStatus response
-        NotificationStatus notificationStatus = NotificationStatus.newBuilder()
-                .setDelivered(true)
-                .setSendtime("")
+        // Generate timestamp for confirmation
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String timestamp = sdf.format(new Date());
+
+        // Create scheduling confirmation response
+        SchedulingConfirmation schedulingConfirmation = SchedulingConfirmation.newBuilder()
+                .setConfirmed(true)
+                .setConfirmationTime(timestamp)
                 .build();
 
         // send back the response to client
-        responseObserver.onNext(notificationStatus);
+        responseObserver.onNext(schedulingConfirmation);
         responseObserver.onCompleted();
     }
 }

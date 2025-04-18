@@ -102,7 +102,6 @@
                               <Component id="QualifiedCandidateListButton" min="-2" pref="192" max="-2" attributes="0"/>
                               <Component id="ScoringCandidateResumeButton" min="-2" pref="192" max="-2" attributes="0"/>
                               <Component id="SchedulingInterviewSlotButton" alignment="0" min="-2" pref="192" max="-2" attributes="0"/>
-                              <Component id="ConfirmingInterviewSlotButton" alignment="0" min="-2" pref="192" max="-2" attributes="0"/>
                               <Component id="ApplicationStatusUpdateButton" alignment="0" min="-2" pref="192" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -126,9 +125,7 @@
                   <Component id="QualifiedCandidateListButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="SchedulingInterviewSlotButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="ConfirmingInterviewSlotButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                   <Component id="ApplicationStatusUpdateButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace pref="46" max="32767" attributes="0"/>
               </Group>
@@ -164,14 +161,6 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SchedulingInterviewSlotButtonActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="ConfirmingInterviewSlotButton">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Confirming Interview Slot"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ConfirmingInterviewSlotButtonActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="ApplicationStatusUpdateButton">

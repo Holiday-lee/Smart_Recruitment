@@ -5,7 +5,7 @@ package generated.grpc.candidateengagementservice;
 
 /**
  * <pre>
- * Message defining a interview slot to pick.
+ * Message defining interview slots to send to a candidate
  * </pre>
  *
  * Protobuf type {@code CandidateEngagementService.SlotSelection}
@@ -21,8 +21,8 @@ private static final long serialVersionUID = 0L;
   }
   private SlotSelection() {
     candidateId_ = "";
-    selectedTime_ = "";
-    selectedLocation_ = "";
+    slotTime_ = "";
+    slotLocation_ = "";
   }
 
   @java.lang.Override
@@ -58,13 +58,13 @@ private static final long serialVersionUID = 0L;
           case 18: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            selectedTime_ = s;
+            slotTime_ = s;
             break;
           }
           case 26: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            selectedLocation_ = s;
+            slotLocation_ = s;
             break;
           }
           default: {
@@ -133,68 +133,68 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int SELECTED_TIME_FIELD_NUMBER = 2;
-  private volatile java.lang.Object selectedTime_;
+  public static final int SLOT_TIME_FIELD_NUMBER = 2;
+  private volatile java.lang.Object slotTime_;
   /**
-   * <code>string selected_time = 2;</code>
+   * <code>string slot_time = 2;</code>
    */
-  public java.lang.String getSelectedTime() {
-    java.lang.Object ref = selectedTime_;
+  public java.lang.String getSlotTime() {
+    java.lang.Object ref = slotTime_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      selectedTime_ = s;
+      slotTime_ = s;
       return s;
     }
   }
   /**
-   * <code>string selected_time = 2;</code>
+   * <code>string slot_time = 2;</code>
    */
   public com.google.protobuf.ByteString
-      getSelectedTimeBytes() {
-    java.lang.Object ref = selectedTime_;
+      getSlotTimeBytes() {
+    java.lang.Object ref = slotTime_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      selectedTime_ = b;
+      slotTime_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
     }
   }
 
-  public static final int SELECTED_LOCATION_FIELD_NUMBER = 3;
-  private volatile java.lang.Object selectedLocation_;
+  public static final int SLOT_LOCATION_FIELD_NUMBER = 3;
+  private volatile java.lang.Object slotLocation_;
   /**
-   * <code>string selected_location = 3;</code>
+   * <code>string slot_location = 3;</code>
    */
-  public java.lang.String getSelectedLocation() {
-    java.lang.Object ref = selectedLocation_;
+  public java.lang.String getSlotLocation() {
+    java.lang.Object ref = slotLocation_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      selectedLocation_ = s;
+      slotLocation_ = s;
       return s;
     }
   }
   /**
-   * <code>string selected_location = 3;</code>
+   * <code>string slot_location = 3;</code>
    */
   public com.google.protobuf.ByteString
-      getSelectedLocationBytes() {
-    java.lang.Object ref = selectedLocation_;
+      getSlotLocationBytes() {
+    java.lang.Object ref = slotLocation_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      selectedLocation_ = b;
+      slotLocation_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -218,11 +218,11 @@ private static final long serialVersionUID = 0L;
     if (!getCandidateIdBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, candidateId_);
     }
-    if (!getSelectedTimeBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, selectedTime_);
+    if (!getSlotTimeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, slotTime_);
     }
-    if (!getSelectedLocationBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, selectedLocation_);
+    if (!getSlotLocationBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, slotLocation_);
     }
     unknownFields.writeTo(output);
   }
@@ -236,11 +236,11 @@ private static final long serialVersionUID = 0L;
     if (!getCandidateIdBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, candidateId_);
     }
-    if (!getSelectedTimeBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, selectedTime_);
+    if (!getSlotTimeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, slotTime_);
     }
-    if (!getSelectedLocationBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, selectedLocation_);
+    if (!getSlotLocationBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, slotLocation_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -260,10 +260,10 @@ private static final long serialVersionUID = 0L;
     boolean result = true;
     result = result && getCandidateId()
         .equals(other.getCandidateId());
-    result = result && getSelectedTime()
-        .equals(other.getSelectedTime());
-    result = result && getSelectedLocation()
-        .equals(other.getSelectedLocation());
+    result = result && getSlotTime()
+        .equals(other.getSlotTime());
+    result = result && getSlotLocation()
+        .equals(other.getSlotLocation());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -277,10 +277,10 @@ private static final long serialVersionUID = 0L;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + CANDIDATE_ID_FIELD_NUMBER;
     hash = (53 * hash) + getCandidateId().hashCode();
-    hash = (37 * hash) + SELECTED_TIME_FIELD_NUMBER;
-    hash = (53 * hash) + getSelectedTime().hashCode();
-    hash = (37 * hash) + SELECTED_LOCATION_FIELD_NUMBER;
-    hash = (53 * hash) + getSelectedLocation().hashCode();
+    hash = (37 * hash) + SLOT_TIME_FIELD_NUMBER;
+    hash = (53 * hash) + getSlotTime().hashCode();
+    hash = (37 * hash) + SLOT_LOCATION_FIELD_NUMBER;
+    hash = (53 * hash) + getSlotLocation().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -378,7 +378,7 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
-   * Message defining a interview slot to pick.
+   * Message defining interview slots to send to a candidate
    * </pre>
    *
    * Protobuf type {@code CandidateEngagementService.SlotSelection}
@@ -420,9 +420,9 @@ private static final long serialVersionUID = 0L;
       super.clear();
       candidateId_ = "";
 
-      selectedTime_ = "";
+      slotTime_ = "";
 
-      selectedLocation_ = "";
+      slotLocation_ = "";
 
       return this;
     }
@@ -451,8 +451,8 @@ private static final long serialVersionUID = 0L;
     public generated.grpc.candidateengagementservice.SlotSelection buildPartial() {
       generated.grpc.candidateengagementservice.SlotSelection result = new generated.grpc.candidateengagementservice.SlotSelection(this);
       result.candidateId_ = candidateId_;
-      result.selectedTime_ = selectedTime_;
-      result.selectedLocation_ = selectedLocation_;
+      result.slotTime_ = slotTime_;
+      result.slotLocation_ = slotLocation_;
       onBuilt();
       return result;
     }
@@ -505,12 +505,12 @@ private static final long serialVersionUID = 0L;
         candidateId_ = other.candidateId_;
         onChanged();
       }
-      if (!other.getSelectedTime().isEmpty()) {
-        selectedTime_ = other.selectedTime_;
+      if (!other.getSlotTime().isEmpty()) {
+        slotTime_ = other.slotTime_;
         onChanged();
       }
-      if (!other.getSelectedLocation().isEmpty()) {
-        selectedLocation_ = other.selectedLocation_;
+      if (!other.getSlotLocation().isEmpty()) {
+        slotLocation_ = other.slotLocation_;
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -611,140 +611,140 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object selectedTime_ = "";
+    private java.lang.Object slotTime_ = "";
     /**
-     * <code>string selected_time = 2;</code>
+     * <code>string slot_time = 2;</code>
      */
-    public java.lang.String getSelectedTime() {
-      java.lang.Object ref = selectedTime_;
+    public java.lang.String getSlotTime() {
+      java.lang.Object ref = slotTime_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        selectedTime_ = s;
+        slotTime_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string selected_time = 2;</code>
+     * <code>string slot_time = 2;</code>
      */
     public com.google.protobuf.ByteString
-        getSelectedTimeBytes() {
-      java.lang.Object ref = selectedTime_;
+        getSlotTimeBytes() {
+      java.lang.Object ref = slotTime_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        selectedTime_ = b;
+        slotTime_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string selected_time = 2;</code>
+     * <code>string slot_time = 2;</code>
      */
-    public Builder setSelectedTime(
+    public Builder setSlotTime(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      selectedTime_ = value;
+      slotTime_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string selected_time = 2;</code>
+     * <code>string slot_time = 2;</code>
      */
-    public Builder clearSelectedTime() {
+    public Builder clearSlotTime() {
       
-      selectedTime_ = getDefaultInstance().getSelectedTime();
+      slotTime_ = getDefaultInstance().getSlotTime();
       onChanged();
       return this;
     }
     /**
-     * <code>string selected_time = 2;</code>
+     * <code>string slot_time = 2;</code>
      */
-    public Builder setSelectedTimeBytes(
+    public Builder setSlotTimeBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      selectedTime_ = value;
+      slotTime_ = value;
       onChanged();
       return this;
     }
 
-    private java.lang.Object selectedLocation_ = "";
+    private java.lang.Object slotLocation_ = "";
     /**
-     * <code>string selected_location = 3;</code>
+     * <code>string slot_location = 3;</code>
      */
-    public java.lang.String getSelectedLocation() {
-      java.lang.Object ref = selectedLocation_;
+    public java.lang.String getSlotLocation() {
+      java.lang.Object ref = slotLocation_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        selectedLocation_ = s;
+        slotLocation_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string selected_location = 3;</code>
+     * <code>string slot_location = 3;</code>
      */
     public com.google.protobuf.ByteString
-        getSelectedLocationBytes() {
-      java.lang.Object ref = selectedLocation_;
+        getSlotLocationBytes() {
+      java.lang.Object ref = slotLocation_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        selectedLocation_ = b;
+        slotLocation_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string selected_location = 3;</code>
+     * <code>string slot_location = 3;</code>
      */
-    public Builder setSelectedLocation(
+    public Builder setSlotLocation(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      selectedLocation_ = value;
+      slotLocation_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string selected_location = 3;</code>
+     * <code>string slot_location = 3;</code>
      */
-    public Builder clearSelectedLocation() {
+    public Builder clearSlotLocation() {
       
-      selectedLocation_ = getDefaultInstance().getSelectedLocation();
+      slotLocation_ = getDefaultInstance().getSlotLocation();
       onChanged();
       return this;
     }
     /**
-     * <code>string selected_location = 3;</code>
+     * <code>string slot_location = 3;</code>
      */
-    public Builder setSelectedLocationBytes(
+    public Builder setSlotLocationBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      selectedLocation_ = value;
+      slotLocation_ = value;
       onChanged();
       return this;
     }

@@ -40,7 +40,6 @@ public class Main extends javax.swing.JFrame {
         ScoringCandidateResumeButton = new javax.swing.JButton();
         QualifiedCandidateListButton = new javax.swing.JButton();
         SchedulingInterviewSlotButton = new javax.swing.JButton();
-        ConfirmingInterviewSlotButton = new javax.swing.JButton();
         ApplicationStatusUpdateButton = new javax.swing.JButton();
 
         jMenuItem1.setText("jMenuItem1");
@@ -90,13 +89,6 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        ConfirmingInterviewSlotButton.setText("Confirming Interview Slot");
-        ConfirmingInterviewSlotButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ConfirmingInterviewSlotButtonActionPerformed(evt);
-            }
-        });
-
         ApplicationStatusUpdateButton.setText("Application Status Update");
         ApplicationStatusUpdateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,7 +108,6 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(QualifiedCandidateListButton, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(ScoringCandidateResumeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(SchedulingInterviewSlotButton, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ConfirmingInterviewSlotButton, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(ApplicationStatusUpdateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(81, 81, 81)
@@ -134,9 +125,7 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(QualifiedCandidateListButton)
                 .addGap(18, 18, 18)
                 .addComponent(SchedulingInterviewSlotButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(ConfirmingInterviewSlotButton)
-                .addGap(18, 18, 18)
+                .addGap(53, 53, 53)
                 .addComponent(ApplicationStatusUpdateButton)
                 .addContainerGap(46, Short.MAX_VALUE))
         );
@@ -171,11 +160,12 @@ public class Main extends javax.swing.JFrame {
         this.setVisible(false);
     }                                                             
 
-    private void ConfirmingInterviewSlotButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    /*private void ConfirmingInterviewSlotButtonActionPerformed(java.awt.event.ActionEvent evt) {
 	ConfirmSlotForm form = new ConfirmSlotForm(this); // based on the name of my forms
 	form.setVisible(true);
 	this.setVisible(false);
-    }                                                             
+    }  
+    */
 
 
 
@@ -218,7 +208,6 @@ public class Main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ApplicationStatusUpdateButton;
-    private javax.swing.JButton ConfirmingInterviewSlotButton;
     private javax.swing.JButton QualifiedCandidateListButton;
     private javax.swing.JButton SchedulingInterviewSlotButton;
     private javax.swing.JButton ScoringCandidateResumeButton;
