@@ -27,7 +27,7 @@ public class InterviewSchedulingClient {
 
     public static void main(String[] args) throws Exception {
         String host = "localhost";
-        int port = 50052;
+        int port = 50054;
 
         ManagedChannel channel = ManagedChannelBuilder.
                 forAddress(host, port)

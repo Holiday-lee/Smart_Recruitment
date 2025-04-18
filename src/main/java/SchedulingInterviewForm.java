@@ -65,7 +65,7 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
     private void setupGrpcConnection() {
         try {
             // Connect to the gRPC service
-            channel = ManagedChannelBuilder.forAddress("localhost", 50052)
+            channel = ManagedChannelBuilder.forAddress("localhost", 50054)
                     .usePlaintext()
                     .build();
 

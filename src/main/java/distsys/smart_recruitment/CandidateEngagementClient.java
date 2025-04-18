@@ -194,7 +194,7 @@ public class CandidateEngagementClient {
     // Main method with an interactive example
     public static void main(String[] args) throws InterruptedException {
         String host = "localhost";
-        int port = 50051;
+        int port = 50053;
 
         // Allow command-line args to override the defaults
         if (args.length > 0) {

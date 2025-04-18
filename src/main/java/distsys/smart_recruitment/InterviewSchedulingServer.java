@@ -35,7 +35,7 @@ public class InterviewSchedulingServer extends InterviewSchedulingServiceGrpc.In
     public static void main(String[] args) {
         InterviewSchedulingServer interviewSchedulingServer = new InterviewSchedulingServer();
 
-        int port = 50052;
+        int port = 50054;
 
         try {
             Server server = ServerBuilder.forPort(port)
