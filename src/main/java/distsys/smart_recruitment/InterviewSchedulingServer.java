@@ -95,7 +95,7 @@ public class InterviewSchedulingServer extends InterviewSchedulingServiceGrpc.In
         };
     }
     
-    // Generate a list of interview slots for a candidate
+    // create a list of interview slots for a candidate
     private List<InterviewSlot> generateInterviewSlots(String candidateName) {
         List<InterviewSlot> slots = new ArrayList<>();
         

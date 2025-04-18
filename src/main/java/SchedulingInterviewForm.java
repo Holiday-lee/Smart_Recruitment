@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 import distsys.smart_recruitment.auth.BearerToken;
 import distsys.smart_recruitment.auth.JwtUtil;
+import java.util.HashMap;
 import java.util.Map;
 
 /*
@@ -121,153 +122,191 @@ public class SchedulingInterviewForm extends javax.swing.JFrame {
                           "Alex Johnson\n");
     }
 
-    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        String candidateInput = textArea1.getText().trim();
+private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    String candidateInput = textArea1.getText().trim();
 
-        if (candidateInput.isEmpty()) {
+    if (candidateInput.isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+            "Please enter candidate names first.",
+            "Empty Input",
+            JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    if (asyncStub == null) {
+        JOptionPane.showMessageDialog(this,
+            "Not connected to the server. Attempting to reconnect...",
+            "Connection Issue",
+            JOptionPane.WARNING_MESSAGE);
+
+        setupGrpcConnection();
+
+        if (asyncStub == null) {
             JOptionPane.showMessageDialog(this,
-                "Please enter candidate names first.",
-                "Empty Input",
+                "Cannot connect to the server. Please make sure the InterviewSchedulingServer is running.",
+                "Connection Error",
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    }
+
+    try {
+        // Clear previous results
+        textArea2.setText("Requesting interview slots...");
+
+        // Parse the input to get candidate names
+        List<String> candidateNames = extractCandidateNames(candidateInput);
+
+        if (candidateNames.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                "No valid candidate names found. Please enter at least one candidate.",
+                "No Candidates",
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        if (asyncStub == null) {
-            JOptionPane.showMessageDialog(this,
-                "Not connected to the server. Attempting to reconnect...",
-                "Connection Issue",
-                JOptionPane.WARNING_MESSAGE);
+        // For counting when the stream is completed
+        final CountDownLatch finishLatch = new CountDownLatch(1);
 
-            setupGrpcConnection();
+        // StringBuilder to collect all slots
+        final StringBuilder slotsBuilder = new StringBuilder();
+        slotsBuilder.append("INTERVIEW SLOTS:\n\n");
 
-            if (asyncStub == null) {
-                JOptionPane.showMessageDialog(this,
-                    "Cannot connect to the server. Please make sure the InterviewSchedulingServer is running.",
-                    "Connection Error",
-                    JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        }
+        // Create a stream observer to handle the response(interviewSlot) stream
+        StreamObserver<InterviewSlot> responseObserver = new StreamObserver<InterviewSlot>() {
+            private int slotCount = 0;
+            private final Map<String, List<String>> candidateSlots = new HashMap<>();
+            private String lastCandidate = null;
+            private int candidateIndex = 0;
 
-        try {
-            // Clear previous results
-            textArea2.setText("Requesting interview slots...");
+            @Override
+            public void onNext(InterviewSlot slot) {
+                // Add the slot to our display
+                slotCount++;
 
-            // Parse the input to get candidate names
-            List<String> candidateNames = extractCandidateNames(candidateInput);
+                // Determine which candidate this slot belongs to
+                // We need to track which candidate we're processing
+                if (candidateIndex < candidateNames.size()) {
+                    String candidateName = candidateNames.get(candidateIndex);
 
-            if (candidateNames.isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                    "No valid candidate names found. Please enter at least one candidate.",
-                    "No Candidates",
-                    JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+                    // Get or create the list for this candidate
+                    List<String> slots = candidateSlots.computeIfAbsent(
+                        candidateName, k -> new ArrayList<>());
 
-            // For counting when the stream is completed
-            final CountDownLatch finishLatch = new CountDownLatch(1);
+                    // Add slot info to this candidate's list
+                    String slotInfo = "Time: " + slot.getTime() +
+                                      ", Location: " + slot.getLocation();
+                    slots.add(slotInfo);
 
-            // StringBuilder to collect all slots
-            final StringBuilder slotsBuilder = new StringBuilder();
-            slotsBuilder.append("INTERVIEW SLOTS:\n\n");
-
-            // Create a stream observer to handle the response(interviewSlot) stream
-            StreamObserver<InterviewSlot> responseObserver = new StreamObserver<InterviewSlot>() {
-                private int slotCount = 0;
-                private String currentCandidate = "";
-
-                @Override
-                public void onNext(InterviewSlot slot) {
-                    // Add the slot to our display
-                    slotCount++;
-
-                    // Add candidate name header if we have a new candidate
-                    if (!currentCandidate.equals(candidateNames.get((slotCount-1) / 3))) {
-                        currentCandidate = candidateNames.get((slotCount-1) / 3);
-                        slotsBuilder.append("\nFor candidate: ").append(currentCandidate).append("\n");
+                    // If we've received 3 slots for this candidate, move to the next one
+                    // Note: The server sends 3-5 slots per candidate, but we'll use 3 as our threshold
+                    // to move to the next candidate for simplicity
+                    if (slots.size() >= 3) {
+                        candidateIndex++;
                     }
 
-                    slotsBuilder.append("Time: ").append(slot.getTime())
-                               .append(", Location: ").append(slot.getLocation())
-                               .append("\n");
-
-                    System.out.println("Received slot: " + slot.getTime() + " at " + slot.getLocation());
+                    System.out.println("Received slot: " + slot.getTime() + " at " + slot.getLocation() +
+                                      " for candidate: " + candidateName);
 
                     // Update the UI as slots arrive
-                    textArea2.setText(slotsBuilder.toString());
+                    updateSlotDisplay();
                 }
+            }
 
-                @Override
-                public void onError(Throwable t) {
-                    System.err.println("Error receiving interview slots: " + t.getMessage());
-                    slotsBuilder.append("\nError: ").append(t.getMessage());
-                    textArea2.setText(slotsBuilder.toString());
-                    finishLatch.countDown();
-                }
+            private void updateSlotDisplay() {
+                StringBuilder display = new StringBuilder("INTERVIEW SLOTS:\n\n");
 
-                @Override
-                public void onCompleted() {
-                    System.out.println("Completed receiving interview slots.");
-
-                    if (slotCount == 0) {
-                        slotsBuilder.append("No interview slots received from server.");
-                    } else {
-                        slotsBuilder.append("\nTotal slots received: ").append(slotCount);
-                        slotsBuilder.append("\n\nPlease note these slots for confirmation in the next step.");
+                // Build the display text with all candidates and their slots
+                for (String candidateName : candidateNames) {
+                    List<String> slots = candidateSlots.get(candidateName);
+                    if (slots != null && !slots.isEmpty()) {
+                        display.append("\nFor candidate: ").append(candidateName).append("\n");
+                        for (String slotInfo : slots) {
+                            display.append(slotInfo).append("\n");
+                        }
                     }
-
-                    // Update the UI on the EDT
-                    javax.swing.SwingUtilities.invokeLater(() -> {
-                        textArea2.setText(slotsBuilder.toString());
-                    });
-
-                    finishLatch.countDown();
-                }
-            };
-
-            // Start the bidirectional streaming
-            StreamObserver<CandidateName> requestObserver = asyncStub.arrangeInterviewSlot(responseObserver);
-
-            // Send each candidate as a separate request
-            for (String name : candidateNames) {
-                // Skip empty lines
-                if (name.trim().isEmpty()) {
-                    continue;
                 }
 
-                // Send the candidate name
-                CandidateName candidateNameProto = CandidateName.newBuilder()
-                        .setCandidateName(name)
-                        .build();
-
-                requestObserver.onNext(candidateNameProto);
-                System.out.println("Sent candidate: " + name);
-
-                // Add a small delay between candidates to prevent overwhelming the server
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+                // Update the UI on the EDT
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    textArea2.setText(display.toString());
+                });
             }
 
-            // Mark the end of requests
-            requestObserver.onCompleted();
-            System.out.println("Done sending candidates");
-
-            // Wait for the response to complete
-            if (!finishLatch.await(1, TimeUnit.MINUTES)) {
-                textArea2.setText(textArea2.getText() + "\n\nTimed out waiting for server response");
+            @Override
+            public void onError(Throwable t) {
+                System.err.println("Error receiving interview slots: " + t.getMessage());
+                slotsBuilder.append("\nError: ").append(t.getMessage());
+                textArea2.setText(slotsBuilder.toString());
+                finishLatch.countDown();
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this,
-                "Error scheduling interviews: " + e.getMessage(),
-                "Service Error",
-                JOptionPane.ERROR_MESSAGE);
+            @Override
+            public void onCompleted() {
+                System.out.println("Completed receiving interview slots.");
+
+                if (slotCount == 0) {
+                    slotsBuilder.append("No interview slots received from server.");
+                } else {
+                    updateSlotDisplay();
+                    slotsBuilder.append("\nTotal slots received: ").append(slotCount);
+                    slotsBuilder.append("\n\nPlease note these slots for confirmation in the next step.");
+                }
+
+                // Update the UI on the EDT
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    textArea2.setText(textArea2.getText() +
+                                     "\n\nTotal slots received: " + slotCount);
+                });
+
+                finishLatch.countDown();
+            }
+        };
+
+        // Start the bidirectional streaming
+        StreamObserver<CandidateName> requestObserver = asyncStub.arrangeInterviewSlot(responseObserver);
+
+        // Send each candidate as a separate request
+        for (String name : candidateNames) {
+            // Skip empty lines
+            if (name.trim().isEmpty()) {
+                continue;
+            }
+
+            // Send the candidate name
+            CandidateName candidateNameProto = CandidateName.newBuilder()
+                    .setCandidateName(name)
+                    .build();
+
+            requestObserver.onNext(candidateNameProto);
+            System.out.println("Sent candidate: " + name);
+
+            // Add a small delay between candidates to prevent overwhelming the server
+            try {
+                Thread.sleep(200);  // Increased from 100 to 200
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
+
+        // Mark the end of requests
+        requestObserver.onCompleted();
+        System.out.println("Done sending candidates");
+
+        // Wait for the response to complete - increased timeout
+        if (!finishLatch.await(2, TimeUnit.MINUTES)) {
+            textArea2.setText(textArea2.getText() + "\n\nTimed out waiting for server response");
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this,
+            "Error scheduling interviews: " + e.getMessage(),
+            "Service Error",
+            JOptionPane.ERROR_MESSAGE);
     }
+}
+
 
     // Extract candidate names from the text input
     private List<String> extractCandidateNames(String input) {
