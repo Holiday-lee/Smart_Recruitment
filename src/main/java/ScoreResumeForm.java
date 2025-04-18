@@ -22,7 +22,7 @@ import distsys.smart_recruitment.auth.JwtUtil; // for authorise problem
  */
 public class ScoreResumeForm extends javax.swing.JFrame {
 
-    // to store the candidate & resume score result - static to be accessible from other forms
+    // store the candidate & resume score result. Static so that it can be accessible from other forms
     private static Map<String, ResumeScore> scoredResumes = new HashMap<>();
     private static Map<String, CandidateResume> candidateResumes = new HashMap<>();
 
@@ -30,9 +30,7 @@ public class ScoreResumeForm extends javax.swing.JFrame {
     private CandidateFilteringServiceGrpc.CandidateFilteringServiceBlockingStub blockingStub;
     private Main mainMenu; // variable links to mainMenu
 
-    /**
-     * Creates new form ScoreResumeForm
-     */
+	// constructor for ScoreResumeForm
     public ScoreResumeForm(Main mainMenu) {
         initComponents();
         this.mainMenu = mainMenu; // link the backToMenu to main menu
@@ -47,37 +45,37 @@ public class ScoreResumeForm extends javax.swing.JFrame {
         addEventListeners();
     }
 
-    // To set up the gRPC service with improved error handling
+    // set up the gRPC service with improved error handling
     private void setupGrpcConnection() {
         try {
-            // Connect to your gRPC service
+            // connect to your gRPC service
             channel = ManagedChannelBuilder.forAddress("localhost", 50051)
                     .usePlaintext()
                     .build();
 
-            // Generate JWT token for authentication
+            // generate JWT token for authentication
             String jwt = JwtUtil.generateToken("CandidateFilteringClient");
             System.out.println("Generated JWT token for authentication");
 
-            // Create authentication credentials with the token
+            // Create authentication credentials token
             BearerToken token = new BearerToken(jwt);
 
-            // Add authentication to the stub
+            // add authentication to the stub
             blockingStub = CandidateFilteringServiceGrpc.newBlockingStub(channel)
                     .withCallCredentials(token);
 
             System.out.println("Successfully connected to gRPC service");
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Error setting up gRPC connection: " + e.getMessage());
+            System.err.println("Error to set up gRPC connection: " + e.getMessage());
             javax.swing.JOptionPane.showMessageDialog(this,
-                "Error connecting to gRPC service: " + e.getMessage() + "\n\nPlease make sure the server is running.",
+                "Error connect to gRPC service: " + e.getMessage() + "\n\nPlease make sure the server is running.",
                 "Connection Error",
                 javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    // Add event listeners to buttons
+    // add event listeners to buttons
     private void addEventListeners() {
         // Submit new request button
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -86,7 +84,7 @@ public class ScoreResumeForm extends javax.swing.JFrame {
             }
         });
 
-        // Back to menu button
+        // back to menu button
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backToMenuButtonActionPerformed(evt);
@@ -174,7 +172,7 @@ public class ScoreResumeForm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 584, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jButton2)
@@ -208,29 +206,30 @@ public class ScoreResumeForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    // Submit button with improved error handling
+    // Submit button implementation to trigger the service.
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // get resume text from text area
+        // store resume text from text area into a resumeText variable
         String resumeText = textArea1.getText().trim();
 
         if (resumeText.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                "Please paste resume content first.",
-                "Empty Content",
+                "The content is empty",
+                "Please paste resume content.",
+
                 javax.swing.JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // Check if blockingStub is null and try to reconnect
+        // check if blockingStub is null and try to reconnect
         if (blockingStub == null) {
             javax.swing.JOptionPane.showMessageDialog(this,
                 "Not connected to the server. Attempting to reconnect...",
-                "Connection Issue",
+                "Connection Error",
                 javax.swing.JOptionPane.WARNING_MESSAGE);
 
             setupGrpcConnection();
 
-            // Check if reconnection was successful
+            // check if reconnection is successful or not
             if (blockingStub == null) {
                 javax.swing.JOptionPane.showMessageDialog(this,
                     "Cannot connect to the server. Please make sure the CandidateFilteringServer is running.",
@@ -241,7 +240,7 @@ public class ScoreResumeForm extends javax.swing.JFrame {
         }
 
         try {
-            // extract information from resume text
+            // trigger to run this and extract information from resume text
             Map<String, String> extractedInfo = extractResumeInfo(resumeText);
 
             // build gRPC request
@@ -249,7 +248,7 @@ public class ScoreResumeForm extends javax.swing.JFrame {
                 .setResumeText(resumeText);
 
             // add candidate name
-            if (extractedInfo.containsKey("name")) {
+            if (extractedInfo.containsKey("name")) { // map built in method
                 resumeBuilder.setCandidateName(extractedInfo.get("name"));
             } else {
                 resumeBuilder.setCandidateName("Anonymous Candidate");
@@ -277,13 +276,7 @@ public class ScoreResumeForm extends javax.swing.JFrame {
                 }
             }
 
-            // Log extracted information for debugging
-            System.out.println("Extracted Resume Information:");
-            System.out.println("Name: " + extractedInfo.getOrDefault("name", "Not detected"));
-            System.out.println("Experience: " + extractedInfo.getOrDefault("experience", "Not detected") + " years");
-            System.out.println("Skills: " + extractedInfo.getOrDefault("skills", "Not detected"));
-
-            // build the resume object
+            // create resume object
             CandidateResume candidateResume = resumeBuilder.build();
 
             // call gRPC service
@@ -300,20 +293,20 @@ public class ScoreResumeForm extends javax.swing.JFrame {
         } catch (Exception ex) {
             ex.printStackTrace();
             javax.swing.JOptionPane.showMessageDialog(this,
-                "Error analyzing resume: " + ex.getMessage(),
+                "Error analysing resume: " + ex.getMessage(),
                 "Service Error",
                 javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    // extractResumeInfo method with improved pattern matching
+    // extractResumeInfo method using Reg Expression
     private Map<String, String> extractResumeInfo(String resumeText) {
         Map<String, String> info = new HashMap<>();
 
         // Debug info
         System.out.println("Analyzing resume text of length: " + resumeText.length());
 
-        // Name detection - looks for patterns like "Name: John Doe" or name at the beginning
+        // Name detection
         Pattern namePattern = Pattern.compile("(?i)(?:name\\s*:\\s*|^\\s*)(\\w+\\s+\\w+)");
         Matcher nameMatcher = namePattern.matcher(resumeText);
         if (nameMatcher.find()) {
@@ -323,7 +316,7 @@ public class ScoreResumeForm extends javax.swing.JFrame {
             System.out.println("No name detected");
         }
 
-        // Experience detection - improved pattern to catch more variations
+        // Experience detection
         Pattern expPattern = Pattern.compile("(?i)(\\d+)\\s*(?:years?|yrs?)(?:\\s+(?:of\\s+)?(?:experience|exp|work))?");
         Matcher expMatcher = expPattern.matcher(resumeText);
         if (expMatcher.find()) {
@@ -335,7 +328,7 @@ public class ScoreResumeForm extends javax.swing.JFrame {
             System.out.println("Text sample: " + resumeText.substring(0, Math.min(200, resumeText.length())));
         }
 
-        // Skills detection - improved pattern to catch more variations
+        // Skills detection
         Pattern skillsPattern = Pattern.compile("(?i)(?:skills|technical skills|core competencies|expertise)\\s*:?\\s*([^\\n\\r.]*(?:[\\n\\r.][^\\n\\r.]*){0,8})");
         Matcher skillsMatcher = skillsPattern.matcher(resumeText);
         if (skillsMatcher.find()) {
@@ -352,58 +345,51 @@ public class ScoreResumeForm extends javax.swing.JFrame {
         return info;
     }
 
-    // Method to display results in the text area
+    // method how to display results in the text area
     private void displayResults(ResumeScore response, Map<String, String> extractedInfo) {
-        // Get the score as an integer for clearer display
+        // get the score as an integer for clearer display
         int intScore = (int) response.getScore();
 
-        // Create a formatted results string for the text area
+        // create a formatted results string for the text area
         StringBuilder results = new StringBuilder();
         results.append("Resume Score: ").append(intScore).append("/100");
 
-        // Display only the score in the results text area
+        // sisplay only the score in the results text area
         jTextArea1.setText(results.toString());
-
-        // Optional: you can also log the detailed information if needed
-        System.out.println("Score Result Information:");
-        System.out.println("Name: " + extractedInfo.getOrDefault("name", "Not detected"));
-        System.out.println("Experience: " + extractedInfo.getOrDefault("experience", "Not detected") + " years");
-        System.out.println("Skills: " + extractedInfo.getOrDefault("skills", "Not detected"));
-        System.out.println("Final Score: " + intScore);
     }
 
     // Submit new request button
     private void newRequestButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // Clear the text areas
+        // clear the text area
         textArea1.setText("");
         jTextArea1.setText("");
     }
 
-    // Back to Menu button - CORRECTED METHOD
+    // Back to Menu button
 	private void backToMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {
 		// Close this form and return to main menu
 		closeGrpcConnection();
 
-		// Check if mainMenu is not null before using it
+		// to check if mainMenu is not null before using it
 		if (mainMenu != null) {
-			// Show the existing main menu that was passed to the constructor
+			// show the existing main menu that was passed to the constructor
 			mainMenu.setVisible(true);
 		} else {
-			// If mainMenu is null, create a new Main instance
+			// if mainMenu= null, create a new Main instance
 			Main newMain = new Main();
 			newMain.setVisible(true);
 		}
 
-		// Dispose this form
+		// sispose this form
 		this.dispose();
 	}
 
-    // Method to close gRPC connection
+    // close gRPC connection method
     private void closeGrpcConnection() {
         if (channel != null && !channel.isShutdown()) {
             try {
                 channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-                System.out.println("gRPC connection closed successfully");
+                System.out.println("gRPC connection closes successfully");
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 System.err.println("Error closing gRPC connection: " + e.getMessage());
@@ -411,7 +397,7 @@ public class ScoreResumeForm extends javax.swing.JFrame {
         }
     }
 
-    // Static methods to access scored resumes from other forms
+    // use static s that can be accessed scored resumes from other forms
     public static Map<String, ResumeScore> getScoredResumes() {
         return scoredResumes;
     }

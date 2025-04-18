@@ -26,31 +26,25 @@ public class CandidateSlotResponseConfirmationForm extends javax.swing.JFrame {
     private String chosenLocation;
     private Main mainForm; // Reference to the main form
 
-    /**
-     * Creates new form CandidateSlotResponseConfirmationForm
-     */
+    // constructor for netbean usage 
     public CandidateSlotResponseConfirmationForm() {
         initComponents();
         initClient();
-        displaySampleCandidateChoice();
+        sampleCandidateChoice();
         setupActionListeners();
     }
 
-    /**
-     * Constructor that accepts the Main form as parameter
-     * @param main The Main form that opened this form
-     */
+    // Constructor that accepts the Main form as parameter
     public CandidateSlotResponseConfirmationForm(Main main) {
         initComponents();
         this.mainForm = main; // Store reference to main form
         initClient();
-        displaySampleCandidateChoice();
+        sampleCandidateChoice();
         setupActionListeners();
     }
 
-    /**
-     * Initialize the gRPC client
-     */
+
+     // Initialize the gRPC client
     private void initClient() {
         try {
             client = new CandidateEngagementClient("localhost", 50053);
@@ -64,18 +58,17 @@ public class CandidateSlotResponseConfirmationForm extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * Set up action listeners for buttons
-     */
+
+     // action listeners for buttons
     private void setupActionListeners() {
-        // Add action listener for the confirm button
+        //confirm button
         confirmButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 confirmButtonActionPerformed(evt);
             }
         });
 
-        // Add action listener for the back to menu button
+        // back to menu button
         backToMenuButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backToMenuButtonActionPerformed(evt);
@@ -83,16 +76,14 @@ public class CandidateSlotResponseConfirmationForm extends javax.swing.JFrame {
         });
     }
 
-    /**
-     * Display a sample candidate slot choice for testing
-     */
-    private void displaySampleCandidateChoice() {
-        // Sample data - in a real app, this would come from notification or database
+
+      // INput: Display a sample candidate slot choice for testing
+    private void sampleCandidateChoice() {
         candidateName = "John Smith";
         chosenTime = "2025-05-15 14:00:00";
         chosenLocation = "Video Conference";
 
-        // Display in the text area
+        // display in the text area(output)
         String details = "Candidate Name: " + candidateName + "\n" +
                          "Chosen Time: " + chosenTime + "\n" +
                          "Chosen Location: " + chosenLocation + "\n" +
@@ -101,9 +92,7 @@ public class CandidateSlotResponseConfirmationForm extends javax.swing.JFrame {
         candidateChosenSlotDetails.setText(details);
     }
 
-    /**
-     * Handle the confirm button click
-     */
+
     private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {
         if (client == null) {
             JOptionPane.showMessageDialog(this,
@@ -118,19 +107,19 @@ public class CandidateSlotResponseConfirmationForm extends javax.swing.JFrame {
             SchedulingConfirmation confirmation = client.receiveCandidateSlotChoiceWithResponse(
                     candidateName, chosenTime, chosenLocation);
 
-            // Log the confirmation
+            // for reponse message to create a time stamp 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String logMessage = sdf.format(new Date()) + " - Confirmed slot for " + candidateName +
+            String logMessage = sdf.format(new Date()) + " // Confirmed slot for " + candidateName +
                    " on " + chosenTime + " at " + chosenLocation +
-                   " - Server confirmed: " + confirmation.getConfirmed() +
-                   " at " + confirmation.getConfirmationTime() + "\n";
+                   " // Server confirmed: " + confirmation.getConfirmed() +
+                   " at time: " + confirmation.getConfirmationTime() + "\n";
 
             interviewSlotConfirmationLog.append(logMessage);
             logger.info(logMessage);
 
-            // Show success message
+            // show success message
             JOptionPane.showMessageDialog(this,
-                "Interview slot confirmed successfully!",
+                "Interview slot has been confirmed.",
                 "Confirmation Success",
                 JOptionPane.INFORMATION_MESSAGE);
 
@@ -138,12 +127,11 @@ public class CandidateSlotResponseConfirmationForm extends javax.swing.JFrame {
             confirmButton.setEnabled(false);
 
         } catch (Exception e) {
-            // Log error
+
             String errorMsg = "ERROR: " + e.getMessage() + "\n";
             interviewSlotConfirmationLog.append(errorMsg);
             logger.severe(errorMsg);
 
-            // Show error message
             JOptionPane.showMessageDialog(this,
                 "Error confirming slot: " + e.getMessage(),
                 "Confirmation Error",
@@ -151,11 +139,7 @@ public class CandidateSlotResponseConfirmationForm extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * Handle the back to menu button click
-     */
     private void backToMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // Close resources
         if (client != null) {
             try {
                 client.shutdown();

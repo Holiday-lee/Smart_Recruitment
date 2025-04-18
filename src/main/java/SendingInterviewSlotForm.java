@@ -81,7 +81,7 @@ public class SendingInterviewSlotForm extends javax.swing.JFrame {
      * Handle submit button click - send interview slots to candidate
      */
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        if (client == null) {
+        if (client == null) { // client 50053 connection = null
             JOptionPane.showMessageDialog(this,
                 "Client not connected to server",
                 "Connection Error",
@@ -90,7 +90,7 @@ public class SendingInterviewSlotForm extends javax.swing.JFrame {
         }
 
         try {
-            // Parse the input from text area
+            // get the input from textArea1
             String input = textArea1.getText().trim();
             if (input.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
@@ -100,8 +100,13 @@ public class SendingInterviewSlotForm extends javax.swing.JFrame {
                 return;
             }
 
-            // Simple parsing - first line is candidate name, rest are time-location pairs
-            String[] lines = input.split("\\n");
+            // set first line = name, the following line continued by time and location
+            /* 
+            * Name
+            * interview time 
+            * interview location
+            */ 
+            String[] lines = input.split("\\n"); // store the input(whole interview slots) 
             if (lines.length < 2) {
                 JOptionPane.showMessageDialog(this,
                     "Please enter at least one interview slot (time and location)",
@@ -109,13 +114,14 @@ public class SendingInterviewSlotForm extends javax.swing.JFrame {
                     JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
+            
+            // lines[0] = first line from input text is candidateName
             String candidateName = lines[0];
 
-            // Parse times and locations
-            int slotCount = lines.length - 1;
-            String[] times = new String[slotCount];
-            String[] locations = new String[slotCount];
+            // the lines[1][2] need to be parsed and store in String[] times & String[] locations
+            int slotCount = lines.length - 1; 
+            String[] times = new String[slotCount]; // = String[1]
+            String[] locations = new String[slotCount]; // = String [2]
 
             for (int i = 0; i < slotCount; i++) {
                 String[] parts = lines[i + 1].split(",");
@@ -130,10 +136,10 @@ public class SendingInterviewSlotForm extends javax.swing.JFrame {
                 locations[i] = parts[1].trim();
             }
 
-            // Send slots to the candidate
+            // send the interviewSlots message with parameters of Name, Times, Location to the server by client(client = that server port 50053 connection)
             client.sendInterviewSlots(candidateName, times, locations);
 
-            // Log the action
+            // need to create a log message with date, interview slots and candidateName
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             StringBuilder logMessage = new StringBuilder();
             logMessage.append(sdf.format(new Date()))
@@ -144,12 +150,6 @@ public class SendingInterviewSlotForm extends javax.swing.JFrame {
                      .append("\n");
 
             jTextArea1.append(logMessage.toString());
-
-            // Show success message
-            JOptionPane.showMessageDialog(this,
-                "Interview slots sent successfully to " + candidateName,
-                "Success",
-                JOptionPane.INFORMATION_MESSAGE);
 
         } catch (Exception e) {
             // Log error
@@ -229,9 +229,6 @@ public class SendingInterviewSlotForm extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(textArea1, javax.swing.GroupLayout.PREFERRED_SIZE, 676, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(45, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -239,12 +236,17 @@ public class SendingInterviewSlotForm extends javax.swing.JFrame {
                         .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(62, 62, 62))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(backToMenuButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34))))
+                        .addGap(34, 34, 34))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jScrollPane1)
+                            .addComponent(textArea1, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE))
+                        .addContainerGap(45, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,16 +259,13 @@ public class SendingInterviewSlotForm extends javax.swing.JFrame {
                     .addComponent(submitButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(textArea1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(backToMenuButton)
-                        .addGap(17, 17, 17))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(23, 23, 23))))
+                .addGap(29, 29, 29)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(backToMenuButton)
+                .addGap(17, 17, 17))
         );
 
         pack();

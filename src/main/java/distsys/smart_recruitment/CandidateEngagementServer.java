@@ -6,7 +6,6 @@
 package distsys.smart_recruitment;
 
 import distsys.smart_recruitment.auth.AuthorizationServerInterceptor;
-import distsys.smart_recruitment.auth.Constants;
 import generated.grpc.candidateengagementservice.CandidateEngagementServiceGrpc;
 import generated.grpc.candidateengagementservice.CandidateSlotChoice;
 import generated.grpc.candidateengagementservice.SchedulingConfirmation;
@@ -17,14 +16,12 @@ import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * Server implementation for the Candidate Engagement Service
@@ -35,7 +32,7 @@ public class CandidateEngagementServer extends CandidateEngagementServiceGrpc.Ca
     // In-memory storage for candidate slot choices and confirmations
     // In a production system, this would be replaced with a database
     private final Map<String, List<SlotSelection>> candidateSlots = new ConcurrentHashMap<>();
-    private final Map<String, CandidateSlotChoice> candidateChoices = new ConcurrentHashMap<>();
+    private final Map<String, CandidateSlotChoice> candidateChoices = new ConcurrentHashMap<>(); //INterviewConfirmation
     private final Map<String, SchedulingConfirmation> confirmations = new ConcurrentHashMap<>();
 
     public static void main(String[] args) {
@@ -62,9 +59,6 @@ public class CandidateEngagementServer extends CandidateEngagementServiceGrpc.Ca
     // rpc SendInterviewSlots(stream SlotSelection) returns (SlotDeliveryConfirmation) {}
     @Override
     public StreamObserver<SlotSelection> sendInterviewSlots(StreamObserver<SlotDeliveryConfirmation> responseObserver) {
-        // Get the authenticated client ID
-        String clientId = Constants.CLIENT_ID_CONTEXT_KEY.get();
-        logger.info("Processing interview slots from client: " + clientId);
 
         return new StreamObserver<SlotSelection>() {
 
@@ -90,7 +84,7 @@ public class CandidateEngagementServer extends CandidateEngagementServiceGrpc.Ca
             @Override
             // once done collecting stream slotSelection
             public void onCompleted() {
-                // Generate timestamp and message ID
+                // Generate timestamp 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String timestamp = sdf.format(new Date());
 
@@ -121,9 +115,6 @@ public class CandidateEngagementServer extends CandidateEngagementServiceGrpc.Ca
     // rpc ReceiveCandidateSlotChoice(CandidateSlotChoice) returns (SchedulingConfirmation) {}
     @Override
     public void receiveCandidateSlotChoice(CandidateSlotChoice request, StreamObserver<SchedulingConfirmation> responseObserver) {
-        // Get the authenticated client ID
-        String clientId = Constants.CLIENT_ID_CONTEXT_KEY.get();
-        logger.info("Processing slot selection from client: " + clientId);
 
         String candidateName = request.getCandidateName();
         String chosenTime = request.getChosenTime();

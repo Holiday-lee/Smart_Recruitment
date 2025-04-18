@@ -23,20 +23,13 @@ import java.util.List;
 public class QualifiedCandidatesForm extends javax.swing.JFrame {
 
     private Main mainMenu;
-    /**
-     * Creates new form QualifiedCandidatesForm
-     */
-    // Update constructor to accept Main form so that the Back to Menu links to Main menu
+
+    // constructor to accept Main form so that the Back to Menu links to Main menu
     public QualifiedCandidatesForm(Main mainMenu) {
-        initComponents();
+        initComponents(); // auto generated code to set up buttons, labels
         this.mainMenu = mainMenu;
-
-        // Initialise with empty text field
-        minimumScoreCriteria.setText("");
-
-         // Clear the results area
-        qualifiedCandidateList.setText("");
-
+        minimumScoreCriteria.setText(""); // Initialise empty text field
+        qualifiedCandidateList.setText(""); // output display: clear the result text area
     }
 
     // constructor needed for NetBeans designer
@@ -154,109 +147,106 @@ public class QualifiedCandidatesForm extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_backToMenuButtonActionPerformed
 
-private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    // Submit button handler
-    // Clear previous results
-    qualifiedCandidateList.setText("");
-
-    try {
-        // Get the minimum score from the text field
-        double minScore = Double.parseDouble(minimumScoreCriteria.getText());
-
-        // Create the gRPC channel
-        String host = "localhost";
-        int port = 50051;
-
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(host, port)
-                .usePlaintext()
-                .build();
+    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        qualifiedCandidateList.setText("");
 
         try {
-            // Generate JWT token for authentication
-            String jwt = JwtUtil.generateToken("CandidateFilteringClient");
 
-            // Create authentication credentials with the token
-            BearerToken token = new BearerToken(jwt);
+            double minScore = Double.parseDouble(minimumScoreCriteria.getText());
 
-            // Create the asynchronous stub with authentication
-            CandidateFilteringServiceGrpc.CandidateFilteringServiceStub asyncStub =
-                    CandidateFilteringServiceGrpc.newStub(channel)
-                    .withCallCredentials(token);
+            // gRPC channel
+            String host = "localhost";
+            int port = 50051;
 
-            // Create the request for filtering qualified candidates
-            QualificationCriteria request = QualificationCriteria.newBuilder()
-                    .setMinScore(minScore)
+            ManagedChannel channel = ManagedChannelBuilder.forAddress(host, port)
+                    .usePlaintext()
                     .build();
 
-            // Collect candidates in a list to display them all at once
-            List<QualifiedCandidate> candidates = new ArrayList<>();
+            try {
+                // generate JWT token
+                String jwt = JwtUtil.generateToken("CandidateFilteringClient");
 
-            // Make the asynchronous call with a StreamObserver to handle the streaming responses
-            asyncStub.qualifiedCandidateList(request, new StreamObserver<QualifiedCandidate>() {
-                @Override
-                public void onNext(QualifiedCandidate candidate) {
-                    // Store each candidate as it arrives
-                    candidates.add(candidate);
-                }
+                // create authentication credentials token
+                BearerToken token = new BearerToken(jwt);
 
-                @Override
-                public void onError(Throwable t) {
-                    // Handle errors that occur during the stream
-                    qualifiedCandidateList.setText("Error retrieving candidates:\n" + t.getMessage());
+                // asynchronous stub + .with authentication
+                CandidateFilteringServiceGrpc.CandidateFilteringServiceStub asyncStub =
+                        CandidateFilteringServiceGrpc.newStub(channel)
+                        .withCallCredentials(token);
 
-                    // Clean up the channel
-                    try {
-                        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-                    } catch (InterruptedException e) {
-                        // Ignore
+                QualificationCriteria request = QualificationCriteria.newBuilder()
+                        .setMinScore(minScore)
+                        .build();
+
+                // store candidates in a list to display them all at once
+                List<QualifiedCandidate> candidates = new ArrayList<>();
+
+
+                asyncStub.qualifiedCandidateList(request, new StreamObserver<QualifiedCandidate>() {
+                    @Override
+                    public void onNext(QualifiedCandidate candidate) {
+                        // store each candidate as it arrives
+                        candidates.add(candidate);
                     }
-                }
 
-                @Override
-                public void onCompleted() {
-                    // Display all candidates when the server has finished sending responses
-                    if (candidates.isEmpty()) {
-                        qualifiedCandidateList.setText("No qualified candidates found with score >= " + minScore);
-                    } else {
-                        // Clear any previous text
-                        qualifiedCandidateList.setText("");
+                    @Override
+                    public void onError(Throwable t) {
+                        // Handle errors that occur during the stream
+                        qualifiedCandidateList.setText("Error retrieving candidates:\n" + t.getMessage());
 
-                        // Display each candidate with the correct numbering
-                        for (int i = 0; i < candidates.size(); i++) {
-                            QualifiedCandidate candidate = candidates.get(i);
-                            qualifiedCandidateList.append((i + 1) + ". " + candidate.getCandidateName());
-                            qualifiedCandidateList.append("  Score: " + candidate.getScore() + "\n\n");
+                        // Clean up the channel
+                        try {
+                            channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+                        } catch (InterruptedException e) {
+
+                        }
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        // show qualified candidates after server has finished sending responses
+                        if (candidates.isEmpty()) {
+                            qualifiedCandidateList.setText("No qualified candidates found with score >= " + minScore);
+                        } else {
+                            // Clear previous text
+                            qualifiedCandidateList.setText("");
+
+                            // show qualifiedcandidate
+                            for (int i = 0; i < candidates.size(); i++) {
+                                QualifiedCandidate candidate = candidates.get(i);
+                                qualifiedCandidateList.append((i + 1) + ". " + candidate.getCandidateName());
+                                qualifiedCandidateList.append("  Score: " + candidate.getScore() + "\n\n");
+                            }
+
+                            // show total count by adding the total
+                            qualifiedCandidateList.append("Total qualified candidates: " + candidates.size());
                         }
 
-                        // Add total count at the end
-                        qualifiedCandidateList.append("Total qualified candidates: " + candidates.size());
+                        // Clean up the channel
+                        try {
+                            channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+                        } catch (InterruptedException e) {
+                            // Ignore
+                        }
                     }
+                });
 
-                    // Clean up the channel
-                    try {
-                        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-                    } catch (InterruptedException e) {
-                        // Ignore
-                    }
+            } catch (Exception e) {
+                qualifiedCandidateList.setText("Error: " + e.getMessage());
+
+                // Clean up the channel
+                try {
+                    channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+                } catch (InterruptedException ie) {
+                    // Ignore
                 }
-            });
-
-        } catch (Exception e) {
-            qualifiedCandidateList.setText("Error: " + e.getMessage());
-
-            // Clean up the channel
-            try {
-                channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-            } catch (InterruptedException ie) {
-                // Ignore
             }
-        }
 
-    } catch (NumberFormatException e) {
-        // Handle invalid input
-        qualifiedCandidateList.setText("Please enter a valid number for the minimum score.");
+        } catch (NumberFormatException e) {
+            // Handle invalid input
+            qualifiedCandidateList.setText("Please enter a valid number for the minimum score.");
+        }
     }
-}
 
     /**
      * @param args the command line arguments
